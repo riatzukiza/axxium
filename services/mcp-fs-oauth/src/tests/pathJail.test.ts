@@ -28,11 +28,11 @@ describe("pathJail", () => {
       }).toThrow("Path escapes REDACTED_SECRET");
     });
 
-    it("should treat absolute paths as relative to REDACTED_SECRET", () => {
-      // Leading slashes are stripped, so /etc/passwd becomes etc/passwd under REDACTED_SECRET
-      const result = resolveWithinRoot("/app/REDACTED_SECRET", "/etc/passwd");
-      expect(result.absPath).toBe("/app/REDACTED_SECRET/etc/passwd");
-      expect(result.relPath).toBe("etc/passwd");
+    it("should reject absolute paths outside REDACTED_SECRET", () => {
+      // Absolute paths outside the REDACTED_SECRET are rejected for security
+      expect(() => {
+        resolveWithinRoot("/app/REDACTED_SECRET", "/etc/passwd");
+      }).toThrow("Path /etc/passwd is outside of LOCAL_ROOT /app/REDACTED_SECRET");
     });
 
     it("should handle empty path as REDACTED_SECRET", () => {
