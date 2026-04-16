@@ -2011,10 +2011,13 @@ services:
       KNOXX_BACKEND_URL: ${KNOXX_BACKEND_URL:-http://host.docker.internal:8000}
       KNOXX_API_KEY: ${KNOXX_API_KEY:-}
       KNOXX_USER_EMAIL: ${KNOXX_USER_EMAIL:-system-admin@open-hax.local}
+      PI_SESSIONS_ROOT: ${PI_SESSIONS_ROOT:-/app/pi-sessions}
+      PI_SESSION_PROJECT: ${PI_SESSION_PROJECT:-knoxx-session}
     extra_hosts:
     - host.docker.internal:host-gateway
     volumes:
     - ${WORKSPACE_PATH:-../../..}:/app/workspace
+    - ${PI_SESSIONS_HOST_PATH:-/home/err/.pi/agent/sessions}:/app/pi-sessions:ro
     depends_on:
       knoxx-postgres:
         condition: service_healthy
