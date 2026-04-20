@@ -76,6 +76,16 @@ services:
     # Atlas Local includes MongoDB + mongot (vector search) in single container
     # Vector search indexes created by atlas-init.sh
     image: mongodb/mongodb-atlas-local:latest
+    # CRITICAL: Atlas Local persists a single-node replica-set config into /data/db
+    # using the container's hostname as the replica-set name + member host.
+    # If the container is recreated (e.g. `docker compose down` then `up`), Docker
+    # defaults the hostname to a new container-id, and MongoDB will boot into a
+    # ReplicaSetNoPrimary / REMOVED state. The Atlas Local runner then panics and
+    # the stack looks like it "needs a volume reset".
+    # Pinning hostname makes the replica-set identity stable across container
+    # recreation, so persisted volumes remain bootable.
+    hostname: openplanner-mongodb
+    command: []
     depends_on:
       secrets-init:
         condition: service_completed_successfully
@@ -262,7 +272,7 @@ services:
       PROXY_ALLOW_UNAUTHENTICATED: 'false'
       DATABASE_URL: postgresql://${OPENPLANNER_PROXX_DB_USER:-openai_proxy}:${OPENPLANNER_PROXX_DB_PASSWORD:-openai_proxy}@openplanner-proxx-db:5432/${OPENPLANNER_PROXX_DB_NAME:-openai_proxy}
       UPSTREAM_PROVIDER_ID: ${OPENPLANNER_PROXX_UPSTREAM_PROVIDER_ID:-zai}
-      UPSTREAM_FALLBACK_PROVIDER_IDS: ${OPENPLANNER_PROXX_UPSTREAM_FALLBACK_PROVIDER_IDS:-llamacpp,ollama,ollama-cloud,requesty}
+      UPSTREAM_FALLBACK_PROVIDER_IDS: ${OPENPLANNER_PROXX_UPSTREAM_FALLBACK_PROVIDER_IDS:-ollama-cloud}
       UPSTREAM_BASE_URL: ${OPENPLANNER_PROXX_UPSTREAM_BASE_URL:-https://api.z.ai/api/paas/v4}
       UPSTREAM_PROVIDER_BASE_URLS: ${OPENPLANNER_PROXX_UPSTREAM_PROVIDER_BASE_URLS:-llamacpp=http://llamacpp-chat:8080,llamacpp-embed=http://llamacpp-embed:8081,openai=https://chatgpt.com/backend-api,vivgrid=https://api.vivgrid.com,requesty=https://router.requesty.ai/v1,zai=https://api.z.ai/api/paas/v4}
       REQUESTY_API_TOKEN: ${REQUESTY_API_TOKEN:-}
