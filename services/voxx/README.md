@@ -12,25 +12,24 @@ This directory is the workspace-local home for runtime/devops material for `voxx
 ```bash
 cd /home/err/devel/services/voxx
 docker compose up --build -d
-curl http://127.0.0.1:8788/healthz
+curl http://127.0.0.1:8787/healthz
 ```
 
 The compose default now binds Voxx to loopback (`127.0.0.1`) so it can sit behind a reverse proxy without exposing a raw public port. Override with `VOXX_BIND_HOST=0.0.0.0` only when you explicitly want direct network exposure.
 
-For smarter TTS quality without changing Battlebussy away from `COMMENTARY_TTS_PROVIDER=voxx`, pass remote-provider creds straight into the compose runtime and let Voxx fall back automatically:
+For smarter TTS quality without changing callers away from Voxx, pass remote-provider creds straight into the compose runtime and let Voxx fall back automatically. The local default is Xiaomi MiMo, Kokoro, MeloTTS, then eSpeak; ElevenLabs is intentionally excluded from the default order.
 
 ```bash
 cd /home/err/devel/services/voxx
-REQUESTY_API_TOKEN=... \
-VOICE_GATEWAY_TTS_BACKEND_ORDER=requesty,melo,espeak \
+XIAOMI_MIMO_API_BASE_URL=https://api.xiaomimimo.com/v1 \
+XIAOMI_MIMO_API_KEY=... \
+VOICE_GATEWAY_TTS_BACKEND_ORDER=xiaomi_mimo,kokoro,melo,espeak \
 docker compose up --build -d
 ```
 
-When a premium ElevenLabs voice is ready later, add `ELEVENLABS_API_KEY` + `ELEVENLABS_VOICE_ID` and switch the order, for example:
+Xiaomi MiMo also accepts the legacy typo-prefixed env names `XAIOMI_MIMO_API_BASE_URL` and `XAIOMI_MIMO_API_KEY` so existing local env files keep working while callers migrate to `XIAOMI_*`.
 
-```bash
-VOICE_GATEWAY_TTS_BACKEND_ORDER=elevenlabs,requesty,melo,espeak
-```
+Kokoro runs as a non-root derived image (`Dockerfile.kokoro`) with its English spaCy model installed at build time. MeloTTS is still optional: if `melo` is selected without the Python package present, Voxx returns 503 or falls through to the next backend.
 
 Voxx also now carries a backend-agnostic sports-commentator postprocess profile by default, so any provider voice can be pushed toward the same high-energy broadcast texture:
 
