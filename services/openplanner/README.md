@@ -51,8 +51,12 @@ cd /home/err/devel/services/proxx && docker compose up -d
 
 cd /home/err/devel/services/openplanner
 
-# Start everything with dev profile (includes Vite dev server)
+# Start everything with dev profile (includes Vite dev server and backend watch service)
 docker compose --profile dev up -d
+
+# Backend watch service only (TypeScript + CLJS compile watch, Node --watch runtime)
+docker compose --profile dev up -d openplanner-dev
+curl http://localhost:${OPENPLANNER_DEV_PORT:-7778}/v1/health
 
 # Wait for all services to become healthy (~2 minutes)
 docker compose ps
@@ -105,6 +109,7 @@ All variables have sensible defaults. Override in `.env` or host environment.
 | `OPENPLANNER_MONGO_APP_USERNAME` | `openplanner` | Application readWrite user |
 | `OPENPLANNER_MONGO_APP_PASSWORD` | `change-me-openplanner-password` | Application user password |
 | `OPENPLANNER_PORT` | `7777` | Main app port |
+| `OPENPLANNER_DEV_PORT` | `7778` | Dev backend watch service host port |
 | `OPENPLANNER_API_KEY` | `change-me` | API key for HTTP access |
 
 ## Common Operations
