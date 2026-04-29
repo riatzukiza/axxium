@@ -1,0 +1,5 @@
+FROM hwdsl2/kokoro-server
+
+RUN /opt/venv/bin/python -m spacy download en_core_web_sm
+
+USER nobody:nogroup
