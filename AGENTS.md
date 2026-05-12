@@ -46,6 +46,16 @@ EOFEOF
 - Avoid requiring `docker compose ... --scale ...` as the only way to express desired replica counts; encode replica intent in compose (even if that means explicit shard services or preset compose overlays).
 - Avoid fixed host-port publishing on services that may run multiple replicas; publish a single ingress port on a proxy (nginx) and use internal networking for replicas.
 
+## Proxx Development Workflow (Verified 2026-05-11)
+- Proxx runs in container `proxx-local-proxx-1` with `/app/dist` mounted read-only from `orgs/open-hax/proxx/dist`
+- Fast iteration: edit TypeScript in `orgs/open-hax/proxx/src/`, run `pnpm build` in that directory to update `dist/`, then recreate the container:
+  ```bash
+  cd orgs/open-hax/proxx && pnpm build
+  cd services/proxx && docker compose --profile prod up -d --force-recreate
+  ```
+- No image rebuild required; the container picks up the freshly compiled `dist/main.js` from the host mount
+- MiniMax music models now route directly to `https://api.minimax.io/v1/music_generation` when `MINIMAX_API_KEY` is configured in `services/proxx/.env`
+
 ## Knoxx
 Knoxx is located at `orgs/open-hax/openplanner/packages/agents/knoxx`. It is a central and highly important part of the workspace.
 
