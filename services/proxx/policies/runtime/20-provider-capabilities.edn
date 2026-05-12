@@ -42,6 +42,10 @@
   :contract/kind :preference-order
   :preference/items ["llamacpp"]}
 
+ {:contract/id :provider-order/gemma4
+  :contract/kind :preference-order
+  :preference/items ["gemini" "ollama-cloud" "ollama"]}
+
 
  {:contract/id :provider-capability/blaze-chat
   :contract/kind :provider-capability

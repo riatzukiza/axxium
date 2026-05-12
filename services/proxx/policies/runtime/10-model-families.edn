@@ -11,6 +11,12 @@
   :reasoning/native-efforts [:none :minimal :low :medium :high :xhigh]
   :reasoning/budget-by-effort {:none 0 :minimal 1024 :low 4096 :medium 12288 :high 24576 :xhigh 32768}}
 
+ {:contract/id :model-alias/gemma4-gemini
+  :contract/kind :model-alias
+  :match/model-pattern "(?i)^gemma4:31b$"
+  :match/provider-pattern "^gemini$"
+  :alias/model-id "gemma-4-31b-it"}
+
  {:contract/id :model-family/claude
   :contract/kind :model-family
   :match/model-pattern "^claude-"
@@ -81,6 +87,13 @@
   :match/model-pattern "(?i)^gemma\\d+:e\\d+b$"
   :reasoning/control :effort-level
   :reasoning/native-efforts [:none :low :medium :high :max]}
+
+ {:contract/id :model-family/gemma4
+  :contract/kind :model-family
+  :match/model-pattern "(?i)^gemma4"
+  :reasoning/control :effort-level
+  :reasoning/native-efforts [:none :low :medium :high :max]}
+
 
  {:contract/id :model-family/blaze-text
   :contract/kind :model-family
@@ -155,6 +168,12 @@
  {:contract/id :reasoning-normalization/ollama-style-max-gemma-e
   :contract/kind :reasoning-normalization
   :match/family :model-family/gemma-e
+  :normalize/from :gpt-thinking-level
+  :normalize/effort-map {:off :none :disabled :none :minimal :low :auto :medium :normal :medium :xhigh :max :very-high :max :x-high :max}}
+
+ {:contract/id :reasoning-normalization/ollama-style-max-gemma4
+  :contract/kind :reasoning-normalization
+  :match/family :model-family/gemma4
   :normalize/from :gpt-thinking-level
   :normalize/effort-map {:off :none :disabled :none :minimal :low :auto :medium :normal :medium :xhigh :max :very-high :max :x-high :max}}
 

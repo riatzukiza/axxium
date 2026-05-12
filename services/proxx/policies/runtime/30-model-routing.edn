@@ -1,4 +1,12 @@
-[{:contract/id :route/gemma-e
+[{:contract/id :route/gemma4
+  :contract/kind :routing-clause
+  :match/family :model-family/gemma4
+  :prefer/providers :provider-order/gemma4
+  :prefer/providers-strict? true
+  :prefer/strategies [:gemini-chat :ollama-chat :chat-completions]
+  :account/order :account-order/prefer-free}
+
+ {:contract/id :route/gemma-e
   :contract/kind :routing-clause
   :match/family :model-family/gemma-e
   :prefer/providers :provider-order/gemma-e
