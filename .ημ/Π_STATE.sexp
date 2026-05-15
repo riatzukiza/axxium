@@ -1,13 +1,10 @@
-(fork-tax/state
-  {:timestamp "20260506T231041Z"
-    :repo "/home/err/devel"
-    :branch "pi/fork-tax/2026-04-15-170411"
-    :base-head "a847e6e8"
-    :tag "pi-fork-tax-broadcast-audio-full-20260506T231041Z"
-    :scope :recursive-broadcast-studio-audio-freeze
-    :knoxx-tag "pi-fork-tax-broadcast-audio-20260506T231041Z"
-    :openplanner-head "75c0071e"
-    :openplanner-tag "pi-fork-tax-openplanner-knoxx-audio-20260506T231041Z"
-    :llamacpp-defaults {:ctx 16384 :parallel 1 :batch 256 :ubatch 256 :cache-ram 0}
-    :ignored-runtime-fingerprint "services/llamacpp-stack/.env"
-    :concurrent-dirt "mass unrelated workspace deletes/assets/submodule dirt left unstaged"})
+(fork-tax-snapshot
+  (name "devel-services-proxx-openplanner")
+  (timestamp "2026-05-15T06:01:45Z")
+  (repo "/home/err/devel")
+  (branch "pi/fork-tax/2026-04-15-170411")
+  (head-before "049622b")
+  (origin "git@github.com:riatzukiza/devel.git")
+  (scope ["services/proxx", "services/openplanner", "orgs/open-hax/proxx", "orgs/open-hax/openplanner", "orgs/shuv/openplanner"])
+  (note "Root service snapshot for services/proxx, services/openplanner, and updated open-hax submodule pointers.")
+  (status-lines ["M services/proxx/.env.example", " M services/proxx/docker-compose.yml", " M services/proxx/policies/runtime/05-provider-seed.edn", " M services/proxx/policies/runtime/10-model-families.edn", " M services/proxx/policies/runtime/20-provider-capabilities.edn", " M services/proxx/policies/runtime/30-model-routing.edn", "m orgs/open-hax/proxx", "m orgs/open-hax/openplanner"]))

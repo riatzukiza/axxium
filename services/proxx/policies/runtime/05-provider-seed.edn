@@ -68,6 +68,13 @@
   :provider/base-url "https://ollama.com"
   :key-env-names ["OLLAMA_CLOUD_API_KEY"]}
 
+ {:contract/id :provider-seed/ollama-lan
+  :contract/kind :provider-seed
+  :provider-id-env-names ["OLLAMA_LAN_PROVIDER_ID"]
+  :provider-id-fallback "ollama-lan"
+  :provider/base-url "http://192.168.12.68:11434"
+  :key-env-names ["OLLAMA_LAN_API_KEY"]}
+
  {:contract/id :provider-seed/zen
   :contract/kind :provider-seed
   :provider-id-env-names ["ZEN_PROVIDER_ID"]
@@ -99,6 +106,12 @@
   :contract/kind :provider-route
   :provider/id "ollama"
   :provider/base-url "http://ollama:11434"}
+
+ {:contract/id :provider-route/ollama-lan
+  :contract/kind :provider-route
+  :provider/id "ollama-lan"
+  :provider/base-url "http://192.168.12.68:11434"
+  :auth/required? false}
 
  {:contract/id :provider-route/llamacpp
   :contract/kind :provider-route
