@@ -35,6 +35,7 @@
 - Staged high-risk secret heuristic scan passed after replacing a hardcoded Discord bot token in `send_msg.py` with an environment lookup.
 - Pre-commit large-blob guard was satisfied by moving the two oversized UTAU zip archives to Git LFS pointers instead of overriding the guard.
 - Benchmark transcript Base64HighEntropyString false positives were marked with inline allowlist comments, and `services/utau-renderer/openutau/OpenUtau.deps.json` is preserved through a Git LFS pointer to avoid scanning dependency hash metadata as source text; `.secrets.baseline` was restored unchanged and no hook bypass was used.
+- Post-push UTAU Git LFS tracking was narrowed to exact oversized/pointer-managed artifacts so existing normal-tracked archives do not become dirty solely because of broad attributes.
 
 ## Residual dirt intentionally not absorbed
 
@@ -46,3 +47,7 @@
 - Dirty private/no-remote repos were documented in `.ημ/recursive-fork-tax-dirty-inventory.json` and left untouched.
 
 No destructive cleanup, repo-wide reset, repo-wide restore, or blanket unstaging was performed.
+
+## Final corrective root commit
+
+- A small follow-up root commit narrows `.gitattributes` LFS patterns and refreshes the tracked-tree manifest/receipts without force-pushing the already-pushed root snapshot.
