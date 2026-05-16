@@ -12,7 +12,7 @@
     (uxx "d76dc9e7"))
   (scope "recursive selected active repos plus staged/safe root artifacts")
   (verification
-    "root git diff --cached --check passed after staged text normalization" "staged high-risk secret heuristic scan passed after send_msg credential env rewrite" "oversized utau zip archives staged as git-lfs pointers" "benchmark false positives inline allowlisted; OpenUtau.deps.json staged as git-lfs pointer; secrets baseline unchanged"
+    "root git diff --cached --check passed after staged text normalization" "staged high-risk secret heuristic scan passed after send_msg credential env rewrite" "oversized utau zip archives staged as git-lfs pointers" "benchmark false positives inline allowlisted; OpenUtau.deps.json staged as git-lfs pointer; secrets baseline unchanged" "utau lfs tracking narrowed to exact paths in follow-up commit"
     "proxx focused header test passed"
     "eta-mu extension and coding-agent focused tests passed"
     "child repos committed tagged pushed before parent")
