@@ -86,3 +86,9 @@
 - `receipts.edn` updated by receipt_river.
 - Raw initial execution result: `.ημ/recursive-submodule-fork-tax-2026-05-26.json`.
 - Post-run recursive inventory: `.ημ/recursive-fork-tax-dirty-inventory.json`.
+
+## Root push completion
+
+- Root preservation commit: `c26b5205`.
+- Root tag pushed: `pi/fork-tax/20260526T191143Z/root-recursive-submodules`.
+- Final receipt commit records the push result and is tagged separately.
