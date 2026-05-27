@@ -32,6 +32,15 @@ logs/
 # Data volumes
 /data/
 
+# Service runtime data volumes (local-only; never track service state)
+services/*/data/
+services/*/.data/
+services/*REDACTED_SECRET/
+services/*/secrets/
+services/*/storage/
+services/*/uploads/
+services/*/tmp/
+
 # Secrets (keep patterns, never track contents)
 .env
 .env.*
