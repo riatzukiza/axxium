@@ -13,5 +13,5 @@
     "REDACTED_SECRETDir": "./src"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["REDACTED_SECRET_modules", "dist"]
+  "exclude": ["REDACTED_SECRET_modules", "dist", "src/tests"]
 }
