@@ -1,0 +1,135 @@
+{
+  "generatedAt": "2026-05-29T04:01:51.223Z",
+  "totalTasks": 4,
+  "columns": [
+    {
+      "status": "icebox",
+      "title": "Icebox",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "incoming",
+      "title": "Incoming",
+      "taskCount": 4,
+      "tasks": [
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-promethean-kanban-orgs-open-hax-tooloxx-docs-imports-promethean-spec-mcp-express-migration-md",
+          "title": "MCP Express Migration & OAuth Middleware Alignment",
+          "slug": "mcp-express-migration-oauth-middleware-alignment",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:50.237Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/promethean/spec/mcp-express-migration.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/promethean/kanban/mcp-express-migration.md`\n\n# MCP Express Migration & OAuth Middleware Alignment\n\n**Author:** Codex Agent  \n**Date:** 2025-11-12  \n**Related Request:** Replace Fastify usage in `@promethean-os/mcp` with Express, add linting guidance, and reuse the existing OAuth MCP middleware.\n\n## Code References\n\n- `packages/mcp/package.json:41-58` – declares `fastify` and `@fastify/*` runtime dependencies that must be removed when switching to Express.\n- `packages/mcp/src/core/transports/fastify.ts:1-2100` – central HTTP transport implementation (imports Fastify at lines 1-4 and instantiates the server in `fastifyTransport` at lines 595-1010).\n- `packages/mcp/src/index.ts:27-456` – imports `fastifyTransport` (line 27) and binds to it inside the CLI/tool bootstrapper (lines 456-470).\n- `packages/mcp/src/auth/oauth-main.ts:8-211` – exposes Fastify-specific OAuth bootstrap helpers (`initializeOAuthSystem`, etc.) and re-exports `fastify-integration` at line 335.\n- `packages/mcp/src/auth/middleware.ts:8-374` – the reusable MCP auth middleware currently typed against Fastify requests/replies; needs to operate on Express types when wiring OAuth flows.\n- `packages/mcp/src/security/middleware.ts:6-393` – comprehensive security middleware wired through Fastify hooks (`addHook` at line 275) that must be re-platformed for Express.\n- `packages/mcp/src/tests/**/*fastify*.test.ts` and other HTTP integration tests – consume `fastifyTransport`, so they must point to the new Express transport (e.g., `fastify-transport.integration.test.ts:10-110`).\n- `eslint.config.mjs:112-139` – existing `no-restricted-imports` rule where we will introduce a warning about `fastify` usage.\n\n## Existing Issues / PRs\n\n- No open issues or PRs in this repo describe the Fastify deprecation or the Express migration. (Checked via `rg fastify spec/ docs/ .github/ ISSUE_TEMPLATE`).\n\n## Requirements\n\n1. Add an ESLint rule that **warns** when `fastify` or `@fastify/*` modules are imported anywhere in the workspace, with guidance to use Express-based transports instead.\n2. Remove Fastify-specific dependencies from `@promethean-os/mcp` and add the Express equivalents (`express`, `cors`, `express-session`/`cookie-parser` as needed).\n3. Replace `fastifyTransport` with an Express-based transport that exposes the same `Transport` API, supports MCP registries, HTTP proxy endpoints, UI assets, OpenAPI/action routes, and health/security endpoints.\n4. Update `packages/mcp/src/index.ts`, config loaders, and any other call sites to instantiate the new Express transport.\n5. Port `OAuthFastifyIntegration`, the shared security middleware, and other Fastify-bound modules (`auth/middleware.ts`, `auth/oauth/routes.ts`, etc.) so they register routes/middleware on Express while leveraging the existing MCP auth middleware for OAuth-protected endpoints.\n6. Ensure all HTTP/integration tests reference the Express transport and continue to validate proxies, registries, and OAuth behavior.\n7. Maintain strict TypeScript settings (no loosening of eslint/tsconfig), and keep the public surface area (exported helpers/types) stable or provide compatibility re-exports.\n\n## Definition of Done\n\n- `pnpm --filter @promethean-os/mcp build` and `pnpm --filter @promethean-os/mcp test` succeed locally.\n- `packages/mcp/package.json` no longer lists `fastify` or `@fastify/*` dependencies; Express equivalents are present.\n- All TypeScript sources under `packages/mcp/src` compile without importing `fastify` types; linting the repo only emits the intentional warning when legacy imports remain.\n- OAuth initialization uses the MCP auth middleware within an Express pipeline, and `/auth/*` routes keep parity with previous functionality.\n- HTTP integration tests exercise the Express transport (`expressTransport`) and pass.\n- Documentation (package README or docs under `packages/mcp/docs/`) updated to mention Express transport usage if necessary.\n\n## Plan (Phases)\n\n**Phase 1 – Tooling & Dependencies**\n\n- Extend `eslint.config.mjs` with a `no-restricted-imports` warning to discourage new `fastify` imports.\n- Update `packages/mcp/package.json` dependencies/devDependencies to drop Fastify packages and add Express stack modules.\n\n**Phase 2 – Core Transport Migration**\n\n- Introduce `expressTransport` (new module) by adapting the logic inside `core/transports/fastify.ts` to Express middleware/routers.\n- Ensure CORS, static assets, streamed MCP server connections, and proxy hand-offs work through Express equivalents.\n- Switch `packages/mcp/src/index.ts` to import/instantiate the Express transport.\n\n**Phase 3 – Security & OAuth Middleware Alignment**\n\n- Port `McpSecurityMiddleware` and the OAuth integration/middleware files to Express request/response types.\n- Reuse the existing `McpAuthMiddleware` to protect OAuth endpoints and tie into the Express server pipeline.\n- Validate cookie/session handling and discovery endpoints still behave as before.\n\n**Phase 4 – Tests & Cleanup**\n\n- Rename/update HTTP transport tests and fixtures to reference Express (e.g., `express-transport.integration.test.ts`).\n- Update any documentation snippets, examples, or pseudo scripts that previously instantiated Fastify.\n- Run targeted builds/tests to confirm everything is green.\n\n**Phase 5 – Verification & Lint**\n\n- Execute `pnpm --filter @promethean-os/mcp lint`, `build`, and `test` to ensure the migration is stable.\n- Capture any follow-up work (e.g., removing stray Fastify references) if warnings remain.\n\n## Notes\n\n- Preserve the external API exported from `packages/mcp/src/index.ts` (tool factories, transport helpers) so downstream callers are unaffected besides enabling Express.\n- Consider providing a compatibility alias (`fastifyTransport` re-exporting the Express transport) to minimize downstream churn, but internally everything should be Express-based.\n- The OAuth middleware already encapsulates authentication logic; focus on swapping out the HTTP bindings without rewriting business rules.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/promethean/kanban/mcp-express-migration.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-promethean-kanban-orgs-open-hax-tooloxx-docs-imports-promethean-spec-mcp-oauth-fastify-fix-md",
+          "title": "MCP OAuth Fastify Build Fix",
+          "slug": "mcp-oauth-fastify-build-fix",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:50.237Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/promethean/spec/mcp-oauth-fastify-fix.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/promethean/kanban/mcp-oauth-fastify-fix.md`\n\n# MCP OAuth Fastify Build Fix\n\n**Author:** Codex Agent  \n**Date:** 2025-11-09  \n**Related request:** User reported `@promethean-os/mcp` build failure because the repo depends on `mcp-auth`, an Express-first package that does not fit our Fastify stack.\n\n## Code References\n\n- `packages/mcp/src/auth/mcp-auth-adapter.ts`: Entire file introduces the `mcp-auth` dependency and Fastify adapter.\n- `packages/mcp/src/auth/oauth/routes.ts`: Compilation errors due to missing Fastify cookie typings, unused params, and incorrect reply API usage.\n- `packages/mcp/src/auth/oauth-main.ts`: `hasActiveSessions` declared but unused (line ~246).\n- `packages/mcp/src/auth/ui/oauth-login.ts`: Class defines private members `onAuthSuccess`/`onAuthError` and methods with the same identifiers causing duplicate symbol errors (lines ~48-360). Success callbacks never fire, making it impossible to observe end-to-end auth completion in automated flows.\n- `packages/mcp/src/config/auth-config.ts`: Env override for `adminIpWhitelist` can produce `undefined` though the field is typed as `string[]` (line 254).\n\n## Existing Issues / PRs\n\n- No open issues or PRs in the repo describing this specific Fastify vs `mcp-auth` mismatch (checked via quick `rg`/history scan).\n\n## Requirements\n\n1. Build must succeed via `pnpm --filter @promethean-os/mcp build`.\n2. Remove the Express-only `mcp-auth` dependency and any unused adapter code.\n3. Align OAuth HTTP routes and UI utilities with Fastify typings (cookie helpers, redirect signature, optional query params, unused parameters, etc.).\n4. Keep OAuth UI component usable by avoiding duplicate identifiers and ensuring optional callback parameters remain type-safe.\n5. Preserve existing public exports unless they are unused/invalid; no new runtime dependencies.\n6. Maintain strict TypeScript settings (no implicit `any`, no unused vars/params).\n\n## Definition of Done\n\n- `pnpm --filter @promethean-os/mcp build` passes locally.\n- `pnpm --filter @promethean-os/mcp test` spot-check not strictly required but route-related changes should be covered by build.\n- Source no longer imports `mcp-auth`; package.json dependency removed if unused.\n- Fastify route handlers compile cleanly and leverage cookie plugin typings by importing `@fastify/cookie` type augmentation.\n- OAuth login UI compiles without duplicate identifier errors and still exposes callback hooks.\n- Auth config env overrides respect `string[]` requirement for `adminIpWhitelist`.\n\n## Plan (Phases)\n\n**Phase 1 – Dependency cleanup**\n\n- Delete `packages/mcp/src/auth/mcp-auth-adapter.ts` and ensure nothing exports it.\n- Remove `mcp-auth` from `packages/mcp/package.json` dependencies.\n\n**Phase 2 – OAuth HTTP routes**\n\n- Add Fastify cookie type augmentation import.\n- Remove unused destructured fields (`jwtManager`, `authManager`).\n- Replace `as const` expressions with plain string unions.\n- Ensure helper functions accept optional session IDs and guard before setting cookies.\n- Fix redirect signature and extend `OAuthCallbackRequest` with `redirect_uri`.\n- Prefix unused handler parameters with `_` or remove them.\n\n**Phase 3 – OAuth UI component**\n\n- Rename private handler properties (e.g., `authSuccessHandler`) to avoid clashing with public methods.\n- Bridge browser-global handler storage so the UI can propagate success/error events after `handleOAuthCallback` completes, enabling Playwright/Chrome automation to observe the full OAuth round-trip.\n- Ensure callback helper `handleOAuthCallback` posts required data and invokes the registered handlers.\n\n**Phase 4 – Auth config typing**\n\n- Default `adminIpWhitelist` to existing array when env var absent, ensuring a `string[]` is always assigned.\n\n**Phase 5 – Verification**\n\n- Re-run `pnpm --filter @promethean-os/mcp build` to confirm TypeScript success.\n\n## Notes\n\n- Keep documentation changes minimal; focus on build unblock.\n- No evidence of external references to the removed adapter, but watch for generated exports.\n- UI spec must support instrumentation (Playwright/Chrome DevTools) so exposing auth success/error hooks is critical for diagnosing the \"last step\" OAuth failures reported by ChatGPT automation.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/promethean/kanban/mcp-oauth-fastify-fix.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-promethean-kanban-orgs-open-hax-tooloxx-docs-imports-promethean-spec-mcp-oauth-login-md",
+          "title": "MCP OAuth Login Flow Investigation",
+          "slug": "mcp-oauth-login-flow-investigation",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:50.238Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/promethean/spec/mcp-oauth-login.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/promethean/kanban/mcp-oauth-login.md`\n\n# MCP OAuth Login Flow Investigation\n\n## Summary\n\n- Goal: complete the Model Context Protocol (MCP) OAuth login flow via the dev server started with `pnpm --filter @promethean/mcp dev` and surface any blockers.\n- Context: PM2 process `mcp-dev` was launched by the user (see session log). We must use Chrome DevTools automations to exercise the UI and gather evidence of a successful login or pinpoint the failure point.\n\n## Relevant Code & References\n\n- `packages/mcp/package.json:30-39` — exposes the `dev` script (`tsx src/index.ts`) that PM2 is already running.\n- `packages/mcp-dev-ui-frontend/package.json:7-15` — indicates the frontend is served by `shadow-cljs watch dev-ui`; expect assets to be hosted via the backend dev server.\n- `packages/clj-hacks/src/clj_hacks/mcp/adapter_codex_toml.clj:269` — documents stdio command `pnpm --filter @promethean/mcp dev`, confirming we are targeting the same entry point.\n- Docs: [[docs/agile/kanban-cli-reference.md]] for kanban process alignment (no specific OAuth doc located yet).\n\n## Existing Issues / PRs\n\n- None identified related to MCP OAuth login during initial search (ran `rg \"@promethean/mcp\"`).\n\n## Requirements\n\n1. Reach the MCP dev UI in the browser via Chrome DevTools session.\n2. Trigger the OAuth login flow (likely Auth0/Okta style) and follow redirects until success or a clear blocking error.\n3. Capture console/network insights to explain success/failure.\n4. Summarize reproduction steps and outcomes for future debugging.\n\n## Definition of Done\n\n- Browser session demonstrates a completed OAuth login (dashboard visible) **or** provides actionable failure details (HTTP status, error payload, stack trace) plus proposed next steps.\n- Observations recorded in final response referencing relevant files/lines.\n- Todo list updated with final status.\n- No code changes required unless blockers demand it.\n\n## Open Questions\n\n- What port/URL does `@promethean/mcp dev` expose for the OAuth UI?\n- Which identity provider is configured (Auth0 vs. internal mock)?\n- Are credentials available or is a mock login expected?",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/promethean/kanban/mcp-oauth-login.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-promethean-kanban-orgs-open-hax-tooloxx-docs-imports-promethean-spec-pantheon-mcp-tsc-fix-md",
+          "title": "Pantheon MCP TSC Build Fix",
+          "slug": "pantheon-mcp-tsc-build-fix",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:50.238Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/promethean/spec/pantheon-mcp-tsc-fix.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/promethean/kanban/pantheon-mcp-tsc-fix.md`\n\n# Pantheon MCP TSC Build Fix\n\n## Context\n\n- `pnpm --filter @promethean-os/pantheon-mcp build` currently fails because `tsc` reports `TS6133` for the unused `defaultHandler` in `packages/pantheon/mcp/src/index.ts:62-76`.\n- `noUnusedLocals` is enforced in this package, so any placeholder definitions must be used or removed.\n\n## Files / References\n\n- packages/pantheon/mcp/src/index.ts:62-76 — `register` declares `defaultHandler` without ever referencing it.\n\n## Existing Issues\n\n- No related GitHub issues found via `gh issue list --search \"pantheon-mcp\" --limit 5` (2025-11-10).\n\n## Existing PRs\n\n- No related GitHub pull requests found via `gh pr list --search \"pantheon-mcp\" --limit 5` (2025-11-10).\n\n## Requirements\n\n1. Keep a sensible default execution path for tools registered without a handler instead of dead code.\n2. Ensure TypeScript `noUnusedLocals` passes by wiring the default handler (or removing it if it is unnecessary).\n3. Maintain backward compatibility for callers expecting `register` to accept a handler on the spec object.\n\n## Definition of Done\n\n- `pnpm --filter @promethean-os/pantheon-mcp build` succeeds locally without TypeScript warnings.\n- Default handler logic is covered either by usage or by clearly documented intentional removal.\n- The change includes any minimal commentary necessary so future changes know why the fallback handler exists.\n\n## Notes\n\n- Consider adding targeted unit coverage later, but not required for this unblocking fix.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/promethean/kanban/pantheon-mcp-tsc-fix.md"
+        }
+      ]
+    },
+    {
+      "status": "accepted",
+      "title": "Accepted",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "breakdown",
+      "title": "Breakdown",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "blocked",
+      "title": "Blocked",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "ready",
+      "title": "Ready",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "todo",
+      "title": "Todo",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "in_progress",
+      "title": "In Progress",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "review",
+      "title": "Review",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "document",
+      "title": "Document",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "done",
+      "title": "Done",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "rejected",
+      "title": "Rejected",
+      "taskCount": 0,
+      "tasks": []
+    }
+  ]
+}
