@@ -1,3 +1,0 @@
-Section order mismatch
-
-Section `Frames` must have at most 3 items

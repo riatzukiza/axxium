@@ -1,0 +1,34 @@
+{
+  "bpm": 90,
+  "tracks": [
+    {
+      "instrument": "drum",
+      "notes": [
+        {"time": "0:0:0", "duration": "4n", "note": "kick"},
+        {"time": "0:1:0", "duration": "4n", "note": "kick"},
+        {"time": "0:2:0", "duration": "4n", "note": "kick"},
+        {"time": "0:3:0", "duration": "4n", "note": "kick"},
+        {"time": "1:0:0", "duration": "4n", "note": "kick"},
+        {"time": "1:1:0", "duration": "4n", "note": "kick"},
+        {"time": "1:2:0", "duration": "4n", "note": "kick"},
+        {"time": "1:3:0", "duration": "4n", "note": "kick"}
+      ]
+    },
+    {
+      "instrument": "bass",
+      "notes": [
+        {"time": "0:0:0", "duration": "2n", "note": "C2"},
+        {"time": "0:2:0", "duration": "2n", "note": "Eb2"},
+        {"time": "1:0:0", "duration": "2n", "note": "C2"},
+        {"time": "1:2:0", "duration": "2n", "note": "G1"}
+      ]
+    },
+    {
+      "instrument": "synth",
+      "notes": [
+        {"time": "0:0:0", "duration": "1n", "note": "C4"},
+        {"time": "1:0:0", "duration": "1n", "note": "Ab3"}
+      ]
+    }
+  ]
+}

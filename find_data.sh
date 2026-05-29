@@ -1,1 +1,0 @@
-find /home/err/devel -name "*agent_taxonomy*" -o -name "*spawn_log*"

@@ -15,6 +15,8 @@ const commonEnv = {
   PROXY_KEYS_FILE: path.join(serviceRoot, "seeds/keys.json"),
   PROXY_MODELS_FILE: path.join(serviceRoot, "models.json"),
   PROXY_REQUEST_LOGS_FILE: path.join(serviceRoot, "data/request-logs.jsonl"),
+  PROXX_EVENT_STORE_TTL_MS: process.env.PROXX_EVENT_STORE_TTL_MS ?? process.env.PROXX_EVENT_TTL_MS ?? String(60 * 60 * 1000),
+  PROXX_EVENT_STORE_TTL_SWEEP_MS: process.env.PROXX_EVENT_STORE_TTL_SWEEP_MS ?? process.env.PROXX_EVENT_TTL_SWEEP_MS ?? String(5 * 60 * 1000),
   DATABASE_URL: process.env.PROXX_DEV_DATABASE_URL ?? "postgresql://openai_proxy:openai_proxy@127.0.0.1:15439/openai_proxy", // pragma: allowlist secret
   PROXX_CLJS_RUNTIME_REQUIRED: "true",
   PROXX_CLJS_POLICY_SHADOW: "true",

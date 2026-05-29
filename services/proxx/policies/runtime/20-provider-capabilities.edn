@@ -6,6 +6,18 @@
   :contract/kind :preference-order
   :preference/items ["openai"]}
 
+ {:contract/id :provider-order/openai-explicit
+  :contract/kind :preference-order
+  :preference/items ["openai" "vivgrid" "requesty" "openrouter" "factory" "blaze"]}
+
+ {:contract/id :provider-order/factory-explicit
+  :contract/kind :preference-order
+  :preference/items ["factory"]}
+
+ {:contract/id :provider-order/ollama-explicit
+  :contract/kind :preference-order
+  :preference/items ["ollama"]}
+
  {:contract/id :provider-order/gpt-oss
   :contract/kind :preference-order
   :preference/items ["ollama-cloud"]}
@@ -32,7 +44,7 @@
 
  {:contract/id :provider-order/embeddings
   :contract/kind :preference-order
-  :preference/items ["llamacpp-embed" "ollama"]}
+  :preference/items ["llamacpp-embed" "ollama" "ollama-lan"]}
 
  {:contract/id :provider-order/gemma
   :contract/kind :preference-order
@@ -129,6 +141,12 @@
   :prefer/strategies [:chat-completions]
   :exclude/strategies [:ollama-chat :messages :responses :openai-responses]}
 
+ {:contract/id :provider-capability/ollama-cloud-responses-passthrough
+  :contract/kind :provider-capability
+  :match/provider-pattern "^ollama-cloud$"
+  :match/request-kind :responses-passthrough
+  :exclude/provider? true}
+
  {:contract/id :request-surface/images-passthrough
   :contract/kind :request-surface-default
   :match/provider-pattern ".*"
@@ -167,6 +185,6 @@
 
  {:contract/id :request-surface/embeddings
   :contract/kind :request-surface-default
-  :match/provider-pattern "^(llamacpp-embed|ollama)$"
+  :match/provider-pattern "^(llamacpp-embed|ollama|ollama-lan)$"
   :match/request-kind :embeddings
   :prefer/strategies [:embeddings]}]

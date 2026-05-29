@@ -14,6 +14,8 @@ target/
 
 # Cache / tooling state (never track these)
 .clj-kondo/
+!orgs/octave-commons/bitch-tracker/.clj-kondo/
+!orgs/octave-commons/bitch-tracker/.clj-kondo/config.edn
 .shadow-cljs/
 .lsp/
 .clojure/
@@ -31,15 +33,6 @@ logs/
 
 # Data volumes
 /data/
-
-# Service runtime data volumes (local-only; never track service state)
-services/*/data/
-services/*/.data/
-services/*/runtime-secrets/
-services/*/secrets/
-services/*/storage/
-services/*/uploads/
-services/*/tmp/
 
 # Secrets (keep patterns, never track contents)
 .env
