@@ -1,4 +1,31 @@
-[{:contract/id :model-family/glm
+[{:contract/id :model-family/openai-explicit
+  :contract/kind :model-family
+  :match/model-pattern "(?i)^openai[/:].+"
+  :routing/provider-id "openai"
+  :routing/strip-prefixes ["openai/" "openai:"]
+  :routing/state {:open-ai-prefixed true}
+  :reasoning/control :effort-level
+  :reasoning/native-efforts [:none :minimal :low :medium :high :xhigh]}
+
+ {:contract/id :model-family/factory-explicit
+  :contract/kind :model-family
+  :match/model-pattern "(?i)^factory[/:].+"
+  :routing/provider-id "factory"
+  :routing/strip-prefixes ["factory/" "factory:"]
+  :routing/state {:factory-prefixed true}
+  :reasoning/control :effort-level
+  :reasoning/native-efforts [:none :minimal :low :medium :high :xhigh]}
+
+ {:contract/id :model-family/ollama-explicit
+  :contract/kind :model-family
+  :match/model-pattern "(?i)^ollama[/:].+"
+  :routing/provider-id "ollama"
+  :routing/strip-prefixes ["ollama/" "ollama:"]
+  :routing/state {:explicit-ollama true :local-ollama true}
+  :reasoning/control :effort-level
+  :reasoning/native-efforts [:none :low :medium :high]}
+
+ {:contract/id :model-family/glm
   :contract/kind :model-family
   :match/model-pattern "^glm-"
   :reasoning/control :effort-level

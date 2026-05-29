@@ -105,13 +105,18 @@
  {:contract/id :provider-route/ollama
   :contract/kind :provider-route
   :provider/id "ollama"
-  :provider/base-url "http://ollama:11434"}
+  :provider/base-url "http://127.0.0.1:11434"
+  :auth/required? false
+  :paths {:embeddings "/api/embed"
+          :chat-completions "/v1/chat/completions"}}
 
  {:contract/id :provider-route/ollama-lan
   :contract/kind :provider-route
   :provider/id "ollama-lan"
   :provider/base-url "http://192.168.12.68:11434"
-  :auth/required? false}
+  :auth/required? false
+  :paths {:embeddings "/api/embed"
+          :chat-completions "/v1/chat/completions"}}
 
  {:contract/id :provider-route/llamacpp
   :contract/kind :provider-route
@@ -122,4 +127,6 @@
  {:contract/id :provider-route/llamacpp-embed
   :contract/kind :provider-route
   :provider/id "llamacpp-embed"
-  :provider/base-url "http://127.0.0.1:8081"}]
+  :provider/base-url "http://127.0.0.1:8081"
+  :auth/required? false
+  :paths {:embeddings "/v1/embeddings"}}]
