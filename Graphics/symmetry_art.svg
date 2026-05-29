@@ -1,0 +1,60 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: Deep Void with a slight dither effect -->
+  <rect width="800" height="800" fill="#0a0a1a" />
+  
+  <!-- Dither Pattern Overlay -->
+  <defs>
+    <pattern id="dither" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.5" fill="#222244" />
+    </pattern>
+  </defs>
+  <rect width="800" height="800" fill="url(#dither)" />
+
+  <!-- Symmetrical Neon Elements -->
+  <g transform="translate(400, 400)">
+    <!-- Central Core -->
+    <circle r="50" fill="none" stroke="#00FFFF" stroke-width="4" stroke-dasharray="10,5">
+      <animate attributeName="r" values="50;60;50" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle r="30" fill="#FF00FF" opacity="0.6">
+       <animate attributeName="opacity" values="0.6;0.2;0.6" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- Symmetrical Spikes -->
+    <g stroke-width="2" fill="none">
+      <!-- Right Side -->
+      <path d="M 50 0 L 200 -100 L 150 0 L 250 100 L 100 0" stroke="#FFFF00" />
+      <path d="M 50 0 L 100 200 L 0 150 L -100 250 L -50 0" stroke="#00FFFF" />
+      
+      <!-- Mirror Left Side -->
+      <path d="M -50 0 L -200 -100 L -150 0 L -250 100 L -100 0" stroke="#FFFF00" />
+      <path d="M -50 0 L -100 200 L 0 150 L 100 250 L 50 0" stroke="#00FFFF" />
+    </g>
+
+    <!-- Rotating Geometric Slop -->
+    <g>
+      <rect x="-150" y="-150" width="300" height="300" stroke="#FF00FF" stroke-width="1" fill="none" transform="rotate(45)" opacity="0.5" />
+      <rect x="-100" y="-100" width="200" height="200" stroke="#FFFF00" stroke-width="1" fill="none" transform="rotate(-45)" opacity="0.5" />
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite" />
+    </g>
+
+    <!-- Jagged Noise Lines -->
+    <path d="M -400 0 L -350 10 L -300 -10 L -250 20 L -200 -20 L -150 10 L -100 -10 L -50 20" stroke="#00FFFF" stroke-width="1" opacity="0.3" />
+    <path d="M 400 0 L 350 10 L 300 -10 L 250 20 L 200 -20 L 150 10 L 100 -10 L 50 20" stroke="#00FFFF" stroke-width="1" opacity="0.3" />
+  </g>
+
+  <!-- Text: Symmetry is Absolute -->
+  <text x="400" y="750" text-anchor="middle" fill="#FFFF00" font-family="Comic Sans MS, cursive" font-size="32" font-weight="bold" filter="url(#glow)">
+    SYMMETRY IS ABSOLUTE
+  </text>
+  
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+</svg>

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@opentui/react",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["REDACTED_SECRET", "react"]
+  },
+  "include": ["src"],
+  "exclude": ["REDACTED_SECRET_modules", "dist"]
+}

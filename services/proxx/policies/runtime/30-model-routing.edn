@@ -1,4 +1,28 @@
-[{:contract/id :route/gemma4-e4b
+[{:contract/id :route/openai-explicit
+  :contract/kind :routing-clause
+  :match/family :model-family/openai-explicit
+  :prefer/providers :provider-order/openai-explicit
+  :prefer/providers-strict? true
+  :prefer/strategies [:openai-responses :responses :openai-chat-completions :chat-completions]
+  :account/order :account-order/prefer-free}
+
+ {:contract/id :route/factory-explicit
+  :contract/kind :routing-clause
+  :match/family :model-family/factory-explicit
+  :prefer/providers :provider-order/factory-explicit
+  :prefer/providers-strict? true
+  :prefer/strategies [:messages :responses :chat-completions]
+  :account/order :account-order/prefer-free}
+
+ {:contract/id :route/ollama-explicit
+  :contract/kind :routing-clause
+  :match/family :model-family/ollama-explicit
+  :prefer/providers :provider-order/ollama-explicit
+  :prefer/providers-strict? true
+  :prefer/strategies [:ollama-chat :chat-completions]
+  :account/order :account-order/prefer-free}
+
+ {:contract/id :route/gemma4-e4b
   :contract/kind :routing-clause
   :match/family :model-family/gemma4-e4b
   :prefer/providers :provider-order/gemma4-e4b
@@ -11,7 +35,7 @@
   :match/family :model-family/gemma4
   :prefer/providers :provider-order/gemma4
   :prefer/providers-strict? true
-  :prefer/strategies [:gemini-chat :ollama-chat :chat-completions]
+  :prefer/strategies [ :ollama-chat :gemini-chat :chat-completions]
   :account/order :account-order/prefer-free}
 
  {:contract/id :route/gemma-e

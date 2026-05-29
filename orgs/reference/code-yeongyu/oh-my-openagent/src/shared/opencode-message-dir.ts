@@ -1,0 +1,29 @@
+import { existsSync, readdirSync } from "REDACTED_SECRET:fs"
+import { join } from "REDACTED_SECRET:path"
+import { MESSAGE_STORAGE } from "./opencode-storage-paths"
+import { log } from "./logger"
+
+export function getMessageDir(sessionID: string): string | null {
+  if (!sessionID.startsWith("ses_")) return null
+  if (/[/\\]|\.\./.test(sessionID)) return null
+  if (!existsSync(MESSAGE_STORAGE)) return null
+
+  const directPath = join(MESSAGE_STORAGE, sessionID)
+  if (existsSync(directPath)) {
+    return directPath
+  }
+
+  try {
+    for (const dir of readdirSync(MESSAGE_STORAGE)) {
+      const sessionPath = join(MESSAGE_STORAGE, dir, sessionID)
+      if (existsSync(sessionPath)) {
+        return sessionPath
+      }
+    }
+  } catch (error) {
+    log("[opencode-message-dir] Failed to scan message directories", { sessionID, error: String(error) })
+    return null
+  }
+
+  return null
+}

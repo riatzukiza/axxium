@@ -1,0 +1,3 @@
+[test]
+REDACTED_SECRET = "./src"
+preload = ["./happydom.ts"]

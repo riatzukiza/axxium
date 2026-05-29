@@ -42,9 +42,18 @@ if ! docker inspect "$PROD_DB_CONTAINER" >/dev/null 2>&1; then
 fi
 
 # Ensure schema exists in the dev database without dumping table data to disk or stdout.
-docker exec "$PROD_DB_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" --schema-only \
-  "${PG_DUMP_TABLE_ARGS[@]}" \
-  | docker exec -i "$DEV_DB_CONTAINER" psql -v ON_ERROR_STOP=1 -U "$DB_USER" -d "$DB_NAME" >/dev/null
+# The schema import is intentionally skipped when all target tables already exist;
+# pg_dump's schema output is not fully idempotent for pre-existing relations.
+SCHEMA_CHECK_SQL="select count(*) from unnest(array['providers','accounts','tenant_provider_policies','account_health','account_cooldown']) as table_name where to_regclass('REDACTED_SECRET.' || table_name) is not null;"
+existing_table_count="$(docker exec "$DEV_DB_CONTAINER" psql -v ON_ERROR_STOP=1 -U "$DB_USER" -d "$DB_NAME" -Atc "$SCHEMA_CHECK_SQL")"
+if [[ "$existing_table_count" == "0" ]]; then
+  docker exec "$PROD_DB_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" --schema-only \
+    "${PG_DUMP_TABLE_ARGS[@]}" \
+    | docker exec -i "$DEV_DB_CONTAINER" psql -v ON_ERROR_STOP=1 -U "$DB_USER" -d "$DB_NAME" >/dev/null
+elif [[ "$existing_table_count" != "${#TABLES[@]}" ]]; then
+  echo "dev db has a partial credential schema ($existing_table_count/${#TABLES[@]} tables); recreate the dev DB volume or repair schema before seeding" >&2
+  exit 1
+fi
 
 # Refresh the credential/provider subset. This intentionally avoids request logs,
 # sessions, OAuth tokens, and other operational state.

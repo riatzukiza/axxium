@@ -1,0 +1,6 @@
+[install]
+exact = true
+
+[test]
+REDACTED_SECRET = "./do-not-run-tests-from-REDACTED_SECRET"
+

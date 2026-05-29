@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler",
+    "types": ["REDACTED_SECRET"],
+    "typeRoots": [
+      "./REDACTED_SECRET_modules/@types",
+      "../workflow-manager/REDACTED_SECRET_modules/@types"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "REDACTED_SECRETDir": "./",
+    "outDir": "dist/esm",
+    "esModuleInterop": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": false,
+    "useUnknownInCatchVariables": true
+  },
+  "include": ["src/**/*.ts", "examples/**/*.ts"],
+  "exclude": ["dist", "REDACTED_SECRET_modules", "tests/**/*.ts"]
+}

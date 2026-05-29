@@ -1,3 +1,0 @@
-Section `Frames` must have at most 3 items
-
-Section `Next` must have exactly 1 items

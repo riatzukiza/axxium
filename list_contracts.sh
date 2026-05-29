@@ -1,1 +1,0 @@
-ls /home/err/devel/contracts/

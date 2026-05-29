@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@opencode-ai/console-resource",
+  "license": "MIT",
+  "dependencies": {
+    "@cloudflare/workers-types": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "production": {
+        "import": "./resource.cloudflare.ts"
+      },
+      "import": "./resource.REDACTED_SECRET.ts"
+    }
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "catalog:",
+    "@tsconfig/REDACTED_SECRET22": "22.0.2",
+    "@types/REDACTED_SECRET": "catalog:",
+    "cloudflare": "5.2.0"
+  }
+}

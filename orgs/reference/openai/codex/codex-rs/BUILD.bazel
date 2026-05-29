@@ -1,0 +1,18 @@
+exports_files([
+    "clippy.toml",
+    "REDACTED_SECRET-version.txt",
+])
+
+filegroup(
+    name = "workspace-files",
+    srcs = glob(
+        [
+            "*",
+            ".cargo/**",
+        ],
+        exclude = [
+            "BUILD.bazel",
+        ],
+    ),
+    visibility = ["//visibility:REDACTED_SECRET"],
+)

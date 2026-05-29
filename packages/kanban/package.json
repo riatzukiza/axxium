@@ -33,12 +33,12 @@
     "sync:trello": "REDACTED_SECRET dist/cli.js sync trello"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
     "gray-matter": "^4.0.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0",
-    "@types/REDACTED_SECRET": "^20.10.5",
+    "@types/REDACTED_SECRET": "^20.19.39",
+    "dotenv": "^16.6.1",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.1"

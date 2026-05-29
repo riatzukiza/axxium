@@ -1,0 +1,327 @@
+import { describe, expect, it, vi } from "vitest";
+import { SESSION_CONFIG } from "../lib/constants.js";
+import { SessionManager } from "../lib/session/session-manager.js";
+import * as logger from "../lib/logger.js";
+import type { RequestBody } from "../lib/types.js";
+
+interface BodyOptions {
+	forkId?: string;
+	parentConversationId?: string;
+	parent_conversation_id?: string;
+}
+
+function createBody(conversationId: string, inputCount = 1, options: BodyOptions = {}): RequestBody {
+	const metadata: Record<string, unknown> = {
+		conversation_id: conversationId,
+	};
+	if (options.forkId) {
+		metadata.forkId = options.forkId;
+	}
+	if (options.parentConversationId) {
+		metadata.parentConversationId = options.parentConversationId;
+	}
+	if (options.parent_conversation_id) {
+		metadata.parent_conversation_id = options.parent_conversation_id;
+	}
+
+	return {
+		model: "gpt-5",
+		metadata,
+		input: Array.from({ length: inputCount }, (_, index) => ({
+			type: "message",
+			role: "user",
+			id: `msg_${index + 1}`,
+			content: `message-${index + 1}`,
+		})),
+	};
+}
+
+describe("SessionManager", () => {
+	it("returns undefined when disabled", () => {
+		const manager = new SessionManager({ enabled: false });
+		const body = createBody("conv-disabled");
+		const context = manager.getContext(body);
+
+		expect(context).toBeUndefined();
+	});
+
+	it("initializes session and preserves ids when enabled", () => {
+		const manager = new SessionManager({ enabled: true });
+		const body = createBody("conv-123");
+
+		const context = manager.getContext(body)!;
+		const { body: updatedBody, context: updatedContext } = manager.applyRequest(body, context);
+
+		expect(updatedContext).toBeDefined();
+		expect(updatedBody.prompt_cache_key).toBe("conv-123");
+		expect(updatedContext!.state.lastInput.length).toBe(1);
+	});
+
+	it("maintains prefix across turns and reuses context", () => {
+		const manager = new SessionManager({ enabled: true });
+		const firstBody = createBody("conv-456");
+
+		let context = manager.getContext(firstBody)!;
+		const firstApply = manager.applyRequest(firstBody, context);
+		context = firstApply.context!;
+
+		const secondBody = createBody("conv-456", 2);
+		let nextContext = manager.getContext(secondBody)!;
+		expect(nextContext.isNew).toBe(false);
+		const secondApply = manager.applyRequest(secondBody, nextContext);
+		nextContext = secondApply.context!;
+
+		expect(secondApply.body.prompt_cache_key).toBe("conv-456");
+		expect(nextContext.state.lastInput.length).toBe(2);
+		expect(nextContext.state.promptCacheKey).toBe(context.state.promptCacheKey);
+	});
+
+	it("regenerates cache key when prefix differs", () => {
+		const warnSpy = vi.spyOn(logger, "logWarn").mockImplementation(() => {});
+		const manager = new SessionManager({ enabled: true });
+		const baseBody = createBody("conv-789", 2);
+
+		const context = manager.getContext(baseBody)!;
+		manager.applyRequest(baseBody, context);
+
+		const changedBody: RequestBody = {
+			...baseBody,
+			input: [
+				{ type: "message", role: "system", content: "updated system prompt" },
+				{ type: "message", role: "user", content: "hello" },
+			],
+		};
+
+		const nextContext = manager.getContext(changedBody)!;
+		manager.applyRequest(changedBody, nextContext);
+
+		const warnCall = warnSpy.mock.calls.find(
+			([message]) => typeof message === "string" && message.includes("prefix mismatch"),
+		);
+
+		expect(warnCall?.[1]).toMatchObject({
+			prefixCause: "system_prompt_changed",
+			previousRole: "user",
+			incomingRole: "system",
+		});
+
+		warnSpy.mockRestore();
+	});
+
+	it("does not warn on user-only content changes", () => {
+		const warnSpy = vi.spyOn(logger, "logWarn").mockImplementation(() => {});
+		const manager = new SessionManager({ enabled: true });
+		const baseBody: RequestBody = {
+			model: "gpt-5",
+			metadata: { conversation_id: "conv-user-change" },
+			input: [
+				{ type: "message", role: "system", content: "sys" },
+				{ type: "message", role: "user", content: "first" },
+			],
+		};
+
+		const context = manager.getContext(baseBody)!;
+		manager.applyRequest(baseBody, context);
+
+		const nextBody: RequestBody = {
+			...baseBody,
+			input: [
+				{ type: "message", role: "system", content: "sys" },
+				{ type: "message", role: "user", content: "second" },
+			],
+		};
+
+		const nextContext = manager.getContext(nextBody)!;
+		manager.applyRequest(nextBody, nextContext);
+
+		const warnCall = warnSpy.mock.calls.find(
+			([message]) => typeof message === "string" && message.includes("prefix mismatch"),
+		);
+		expect(warnCall?.[1]).toMatchObject({
+			prefixCause: "user_message_changed",
+			previousRole: "user",
+			incomingRole: "user",
+			sharedPrefixLength: 1,
+		});
+
+		warnSpy.mockRestore();
+	});
+
+	it("logs history pruning when earlier tool results are removed", () => {
+		const warnSpy = vi.spyOn(logger, "logWarn").mockImplementation(() => {});
+		const manager = new SessionManager({ enabled: true });
+		const fullBody: RequestBody = {
+			model: "gpt-5",
+			metadata: { conversation_id: "conv-history-prune" },
+			input: [
+				{ type: "message", role: "system", content: "sys" },
+				{ type: "message", role: "user", content: "step 1" },
+				{
+					type: "message",
+					role: "assistant",
+					content: "tool call",
+					tool_calls: [{ id: "call-1" }],
+				},
+				{ type: "message", role: "tool", content: "tool output", tool_call_id: "call-1" },
+				{ type: "message", role: "user", content: "follow up" },
+			],
+		};
+
+		const context = manager.getContext(fullBody)!;
+		manager.applyRequest(fullBody, context);
+
+		const prunedBody: RequestBody = {
+			...fullBody,
+			input: fullBody.input ? fullBody.input.slice(4) : [],
+		};
+
+		const prunedContext = manager.getContext(prunedBody)!;
+		manager.applyRequest(prunedBody, prunedContext);
+
+		const warnCall = warnSpy.mock.calls.find(
+			([message]) => typeof message === "string" && message.includes("prefix mismatch"),
+		);
+
+		expect(warnCall?.[1]).toMatchObject({
+			prefixCause: "history_pruned",
+			removedCount: 4,
+		});
+		expect((warnCall?.[1] as Record<string, unknown>)?.removedRoles).toContain("tool");
+
+		warnSpy.mockRestore();
+	});
+
+	it("records cached token usage from response payload", () => {
+		const manager = new SessionManager({ enabled: true });
+		const body = createBody("conv-usage");
+
+		const context = manager.getContext(body)!;
+		const applyResult = manager.applyRequest(body, context);
+		const updatedContext = applyResult.context!;
+
+		manager.recordResponse(updatedContext, { usage: { cached_tokens: 42 } });
+
+		expect(updatedContext.state.lastCachedTokens).toBe(42);
+	});
+
+	it("reports metrics snapshot with recent sessions", () => {
+		const manager = new SessionManager({ enabled: true });
+		const body = createBody("conv-metrics");
+		const context = manager.getContext(body)!;
+		manager.applyRequest(body, context);
+
+		const metrics = manager.getMetrics();
+		expect(metrics.enabled).toBe(true);
+		expect(metrics.totalSessions).toBe(1);
+		expect(metrics.recentSessions[0].id).toBe("conv-metrics");
+	});
+
+	it("falls back to prompt_cache_key when metadata missing", () => {
+		const manager = new SessionManager({ enabled: true });
+		const body: RequestBody = {
+			model: "gpt-5",
+			input: [],
+			prompt_cache_key: "fallback_cache_key",
+		};
+
+		const context = manager.getContext(body)!;
+		expect(context.enabled).toBe(true);
+		expect(context.isNew).toBe(true);
+		expect(context.state.promptCacheKey).toBe("fallback_cache_key");
+	});
+
+	it("reuses session when prompt_cache_key matches existing", () => {
+		const manager = new SessionManager({ enabled: true });
+		const cacheKey = "persistent_key_789";
+
+		// First request creates session
+		const firstBody: RequestBody = {
+			model: "gpt-5",
+			input: [],
+			prompt_cache_key: cacheKey,
+		};
+		const firstContext = manager.getContext(firstBody)!;
+		expect(firstContext.isNew).toBe(true);
+
+		// Second request reuses session
+		const secondBody: RequestBody = {
+			model: "gpt-5",
+			input: [{ type: "message", role: "user", content: "second" }],
+			prompt_cache_key: cacheKey,
+		};
+		const secondContext = manager.getContext(secondBody)!;
+		expect(secondContext.isNew).toBe(false);
+		expect(secondContext.state.promptCacheKey).toBe(firstContext.state.promptCacheKey);
+	});
+
+	it("creates fork-specific sessions with derived cache keys", () => {
+		const manager = new SessionManager({ enabled: true });
+		const firstAlpha = createBody("conv-fork", 1, { forkId: "alpha" });
+		let alphaContext = manager.getContext(firstAlpha)!;
+		expect(alphaContext.isNew).toBe(true);
+		const alphaApply = manager.applyRequest(firstAlpha, alphaContext);
+		alphaContext = alphaApply.context!;
+		expect(alphaContext.state.promptCacheKey).toBe("conv-fork::fork::alpha");
+
+		const repeatAlpha = createBody("conv-fork", 2, { forkId: "alpha" });
+		const repeatedContext = manager.getContext(repeatAlpha)!;
+		expect(repeatedContext.isNew).toBe(false);
+		const repeatApply = manager.applyRequest(repeatAlpha, repeatedContext);
+		expect(repeatApply.body.prompt_cache_key).toBe("conv-fork::fork::alpha");
+
+		const betaBody = createBody("conv-fork", 1, { forkId: "beta" });
+		const betaContext = manager.getContext(betaBody)!;
+		expect(betaContext.isNew).toBe(true);
+		expect(betaContext.state.promptCacheKey).toBe("conv-fork::fork::beta");
+	});
+
+	it("derives fork ids from parent conversation hints", () => {
+		const manager = new SessionManager({ enabled: true });
+		const parentBody = createBody("conv-fork-parent", 1, { parentConversationId: "parent-conv" });
+		const parentContext = manager.getContext(parentBody)!;
+		expect(parentContext.isNew).toBe(true);
+		expect(parentContext.state.promptCacheKey).toBe("conv-fork-parent::fork::parent-conv");
+		const parentApply = manager.applyRequest(parentBody, parentContext);
+		expect(parentApply.body.prompt_cache_key).toBe("conv-fork-parent::fork::parent-conv");
+
+		const snakeParentBody = createBody("conv-fork-parent", 1, {
+			parent_conversation_id: "parent-snake",
+		});
+		const snakeParentContext = manager.getContext(snakeParentBody)!;
+		expect(snakeParentContext.isNew).toBe(true);
+		expect(snakeParentContext.state.promptCacheKey).toBe("conv-fork-parent::fork::parent-snake");
+	});
+
+	it("evicts sessions that exceed idle TTL", () => {
+		const manager = new SessionManager({ enabled: true });
+		const body = createBody("conv-expire");
+		let context = manager.getContext(body)!;
+		const expireApply = manager.applyRequest(body, context);
+		context = expireApply.context!;
+
+		context.state.lastUpdated = Date.now() - SESSION_CONFIG.IDLE_TTL_MS - 1000;
+		manager.pruneIdleSessions(Date.now());
+
+		const metrics = manager.getMetrics();
+		expect(metrics.totalSessions).toBe(0);
+	});
+
+	it("caps total sessions to the configured maximum", () => {
+		const manager = new SessionManager({ enabled: true });
+
+		const totalSessions = SESSION_CONFIG.MAX_ENTRIES + 5;
+		for (let index = 0; index < totalSessions; index += 1) {
+			const body = createBody(`conv-cap-${index}`);
+			const context = manager.getContext(body)!;
+
+			const applyResult = manager.applyRequest(body, context);
+			const appliedContext = applyResult.context ?? context;
+
+			appliedContext.state.lastUpdated -= index; // ensure ordering
+		}
+
+		const metrics = manager.getMetrics(SESSION_CONFIG.MAX_ENTRIES + 10);
+		expect(metrics.totalSessions).toBe(SESSION_CONFIG.MAX_ENTRIES);
+		expect(metrics.recentSessions.length).toBeLessThanOrEqual(SESSION_CONFIG.MAX_ENTRIES);
+	});
+});

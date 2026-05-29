@@ -1,0 +1,13 @@
+- Search the web for up-to-date information beyond the model's knowledge cutoff
+- Backend is selected automatically:
+  - OpenAI/Azure: uses the OpenAI Responses API built-in `web_search` tool (Codex-like)
+  - Otherwise: falls back to Exa (requires Exa enabled in OpenCode)
+- Use this tool for discovery (finding sources and summaries)
+- Pair with `webfetch` when you need to retrieve full content from a specific URL
+
+Usage notes:
+  - Prefer including the current year in time-sensitive queries
+  - If you need more comprehensive context, use type="deep" (may be slower/more expensive)
+
+The current year is {{year}}. You MUST use this year when searching for recent information or current events
+- Example: If the current year is 2026 and the user asks for "latest AI news", search for "AI news 2026", NOT "AI news 2025"
