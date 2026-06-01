@@ -50,9 +50,10 @@
       (.then
         (fn [_]
           (println "Database schema initialized")
-          (let [app (create-app)]
-            (register-routes! app)
-            (register-static! app)
+           (let [app (create-app)]
+             (println "DEBUG: about to call register-routes!")
+             (register-routes! app)
+             (register-static! app)
             (.then
               (.listen app #js {:port (cfg/get-in-config [:axxium/port])
                                 :host (cfg/get-in-config [:axxium/host])})
