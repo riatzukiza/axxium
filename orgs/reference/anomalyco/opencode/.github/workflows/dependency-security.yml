@@ -1,0 +1,74 @@
+name: dependency-security
+on:
+  pull_request:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bun-audit:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Run Bun audit (prod, high+)
+        run: bun audit --prod --audit-level=high
+
+  trivy-release:
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (release tag)
+        if: github.event_name == 'release'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - name: Checkout (default)
+        if: github.event_name != 'release'
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@0.34.1
+        with:
+          version: v0.69.1
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln
+          vuln-type: library
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: "1"
+
+      - name: Run Trivy misconfig and secret scan
+        uses: aquasecurity/trivy-action@0.34.1
+        with:
+          version: v0.69.1
+          scan-type: fs
+          scan-ref: .
+          scanners: misconfig,secret
+          severity: HIGH,CRITICAL
+          skip-dirs: node_modules,packages/opencode/dist,tree-sitter-scheme
+          format: sarif
+          output: trivy-policy-results.sarif
+          exit-code: "0"
+
+      - name: Upload Trivy report
+        if: ${{ always() && env.ACTIONS_RUNTIME_TOKEN != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-release-report
+          path: |
+            trivy-results.sarif
+            trivy-policy-results.sarif

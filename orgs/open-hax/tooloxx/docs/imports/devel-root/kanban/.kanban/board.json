@@ -1,0 +1,164 @@
+{
+  "generatedAt": "2026-05-29T04:01:49.216Z",
+  "totalTasks": 6,
+  "columns": [
+    {
+      "status": "icebox",
+      "title": "Icebox",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "incoming",
+      "title": "Incoming",
+      "taskCount": 5,
+      "tasks": [
+        {
+          "uuid": "b2aab092-9a32-423b-a225-3f514a2cb69f",
+          "title": "Cephalon MCP Subcommands",
+          "slug": "2026-01-29-cephalon-mcp-subcommands",
+          "status": "incoming",
+          "priority": "P2",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-02-03T06:36:00.407448Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/devel-root/spec/2026-01-29-cephalon-mcp-subcommands.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-01-29-cephalon-mcp-subcommands.md`\n# Cephalon MCP Subcommands\n\n## Context\nAdd `cephalon mcp` subcommands to serve an MCP server and expose the same toolsets as Duck and OpenSkull, using `OPENHAX_DISCORD_TOKEN` as a fallback Discord token when serving.\n\n## Requirements\n- Add `cephalon mcp serve`, `cephalon mcp config`, and `cephalon mcp tools` subcommands.\n- MCP toolset mirrors Duck + OpenSkull tool names.\n- MCP config output lives under `cephalon-clj-brain` and is printable via `cephalon mcp config`.\n- `OPENHAX_DISCORD_TOKEN` is recognized as a fallback for `DISCORD_TOKEN` in MCP serve.\n\n## Planned Files\n- `bin/cephalon` (command dispatch + usage + env wiring)\n- `orgs/octave-commons/cephalon/recovered/cephalon-clj/cephalon-clj-brain/deps.edn` (add MCP dependency)\n- `orgs/octave-commons/cephalon/recovered/cephalon-clj/cephalon-clj-brain/src/cephalon/brain/toolset.clj` (shared tool lists)\n- `orgs/octave-commons/cephalon/recovered/cephalon-clj/cephalon-clj-brain/src/cephalon/brain/agent.clj` (use shared toolset)\n- `orgs/octave-commons/cephalon/recovered/cephalon-clj/cephalon-clj-brain/src/cephalon/brain/mcp.clj` (config/tools output)\n- `orgs/octave-commons/cephalon/recovered/cephalon-clj/cephalon-clj-brain/src/cephalon/brain/mcp_server.clj` (MCP server)\n- `orgs/octave-commons/cephalon/recovered/cephalon-clj/cephalon-clj-brain/mcp/cephalon.mcp.json` (config file)\n\n## Existing Issues / PRs\n- None referenced.\n\n## Definition of Done\n- `cephalon mcp serve` starts the MCP server from `cephalon-clj-brain` and uses Duck/OpenSkull tools.\n- `cephalon mcp config` prints a valid MCP JSON config containing Duck/OpenSkull tool lists.\n- `cephalon mcp tools` lists tool names (supports agent filter).\n- LSP diagnostics are clean for changed files (or recorded if unavailable).",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-01-29-cephalon-mcp-subcommands.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-devel-root-kanban-orgs-open-hax-tooloxx-docs-imports-devel-root-spec-2026-02-08-mcp-migration-implementation-status-md",
+          "title": "MCP Migration Implementation Status (2026-02-08)",
+          "slug": "mcp-migration-implementation-status-2026-02-08",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:46.594Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/devel-root/spec/2026-02-08-mcp-migration-implementation-status.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-02-08-mcp-migration-implementation-status.md`\n\n# MCP Migration Implementation Status (2026-02-08)\n\n## Implemented in this pass\n\n- Gateway MCP mux route added: `/api/mcp/:service/*` with service map lookup.\n- Unknown service handling added: `404 { ok: false, error: \"unknown_mcp_service\", service }`.\n- Config support added for `MCP_SERVICE_URLS` JSON mapping and `MCP_INTERNAL_SHARED_SECRET`.\n- Gateway proxy now emits signed internal assertion headers for downstream MCP services:\n  - `x-mcp-gateway-ts`\n  - `x-mcp-gateway-sig`\n- Gateway now forwards `x-request-id` to upstream MCP services.\n- `mcp-files` hardened with auth/trust middleware:\n  - loopback-only local bypass behavior\n  - optional `ALLOW_UNAUTH_LOCAL=true`\n  - gateway signature verification for non-local traffic\n- `mcp-files` now supports MCP session DELETE route at `/mcp`.\n- `mcp-files` legacy compatibility aliases implemented:\n  - `files_list_directory`\n  - `files_view_file`\n  - `files_write_content`\n  - `files_write_lines`\n  - `files_tree_directory`\n  - `files_search`\n- Added shared package `packages/mcp-family-proxy` that provides:\n  - local-bypass + signed gateway-assertion auth middleware\n  - MCP pass-through proxying to legacy monolith\n  - per-service tool-family filtering for `tools/list` and `tools/call`\n- Scaffolded extracted `services/mcp-*` family services, each with `/health` and `/mcp` proxy contract:\n  - `mcp-github`\n  - `mcp-process`\n  - `mcp-devtools`\n  - `mcp-tdd`\n  - `mcp-sandboxes`\n  - `mcp-ollama`\n  - `mcp-exec`\n- Added workspace package wiring for the new shared package in `pnpm-workspace.yaml`.\n- Added open-question decision record at `spec/95-open-questions-resolution.md`.\n\n## Tests added/updated\n\n- `services/api-gateway/src/tests/api-gateway.test.ts`\n  - Added mux routing test for configured service route.\n  - Added unknown-service contract test for mux.\n- `services/mcp-files/src/tests/mcp-files.test.ts`\n  - Added health smoke test.\n  - Added MCP discovery smoke test asserting legacy `files_*` aliases are exposed.\n- `packages/mcp-family-proxy/src/tests/family-proxy.test.ts`\n  - Added health smoke test.\n  - Added tool-filter contract test (`tools/list` filtered, disallowed `tools/call` blocked).\n- `services/mcp-github/src/tests/mcp-github.test.ts`\n  - Added service smoke test validating health + github-only tool filtering.\n\n## Build/Test status\n\n- `services/api-gateway`: build + test passing.\n- `services/mcp-files`: build + typecheck + test passing.\n- `packages/mcp-family-proxy`: build + test passing.\n- `services/mcp-github`: build + test passing.\n- `services/mcp-process`: build + typecheck passing.\n- `services/mcp-devtools`: build + typecheck passing.\n- `services/mcp-tdd`: build + typecheck passing.\n- `services/mcp-sandboxes`: build + typecheck passing.\n- `services/mcp-ollama`: build + typecheck passing.\n- `services/mcp-exec`: build + typecheck passing.\n\n## Remaining migration gaps against full 10-spec target\n\n- Tool implementation extraction is currently proxy-based (delegating to monolith) rather than source-moved tool code.\n- Full tool-schema parity snapshot tests against monolith are not yet added for all families.\n- Rollout/deprecation execution (legacy route removal timing, warning logs) remains to be completed.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-02-08-mcp-migration-implementation-status.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-devel-root-kanban-orgs-open-hax-tooloxx-docs-imports-devel-root-spec-2026-02-08-mcp-migration-overview-md",
+          "title": "mcp migration overview",
+          "slug": "mcp-migration-overview",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:46.590Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/devel-root/spec/2026-02-08-mcp-migration-overview.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-02-08-mcp-migration-overview.md`\n\n# mcp migration overview\n\n## goal\nMigrate everything except oauth from `orgs/riatzukiza/promethean/services/mcp` into independent `services/mcp-*` services, all proxied behind `services/api-gateway`, matching the deployment pattern used by `services/mcp-fs-oauth`.\n\nThis is not just splitting an mcp server. The legacy `promethean/services/mcp` is also a spec and runtime for defining workflows with composable tools and packaging them as mcp servers. The migration must preserve that capability.\n\n## non goals\n- Replacing oauth provider implementation (oauth remains in `services/mcp-fs-oauth`).\n- Renaming tool ids in a way that breaks existing workflows.\n\n## current state\n- `services/api-gateway` proxies all mcp traffic to a single upstream `MCP_FS_OAUTH_URL`.\n  - `/api/mcp/*` is proxied to the upstream with `/api` stripped.\n  - root oauth endpoints (`/authorize`, `/token`, `/.well-known/*`, `/login*`, `/auth/*`) are also proxied to the same upstream.\n- `services/mcp-fs-oauth` provides oauth + mcp endpoint at `/mcp`.\n- `services/mcp-files` exists but currently runs auth-free and exposes `fs_*` tool ids.\n- legacy monolith `orgs/.../services/mcp` exposes many non oauth toolpacks (github, process manager, pnpm, nx, tdd, sandboxes, ollama, etc).\n\n## target state\n- `services/api-gateway` becomes a mux for mcp services.\n  - root oauth endpoints remain pinned to `mcp-fs-oauth`.\n  - tool traffic is routed by service name, eg `/api/mcp/github/* -> services/mcp-github`.\n- each `services/mcp-*` service:\n  - exposes mcp at `/mcp`.\n  - does not implement oauth flows.\n  - validates authorization according to the auth strategy (see auth spec).\n  - preserves tool ids (or provides aliases).\n\n```mermaid\nflowchart LR\n  clients --> api_gateway\n\n  api_gateway --> mcp_fs_oauth\n  api_gateway --> mcp_files\n  api_gateway --> mcp_github\n  api_gateway --> mcp_process\n  api_gateway --> mcp_devtools\n  api_gateway --> mcp_tdd\n  api_gateway --> mcp_sandboxes\n  api_gateway --> mcp_ollama\n  api_gateway --> mcp_exec\n```\n\n## key constraints\n- keep oauth isolated in `services/mcp-fs-oauth`.\n- keep tool ids stable for workflows.\n- avoid `fs_tree` heavy scans for repo discovery; prefer glob and grep.\n- gateway streaming must remain correct for `text/event-stream` mcp responses.\n\n## phased plan\n\n### phase 0 inventory\n- generate a tool id to service mapping (see tool id spec doc).\n- identify shared runtime code that should live in packages (optional if `@workspace/mcp-runtime` already covers it).\n\n### phase 1 api gateway mux\n- keep existing single upstream behavior for backward compatibility.\n- add mux routing for `/api/mcp/:service/*`.\n- configure service url map via env.\n\n### phase 2 migrate toolpacks\n- migrate github toolpack first (largest surface area).\n- then process manager.\n- then devtools (pnpm nx apply_patch).\n- then tdd.\n- then sandboxes.\n- then ollama.\n- then exec (hardened).\n\n### phase 3 cutover and cleanup\n- flip clients and workflow specs to use mux paths.\n- keep legacy `/api/mcp/* -> fs-oauth` during transition.\n- once no callers rely on it, decide whether to:\n  - keep it as alias to `fs-oauth`, or\n  - remove it to force explicit routing.\n\n## deliverables\n- new spec docs in `spec/2026-02-08-mcp-*.md`.\n- a route table and env var contract for the gateway.\n- service skeletons for each toolpack.\n- contract tests ensuring tool list and invoke behavior is stable.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-02-08-mcp-migration-overview.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-devel-root-kanban-orgs-open-hax-tooloxx-docs-imports-devel-root-specs-drafts-mcp-social-publisher-ussy-key-auth-deploy-2026-03-21-md",
+          "title": "mcp-social-publisher ussy key-auth deploy draft",
+          "slug": "mcp-social-publisher-ussy-key-auth-deploy-draft",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:48.357Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/devel-root/specs/drafts/mcp-social-publisher-ussy-key-auth-deploy-2026-03-21.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/specs-import/drafts/mcp-social-publisher-ussy-key-auth-deploy-2026-03-21.md`\n\n# mcp-social-publisher ussy key-auth deploy draft\n\n- status: active\n- created: 2026-03-21\n- owner: err\n- priority: high\n\n## Goal\nDeploy the standalone `mcp-social-publisher-live` app to `error@ussy.promethean.rest` and protect MCP access with a static key instead of OAuth.\n\n## Working assumptions\n- Target app is the standalone repo at `mcp-social-publisher-live/`, not the workspace service at `services/mcp-social-publisher/`.\n- Public exposure should avoid Render and run directly on `ussy.promethean.rest` infrastructure.\n- A static bearer-style key is acceptable for `/mcp`.\n- Admin UI may remain separately protected by `ADMIN_AUTH_KEY`.\n\n## Open questions\n- Whether the currently deployed Render config/targets need migration, or whether a fresh empty config is acceptable.\n\n## Risks\n- Exposing OAuth metadata while actually using static key auth, confusing clients.\n- Choosing a new hostname that does not resolve in DNS.\n- Breaking existing `services/proxx/Caddyfile` routing on `ussy.promethean.rest`.\n- Leaking the static key through logs, shell history, or receipts.\n\n## Evidence gathered\n- `mcp-social-publisher-live/` is a standalone git repo with no workspace-only runtime deps.\n- Remote host is reachable via `ssh error@ussy.promethean.rest`.\n- Remote host has Node 18 and Docker Compose, but not `pnpm`.\n- Existing reverse proxy config lives at `services/proxx/Caddyfile` on the remote host.\n- Arbitrary new `*.ussy.promethean.rest` names tested locally do not currently resolve.\n- `npx --yes pnpm@10` and `npx --yes pm2` work remotely without requiring root-level global installs.\n\n## Decisions\n- Use SSH/tunnel-first deployment instead of adding a new public DNS route right now.\n- Bind the service to `127.0.0.1:10000` on the remote host.\n- Protect `/mcp` with a static bearer-style key via `MCP_AUTH_MODE=key` and `MCP_AUTH_KEY`.\n- Keep the admin UI separately protected by a generated `ADMIN_AUTH_KEY`.\n- Use `npx pm2` on the remote host for process persistence.\n\n## Affected files (likely)\n- `mcp-social-publisher-live/src/main.ts`\n- `mcp-social-publisher-live/.env.example`\n- `mcp-social-publisher-live/README.md`\n- `specs/drafts/mcp-social-publisher-ussy-key-auth-deploy-2026-03-21.md`\n\n## Phases\n\n### Phase 1 — Decide public route and auth mode\n- Confirm route strategy from current DNS/Caddy constraints.\n- Add static key auth mode to the standalone app.\n\n### Phase 2 — Build and prepare runtime\n- Build the standalone app locally.\n- Sync the needed repo/runtime files to `error@ussy.promethean.rest`.\n- Create remote env/runtime dirs with non-logged secrets.\n\n### Phase 3 — Expose and verify\n- Start the service on the remote host.\n- Verify `/health` and key-protected `/mcp` behavior.\n\n## Execution notes\n- Added `HOST`, `MCP_AUTH_MODE`, and `MCP_AUTH_KEY` env support to `mcp-social-publisher-live`.\n- In `key` mode, the service skips MCP OAuth metadata/routes and accepts either `Authorization: Bearer <MCP_AUTH_KEY>` or `x-api-key: <MCP_AUTH_KEY>` for `/mcp`.\n- Synced the standalone repo to `~/apps/mcp-social-publisher-live` on `error@ussy.promethean.rest`.\n- Wrote remote runtime files:\n  - `~/apps/mcp-social-publisher-live/.env`\n  - `~/apps/mcp-social-publisher-live/secrets/mcp-auth-key.txt`\n  - `~/apps/mcp-social-publisher-live/secrets/admin-auth-key.txt`\n- Started the service as `mcp-social-publisher-live` via `npx pm2`.\n\n## Verification\n- Local build: `cd mcp-social-publisher-live && npm run build`\n- Remote health: `GET http://127.0.0.1:10000/health` -> `200`\n- Remote auth gate:\n  - unauthenticated `GET /mcp` -> `401`\n  - authenticated `GET /mcp` with generated bearer key -> non-`401` (`400`, proving auth passed through to the MCP router)\n\n## Definition of done\n- The app is running on `error@ussy.promethean.rest`.\n- `/mcp` rejects missing/incorrect key and accepts the configured key.\n- Access is available through SSH tunneling to `127.0.0.1:10000`.\n- No secrets are emitted into tracked files or receipts.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/specs-import/drafts/mcp-social-publisher-ussy-key-auth-deploy-2026-03-21.md"
+        },
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-devel-root-kanban-orgs-open-hax-tooloxx-docs-imports-devel-root-spec-2026-04-04-tooloxx-mcp-monorepo-md",
+          "title": "Tooloxx MCP monorepo migration",
+          "slug": "tooloxx-mcp-monorepo-migration",
+          "status": "incoming",
+          "priority": "P3",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:46.593Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/devel-root/spec/2026-04-04-tooloxx-mcp-monorepo.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-04-04-tooloxx-mcp-monorepo.md`\n\n# Tooloxx MCP monorepo migration\n\n## Goal\nConsolidate the workspace-owned MCP packages and services under `orgs/open-hax/tooloxx` so MCP infrastructure has one canonical monorepo home.\n\n## Canonical layout\n- `orgs/open-hax/tooloxx/packages/*` — shared MCP libraries and package-style tools\n- `orgs/open-hax/tooloxx/services/*` — runnable MCP servers and HTTP services\n\n## Phase 1 scope\nMove these canonical paths into `tooloxx`:\n\n### packages\n- `packages/mcp-foundation`\n- `packages/mcp-oauth`\n- `packages/chat-bridge-mcp`\n- `reconstitute-mcp`\n\n### services\n- `orgs/open-hax/mcp-fs-oauth`\n- `orgs/riatzukiza/mcp-devtools`\n- `orgs/riatzukiza/mcp-exec`\n- `orgs/riatzukiza/mcp-github`\n- `orgs/riatzukiza/mcp-ollama`\n- `orgs/riatzukiza/mcp-process`\n- `orgs/riatzukiza/mcp-sandboxes`\n- `orgs/riatzukiza/mcp-social-publisher`\n- `orgs/riatzukiza/mcp-tdd`\n- `orgs/riatzukiza/hormuz-clock-mcp`\n- `orgs/riatzukiza/threat-radar-mcp`\n- `orgs/octave-commons/fork_tales/mcp-lith-nexus`\n\n## Deferred edge cases\n- `mcp-social-publisher-live` — duplicate/live scratch tree, not treated as the canonical package home in this pass.\n\n## Required follow-through\n- Add `tooloxx` workspace roots to the root `pnpm-workspace.yaml`.\n- Update runtime scripts/configs that hard-code the old MCP paths.\n- Update fork-tales `part64` runtime wiring so it loads `mcp-lith-nexus` from `tooloxx`.\n- Refresh the root lockfile after the workspace move.\n\n## Active rewires completed\n- Root workspace package discovery now includes `orgs/open-hax/tooloxx/packages/*` and `orgs/open-hax/tooloxx/services/*`.\n- `services/mcp-stack/*` now points at `tooloxx` package/service paths.\n- `services/radar-stack/Dockerfile.hormuz-clock-mcp` now builds Hormuz from `orgs/open-hax/tooloxx/services/hormuz-clock-mcp` and `orgs/open-hax/tooloxx/packages/mcp-oauth`.\n- `services/radar-stack/Dockerfile.threat-radar-mcp` now sources `mcp-foundation` and `threat-radar-mcp` from `tooloxx` via an additional Docker build context.\n- `services/radar-stack/docker-compose.yml` now runs Hormuz from the `tooloxx` path and passes the extra build context needed for `threat-radar-mcp`.\n- Fork Tales `part64` runtime/build wiring now loads `mcp-lith-nexus` from `orgs/open-hax/tooloxx/services/mcp-lith-nexus`.\n\n## Historical references intentionally left alone for now\n- `spec/migrations/mcp-servers-epic.md`\n- `spec/services-code-migration-epic.md`\n- `orgs/octave-commons/fork_tales/docs/SCATTERED_TASKS_INVENTORY.md`\n- `orgs/octave-commons/fork_tales/specs/drafts/mcp-lith-nexus.md`\n\nThese are history/spec/report surfaces rather than active runtime wiring.\n\n## Verification\n- Root workspace still resolves moved packages via `pnpm --filter ...`.\n- MCP stack scripts point at `tooloxx` service paths.\n- Fork Tales `part64` still resolves and builds `mcp-lith-nexus` from its new canonical location.\n- `@riatzukiza/hormuz-clock-mcp` still builds and typechecks from its new `tooloxx` home.",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/2026-04-04-tooloxx-mcp-monorepo.md"
+        }
+      ]
+    },
+    {
+      "status": "accepted",
+      "title": "Accepted",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "breakdown",
+      "title": "Breakdown",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "blocked",
+      "title": "Blocked",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "ready",
+      "title": "Ready",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "todo",
+      "title": "Todo",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "in_progress",
+      "title": "In Progress",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "review",
+      "title": "Review",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "document",
+      "title": "Document",
+      "taskCount": 0,
+      "tasks": []
+    },
+    {
+      "status": "done",
+      "title": "Done",
+      "taskCount": 1,
+      "tasks": [
+        {
+          "uuid": "orgs-open-hax-tooloxx-docs-imports-devel-root-kanban-orgs-open-hax-tooloxx-docs-imports-devel-root-spec-migrations-mcp-servers-epic-md",
+          "title": "MCP Server Migrations Sub-Epic",
+          "slug": "mcp-server-migrations-sub-epic",
+          "status": "done",
+          "priority": "HIGH",
+          "labels": [
+            "specs",
+            "migrated-spec"
+          ],
+          "createdAt": "2026-05-29T04:01:46.595Z",
+          "content": "> Source: `orgs/open-hax/tooloxx/docs/imports/devel-root/spec/migrations/mcp-servers-epic.md`\n> Migrated-to-kanban: `orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/migrations/mcp-servers-epic.md`\n# MCP Server Migrations Sub-Epic\n\nMigrate 10 MCP servers from `services/` to `orgs/riatzukiza/` and `orgs/open-hax/`.\n\n**Total: 20.5 SP** — **COMPLETED**\n\n## What Happened\n\nThe MCP servers already existed in their target locations under `orgs/riatzukiza/` and `orgs/open-hax/` with identical source code. The `services/` copies were redundant duplicates. Migration was simply:\n\n1. Delete redundant `services/` copies (10 directories)\n2. Update `services/mcp-stack/ecosystem.container.config.cjs` cwd paths\n3. Update `pnpm-workspace.yaml` to reference new org locations\n4. Delete empty `services/mcp-files/` directory\n\n## Completed Tasks\n\n### mcp-devtools - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-devtools`\n- Deleted `services/mcp-devtools/`\n- Updated ecosystem config cwd\n\n### mcp-exec - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-exec`\n- Deleted `services/mcp-exec/`\n- Updated ecosystem config cwd\n\n### mcp-github - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-github`\n- Deleted `services/mcp-github/`\n- Updated ecosystem config cwd\n\n### mcp-ollama - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-ollama`\n- Deleted `services/mcp-ollama/`\n- Updated ecosystem config cwd\n\n### mcp-process - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-process`\n- Deleted `services/mcp-process/`\n- Updated ecosystem config cwd\n\n### mcp-sandboxes - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-sandboxes`\n- Deleted `services/mcp-sandboxes/`\n- Updated ecosystem config cwd\n\n### mcp-tdd - 2 SP ✅\n- Source already at `orgs/riatzukiza/mcp-tdd`\n- Deleted `services/mcp-tdd/`\n- Updated ecosystem config cwd\n\n### mnemosyne - 2 SP ✅\n- Source already at `orgs/riatzukiza/mnemosyne`\n- Deleted `services/mnemosyne/`\n- Updated ecosystem config cwd\n\n### mcp-social-publisher - 3 SP ✅\n- Source already at `orgs/riatzukiza/mcp-social-publisher`\n- Deleted `services/mcp-social-publisher/`\n- Updated ecosystem config cwd\n\n### mcp-fs-oauth - 5 SP ✅\n- Source already at `orgs/open-hax/mcp-fs-oauth`\n- Deleted `services/mcp-fs-oauth/`\n- Updated ecosystem config cwd (both stable and dev instances)\n\n### mcp-files - 0.5 SP ✅\n- Deleted empty `services/mcp-files/` (logs only)\n\n## Files Changed\n- `pnpm-workspace.yaml` — added 10 new org package entries\n- `services/mcp-stack/ecosystem.container.config.cjs` — updated all 12 cwd paths\n- Deleted: `services/mcp-devtools/`, `services/mcp-exec/`, `services/mcp-github/`, `services/mcp-ollama/`, `services/mcp-process/`, `services/mcp-sandboxes/`, `services/mcp-tdd/`, `services/mnemosyne/`, `services/mcp-social-publisher/`, `services/mcp-fs-oauth/`, `services/mcp-files/`",
+          "sourcePath": "/home/err/devel/orgs/open-hax/tooloxx/docs/imports/devel-root/kanban/migrations/mcp-servers-epic.md"
+        }
+      ]
+    },
+    {
+      "status": "rejected",
+      "title": "Rejected",
+      "taskCount": 0,
+      "tasks": []
+    }
+  ]
+}

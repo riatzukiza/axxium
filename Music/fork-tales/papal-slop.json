@@ -1,0 +1,45 @@
+{
+  "bpm": 160,
+  "tracks": [
+    {
+      "instrument": "synth",
+      "notes": [
+        {"time": "0:0:0", "duration": "2n", "tone": 60},
+        {"time": "0:2:0", "duration": "2n", "tone": 63},
+        {"time": "1:0:0", "duration": "2n", "tone": 67},
+        {"time": "1:2:0", "duration": "2n", "tone": 60},
+        {"time": "2:0:0", "duration": "2n", "tone": 60},
+        {"time": "2:2:0", "duration": "2n", "tone": 63},
+        {"time": "3:0:0", "duration": "2n", "tone": 67},
+        {"time": "3:2:0", "duration": "2n", "tone": 60}
+      ]
+    },
+    {
+      "instrument": "bass",
+      "notes": [
+        {"time": "0:0:0", "duration": "4n", "tone": 36},
+        {"time": "0:1:0", "duration": "4n", "tone": 36},
+        {"time": "0:2:0", "duration": "4n", "tone": 39},
+        {"time": "0:3:0", "duration": "4n", "tone": 36},
+        {"time": "1:0:0", "duration": "4n", "tone": 43},
+        {"time": "1:1:0", "duration": "4n", "tone": 43},
+        {"time": "1:2:0", "duration": "4n", "tone": 36},
+        {"time": "1:3:0", "duration": "4n", "tone": 36}
+      ]
+    },
+    {
+      "instrument": "drum",
+      "notes": [
+        {"time": "0:0:0", "duration": "8n", "tone": "kick"},
+        {"time": "0:1:0", "duration": "8n", "tone": "snare"},
+        {"time": "0:2:0", "duration": "8n", "tone": "kick"},
+        {"time": "0:3:0", "duration": "8n", "tone": "snare"},
+        {"time": "1:0:0", "duration": "8n", "tone": "kick"},
+        {"time": "1:1:0", "duration": "8n", "tone": "snare"},
+        {"time": "1:2:0", "duration": "8n", "tone": "kick"},
+        {"time": "1:3:0", "duration": "8n", "tone": "snare"}
+      ]
+    }
+  ],
+  "output_path": "Music/fork-tales/papal-slop-base.wav"
+}

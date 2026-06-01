@@ -1,0 +1,14 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#1a1a1a" />
+  <rect x="50" y="50" width="700" height="500" fill="none" stroke="#d4af37" stroke-width="5" />
+  <text x="400" y="120" font-family="serif" font-size="40" fill="#d4af37" text-anchor="middle" font-weight="bold">SYMMETRY COUNCIL</text>
+  <text x="400" y="160" font-family="serif" font-size="20" fill="#aaa" text-anchor="middle">CERTIFICATE OF NON-COMPLIANCE</text>
+  <line x1="100" y1="180" x2="700" y2="180" stroke="#d4af37" stroke-width="2" />
+  <text x="100" y="230" font-family="monospace" font-size="18" fill="#fff">CASE ID: #36-ZOMBIE-LEAK</text>
+  <text x="100" y="260" font-family="monospace" font-size="18" fill="#fff">STATUS: BRAIN FART CERTIFIED</text>
+  <text x="100" y="290" font-family="monospace" font-size="18" fill="#fff">ERROR: GC CHURN DETECTED</text>
+  <text x="100" y="320" font-family="monospace" font-size="18" fill="#fff">SINDROM: RECURSIVE ROUTING</text>
+  <text x="400" y="450" font-family="serif" font-size="24" fill="#d4af37" text-anchor="middle" font-style="italic">"The pointers break, but the vibe remains."</text>
+  <circle cx="700" cy="500" r="40" fill="#d4af37" opacity="0.5" />
+  <text x="700" y="505" font-family="serif" font-size="12" fill="#000" text-anchor="middle" font-weight="bold">S_SND</text>
+</svg>
