@@ -72,7 +72,7 @@
                           {:ok true
                            :actor (sanitize-actor actor)
                            :token token}))))))
-    (catch err
+    (catch js/Error err
       (.send (.code reply (or (.-statusCode err) 500))
              (clj->js {:error (or (.-message err) "Signup failed")
                        :code (or (.-code err) "unknown")})))))
@@ -98,7 +98,7 @@
                                 {:ok true
                                  :actor (sanitize-actor actor)
                                  :token token}))))))))
-    (catch err
+    (catch js/Error err
       (.send (.code reply (or (.-statusCode err) 500))
              (clj->js {:error (or (.-message err) "Login failed")
                        :code (or (.-code err) "unknown")})))))
