@@ -4,9 +4,15 @@ Canonical source: `../../orgs/open-hax/proxx`
 
 This directory is the workspace-local home for runtime and deployment material for the proxy service:
 - Docker Compose files
-- env examples
-- local runtime config (`keys.json`, `models.json`)
+- `.env.example` for secrets, ports, and process wiring only; never for provider/model decisions
+- deployment-owned policy contracts under `policies/runtime/*.edn`
+- legacy seed files (`keys.json`, `models.json`) only for bootstrap/back-compat while migration completes
 - bind-mounted runtime data under `data/`
+
+Policy direction:
+- Proxx is being slowly rewritten in ClojureScript.
+- Provider routing, provider capability, model-family, model-routing, and model-pricing configuration must come from the policy EDN files mounted from this service directory, not from environment variables.
+- Do not make provider/model decisions by adding knobs to `.env`, Compose env blocks, shell exports, or TypeScript config parsing. Add or change the relevant policy EDN contract instead.
 
 Read `RUNTIME_BOUNDARY.md` before changing local ports or databases. The short version:
 - Docker compose `prod` is the primary local work instance used by Knoxx: API `8789`, web `5174`, DB `15432`.
@@ -44,12 +50,14 @@ docker compose -f docker-compose.dev-db.yml up -d proxx-dev-db
 pm2 start ecosystem.host.config.cjs --only proxx-host,proxx-host-web --no-autorestart
 ```
 
+When developing the source in `/home/err/devel/orgs/open-hax/proxx`, use this service-local PM2 config (`/home/err/devel/services/proxx/ecosystem.host.config.cjs`) as the canonical host development runner. It points at the source checkout, uses the service-owned dev database, and mounts the service-owned policy manifest via `PROXX_CLJS_POLICY_MANIFEST`.
+
 ## Local compose
 ```bash
 cd /home/err/devel/services/proxx
-cp .env.example .env   # optional
-cp keys.example.json keys.json
-cp models.example.json models.json
+cp .env.example .env   # optional; secrets/ports/process wiring only, not provider/model decisions
+cp keys.example.json keys.json       # optional legacy/bootstrap seed
+cp models.example.json models.json   # optional legacy/bootstrap seed
 
 # Production-like container (pm2 + built dist/):
 docker compose --profile prod -f docker-compose.yml -f docker-compose.factory-auth.override.yml up --build -d
@@ -63,7 +71,7 @@ docker compose logs -f
 
 If you do not need Factory auth mounts, omit the override file.
 
-If you want z.ai/GLM routing in the local compose stack, set `ZAI_API_KEY` (or `ZHIPU_API_KEY`) in `services/proxx/.env` before `docker compose up`; `docker-compose.yml` passes those vars through to the running proxy container.
+Provider/model configuration commandment: provider routes, provider capabilities, model families, model routing, model allow/deny policy, and pricing overrides belong in EDN policy contracts under `services/proxx/policies/runtime/` and must be loaded through `services/proxx/policies/runtime/00-manifest.edn`. Do not solve provider/model decisions with `.env`, Compose env blocks, shell exports, or TypeScript conditionals.
 
 Pricing override commandment: if token pricing is missing/incorrect for a model (for example open-weights models like `gemma4:31b`), overrides must be added as EDN policy contracts under `services/proxx/policies/runtime/15-model-pricing-overrides.edn`. Do not add pricing override JSON files and do not hard-code one-off token prices in TypeScript.
 

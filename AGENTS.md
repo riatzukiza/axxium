@@ -47,15 +47,18 @@ EOFEOF
 - Avoid requiring `docker compose ... --scale ...` as the only way to express desired replica counts; encode replica intent in compose (even if that means explicit shard services or preset compose overlays).
 - Avoid fixed host-port publishing on services that may run multiple replicas; publish a single ingress port on a proxy (nginx) and use internal networking for replicas.
 
-## Proxx Development Workflow (Verified 2026-05-11)
-- Proxx runs in container `proxx-local-proxx-1` with `/app/dist` mounted read-only from `orgs/open-hax/proxx/dist`
-- Fast iteration: edit TypeScript in `orgs/open-hax/proxx/src/`, run `pnpm build` in that directory to update `dist/`, then recreate the container:
+## Proxx Development Workflow (Updated 2026-05-20)
+- Proxx source lives in `orgs/open-hax/proxx`; runtime/devops state lives in `services/proxx`.
+- For host development on `orgs/open-hax/proxx`, use the service-owned PM2 ecosystem file:
   ```bash
-  cd orgs/open-hax/proxx && pnpm build
-  cd services/proxx && docker compose --profile prod up -d --force-recreate
+  cd services/proxx
+  docker compose -f docker-compose.dev-db.yml up -d proxx-dev-db
+  ./scripts/seed-dev-db-from-prod.sh
+  pm2 start ecosystem.host.config.cjs --only proxx-host,proxx-host-web --no-autorestart
   ```
-- No image rebuild required; the container picks up the freshly compiled `dist/main.js` from the host mount
-- MiniMax music models now route directly to `https://api.minimax.io/v1/music_generation` when `MINIMAX_API_KEY` is configured in `services/proxx/.env`
+- `services/proxx/ecosystem.host.config.cjs` is the canonical host dev runner; it points at the source checkout, the dev DB, and the active policy manifest.
+- Proxx is being slowly rewritten in CLJS. Provider/model routes, capabilities, model families, routing, allow/deny behavior, and pricing must come from policy EDN files under `services/proxx/policies/runtime/` (and the source defaults in `orgs/open-hax/proxx/resources/policies/runtime/`), not from `.env`, Compose env blocks, shell exports, or TypeScript conditionals.
+- Env vars in `services/proxx/.env` are for secrets, ports, database URLs, process wiring, and temporary legacy compatibility only; never add provider/model decision knobs there.
 
 ## Knoxx
 Knoxx is located at `orgs/open-hax/openplanner/packages/agents/knoxx`. It is a central and highly important part of the workspace.

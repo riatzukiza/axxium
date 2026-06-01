@@ -1,0 +1,124 @@
+{
+  "name": "@flo-ai/codex-ts-sdk",
+  "version": "0.0.7",
+  "description": "TypeScript client for Codex native runtime",
+  "keywords": [
+    "flo-ai",
+    "codex-ts-sdk",
+    "codex",
+    "openai",
+    "openai-codex",
+    "codex-sdk",
+    "codex-client",
+    "typescript",
+    "sdk",
+    "api",
+    "client",
+    "ai",
+    "llm",
+    "language-model",
+    "native",
+    "runtime",
+    "conversational-ai",
+    "streaming",
+    "async",
+    "napi",
+    "rust-bindings",
+    "code-generation",
+    "developer-tools"
+  ],
+  "author": "Flo AI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flo-ai/codex-ts-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flo-ai/codex-ts-sdk/issues"
+  },
+  "homepage": "https://github.com/flo-ai/codex-ts-sdk#readme",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/cjs/src/index.js",
+  "module": "./dist/esm/src/index.js",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/src/index.d.ts",
+      "import": "./dist/esm/src/index.js",
+      "require": "./dist/cjs/src/index.js"
+    },
+    "./bindings": {
+      "types": "./dist/types/src/bindings/index.d.ts",
+      "import": "./dist/esm/src/bindings/index.js",
+      "require": "./dist/cjs/src/bindings/index.js"
+    },
+    "./cloud": {
+      "types": "./dist/types/src/cloud/index.d.ts",
+      "import": "./dist/esm/src/cloud/index.js",
+      "require": "./dist/cjs/src/cloud/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "native/codex-napi/index.REDACTED_SECRET",
+    "native/codex-napi/index.js",
+    "native/README.md",
+    "docs/",
+    "examples/",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "setup": "REDACTED_SECRET scripts/setup.cjs",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types && REDACTED_SECRET scripts/write-cjs-package-json.cjs",
+    "build:esm": "tsc -p tsconfig.build.json",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "prepublishOnly": "npm run package",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:live:status": "REDACTED_SECRET --enable-source-maps scripts/run-live-status.mjs",
+    "test:monitoring": "vitest run --reporter=verbose tests/monitoring/",
+    "test:persistence": "vitest run --reporter=verbose tests/persistence/",
+    "test:cloud:list": "vitest run --reporter=verbose tests/live/cloud-list-tasks.test.ts",
+    "test:cloud:create": "vitest run --reporter=verbose tests/live/cloud-create-minimal.test.ts",
+    "coverage": "vitest run --coverage",
+    "build:native": "napi build --platform --manifest-path native/codex-napi/Cargo.toml",
+    "package": "npm run build && npm run build:native",
+    "docs": "typedoc"
+  },
+  "engines": {
+    "REDACTED_SECRET": ">=18"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^3.2.0",
+    "@types/REDACTED_SECRET": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "msw": "^2.4.2",
+    "eslint": "^9.35.0",
+    "typedoc": "^0.25.13",
+    "typescript": "^5.3.0",
+    "vitest": "^3.2.4"
+  },
+  "typesVersions": {
+    "*": {
+      "bindings": [
+        "dist/types/src/bindings/index.d.ts"
+      ],
+      "bindings/*": [
+        "dist/types/src/bindings/*"
+      ],
+      "*": [
+        "dist/types/src/*"
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.prism.log
+REDACTED_SECRET_modules
+yarn-error.log
+codegen.log
+Brewfile.lock.json
+dist
+dist-deno
+/*.tgz
+.idea/
+

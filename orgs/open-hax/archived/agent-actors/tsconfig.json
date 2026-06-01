@@ -1,0 +1,13 @@
+{
+  "extends": "../../config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "REDACTED_SECRETDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "REDACTED_SECRET_modules", "src/tests"]
+}
