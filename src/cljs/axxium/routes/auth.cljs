@@ -6,9 +6,8 @@
             [axxium.config :as cfg]
             [axxium.db :as db]
             [axxium.auth.session :as session]
-            [axxium.schema :as schema]))
-
-(def ^:private bcrypt (js/require "bcrypt"))
+            [axxium.schema :as schema]
+            ["bcryptjs" :default bcrypt]))
 
 (defn- body-map [req]
   (js->clj (or (aget req "body") #js {}) :keywordize-keys true))

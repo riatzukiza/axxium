@@ -6,7 +6,7 @@
 (defn- sanitize-actor [actor]
   (dissoc actor :password_hash))
 
-(defn register-actor-routes! [app]
+(defn- register-list-actors-route! [app]
   (.get app "/api/actors"
     (fn [req reply]
       (-> (session/resolve-auth-context req)
@@ -25,6 +25,7 @@
                                                    :actors (map sanitize-actor actors)
                                                    :count (count actors)}))))))))))))
 
+(defn- register-get-actor-route! [app]
   (.get app "/api/actors/:id"
     (fn [req reply]
       (-> (session/resolve-auth-context req)
@@ -38,9 +39,10 @@
                         (fn [actor]
                           (if-not actor
                             (.send (.code reply 404) (clj->js {:error "Actor not found"}))
-                            (.send reply (clj->js {:ok true
-                                                     :actor (sanitize-actor (js->clj actor :keywordize-keys true))}))))))))))))
+                             (.send reply (clj->js {:ok true
+                                                      :actor (sanitize-actor (js->clj actor :keywordize-keys true))})))))))))))))))
 
+(defn- register-get-me-route! [app]
   (.get app "/api/actors/me"
     (fn [req reply]
       (-> (session/resolve-auth-context req)
@@ -56,6 +58,7 @@
                           (.send reply (clj->js {:ok true
                                                    :actor (sanitize-actor (js->clj actor :keywordize-keys true))}))))))))))))
 
+(defn- register-get-entity-route! [app]
   (.get app "/api/entities/:id"
     (fn [req reply]
       (-> (session/resolve-auth-context req)
@@ -69,9 +72,10 @@
                         (fn [entity]
                           (if-not entity
                             (.send (.code reply 404) (clj->js {:error "Entity not found"}))
-                            (.send reply (clj->js {:ok true
-                                                     :entity (js->clj entity :keywordize-keys true)})))))))))))))
+                             (.send reply (clj->js {:ok true
+                                                      :entity (js->clj entity :keywordize-keys true)})))))))))))))))
 
+(defn- register-update-capabilities-route! [app]
   (.post app "/api/actors/:id/capabilities"
     (fn [req reply]
       (-> (session/resolve-auth-context req)
@@ -88,4 +92,10 @@
                       (.then
                         (fn [_]
                           (.send reply (clj->js {:ok true})))))))))))))
-)
+
+(defn register-actor-routes! [app]
+  (register-list-actors-route! app)
+  (register-get-actor-route! app)
+  (register-get-me-route! app)
+  (register-get-entity-route! app)
+  (register-update-capabilities-route! app))

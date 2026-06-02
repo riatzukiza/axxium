@@ -10,10 +10,9 @@
 (def COOKIE-NAME (cfg/get-in-config [:session/cookie-name]))
 
 (defn- hash-token [token]
-  (let [crypto (js/require "node:crypto")]
-    (.createHash crypto "sha256")
-    (.update token)
-    (.digest "hex")))
+  (-> (js/crypto.createHash "sha256")
+      (.update token)
+      (.digest "hex")))
 
 (defn- body-map [req]
   (js->clj (or (aget req "body") #js {}) :keywordize-keys true))

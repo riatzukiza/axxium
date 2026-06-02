@@ -1,10 +1,10 @@
 (ns axxium.db
   "PostgreSQL database layer for Axxium.
    Uses pg via JS interop — following knoxx/proxx patterns."
-  (:require [axxium.config :as cfg]))
+  (:require [axxium.config :as cfg]
+            ["pg" :refer [Pool]]))
 
-(def ^:private pg (js/require "pg"))
-(def ^:private Pool (.-Pool pg))
+(def ^:private pg #js {:Pool Pool})
 
 (defonce pool
   (delay

@@ -2,17 +2,12 @@
   "JWT token creation and verification using jose.
    Tokens carry the auth context that downstream services consume."
   (:require [axxium.config :as cfg]
-            [clojure.string :as str]))
-
-(def ^:private jose (js/require "jose"))
-(def ^:private SignJWT (.-SignJWT jose))
-(def ^:private jwtVerify (.-jwtVerify jose))
+            [clojure.string :as str]
+            ["jose" :refer [SignJWT jwtVerify]]))
 
 (defn- secret-key []
   (let [secret (cfg/get-in-config [:jwt/secret])]
-    (.TextEncoder (js/require "util"))
-    (new (.-TextEncoder js/globalThis) "utf-8")
-    (.encode (new (.-TextEncoder js/globalThis)) secret)))
+    (.encode (new js/TextEncoder) secret)))
 
 (defn create-token
   "Create a JWT for an actor with their capabilities.
