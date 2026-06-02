@@ -1,13 +1,14 @@
-name: Deploy Axxium
+name: Deploy Staging
 
 on:
   push:
-    branches: [main]
+    branches: [staging]
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy-staging:
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - uses: actions/checkout@v4
 
@@ -28,9 +29,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to knoxx.promethean.rest
+      - name: Deploy to staging
         env:
-          DEPLOY_HOST: knoxx.promethean.rest
+          DEPLOY_HOST: axxium-staging.promethean.rest
           DEPLOY_USER: error
           DEPLOY_KEY: ${{ secrets.PROMETHEAN_DEPLOY_KEY }}
         run: |
@@ -38,12 +39,10 @@ jobs:
           echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           
-          # Create deploy directory
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
             mkdir -p ~/services/axxium
           '
           
-          # Sync files
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             --exclude node_modules \
@@ -52,7 +51,6 @@ jobs:
             --exclude dist-dev \
             ./ $DEPLOY_USER@$DEPLOY_HOST:~/services/axxium/
           
-          # Deploy with Docker Compose
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
-            cd ~/services/axxium && docker compose up -d --build
+            cd ~/services/axxium && docker compose -f docker-compose.yml up -d --build
           '
