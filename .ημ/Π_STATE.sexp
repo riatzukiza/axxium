@@ -1,6 +1,11 @@
-(fork-tax
-  (time "2026-06-01T16:08:26Z")
+(fork-tax-promotion
+  (time "20260602T163545Z")
+  (repo "riatzukiza/devel")
   (branch "pi/fork-tax/20260529T022118Z-main-softreset-all-dirt")
-  (merge-conflicts resolved)
-  (verification "python yaml.safe_load on GitHub workflow YAML files")
-  (residual-dirt "unstaged submodule worktrees intentionally left untouched"))
+  (branch-pre-merge "d5c41bffda04fd4f3065c48b4010dfc18f7a2612")
+  (main-rewritten "072dd5d6dac973a28288e2b4ba1566b06bac92b2")
+  (staging-rewritten "db99be843ea94458ce73461f8b57de97da135b97")
+  (staging-merge-parent "db99be843ea94458ce73461f8b57de97da135b97")
+  (secret-history-gate (status passed) (values redacted) (raw-values-logged false))
+  (merge-policy "ours-strategy-preserve-fork-tax-tree")
+  (promotion-targets (staging main branch)))
