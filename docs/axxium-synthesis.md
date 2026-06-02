@@ -10,7 +10,7 @@ You are building **Axxium** — a unified actor-based identity, authorization, a
 
 Stop duplicating auth/identity across proxx, knoxx, and openplanner. Extract it:
 
-```
+```text
 Axxium = Actor + Authentication + Authorization + Policy + Federation
 ```
 
@@ -55,7 +55,7 @@ Your pain is clear. The current system mixes:
 | **Actor** | Identity + state + valid actions/events | Actor contract |
 | **Agent** | Prompt + capabilities + roles | Agent contract |
 
-> "There should be NO event or source related fields on agent contracts. They are the responsibility of the trigger."
+> "There should be NO event-related or source-related fields on agent contracts. They are the responsibility of the trigger."
 
 ### 4. **Capability-Based Security (Not Ambient Authority)**
 
@@ -124,7 +124,7 @@ Every action, authorization decision, capability grant, goal state change — al
 
 ## The Architecture You Are Building
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                        AXXIUM                                │
 │  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────┐ │

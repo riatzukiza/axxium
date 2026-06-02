@@ -30,7 +30,7 @@ Each repo has:
 
 Not a new framework. Not a rewrite. The **common denominator** that already exists across all three repos, pulled into one canonical implementation.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                         AXXIUM                               │
 │                    (shared kernel)                           │
@@ -177,7 +177,7 @@ The thing that gates admissibility. Not a schema. Not a policy file. The **execu
 - ✅ `actor` — identity + capabilities
 - ✅ `receipt` — audit trail
 - ✅ `contract` — admissibility boundary (ONLY in Axxium context)
-- ✅ `policy` — a kind of contract ( narrowing)
+- ✅ `policy` — a kind of contract (narrowing)
 - ✅ `fulfillment` — a kind of contract (progress check)
 - ✅ `capability` — a kind of contract (permission grant)
 

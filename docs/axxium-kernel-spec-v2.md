@@ -122,7 +122,7 @@ Axxium is **homoiconic**: the schema IS the data, in the same medium, subject to
 
 ## The Axxium Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                      AXXIUM KERNEL                           │
 ├─────────────────────────────────────────────────────────────┤
