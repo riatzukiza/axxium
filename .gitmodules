@@ -226,3 +226,6 @@
 	path = orgs/open-hax/eta-mu
 	url = https://github.com/open-hax/eta-mu.git
 	branch = main
+[submodule "orgs/open-hax/axxium"]
+	path = orgs/open-hax/axxium
+	url = git@github.com:riatzukiza/axxium.git
