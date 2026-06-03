@@ -5,57 +5,50 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: axxium-production
+  cancel-in-progress: false
+
 jobs:
-  deploy-production:
+  production-preflight:
+    name: production-preflight
     runs-on: ubuntu-latest
-    environment: production
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: "21"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: "22"
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build
-        run: npm run build
-
-      - name: Deploy to production
-        env:
-          DEPLOY_HOST: axxium.promethean.rest
-          DEPLOY_USER: error
-          DEPLOY_KEY: ${{ secrets.PROMETHEAN_DEPLOY_KEY }}
+      - name: Run Axxium production gates
         run: |
-          mkdir -p ~/.ssh
-          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
-            mkdir -p ~/services/axxium
-          '
-          
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            --exclude node_modules \
-            --exclude .git \
-            --exclude .shadow-cljs \
-            --exclude dist-dev \
-            ./ $DEPLOY_USER@$DEPLOY_HOST:~/services/axxium/
-          
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
-            cd ~/services/axxium && docker compose -f docker-compose.yml up -d --build
-          '
+          npm run boundary:check
+          npm run typecheck
+          npm test
+          npm run build
 
-      - name: Create release tag
-        run: |
-          git tag "release-$(date +%Y%m%d-%H%M%S)"
-          git push origin --tags
+  deploy-production:
+    name: deploy-production
+    needs: production-preflight
+    uses: open-hax/services/.github/workflows/deploy-promethean.yml@main
+    with:
+      environment: production
+      service: axxium
+      source_repository: ${{ github.repository }}
+      source_ref: ${{ github.sha }}
+    secrets: inherit
