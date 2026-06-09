@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# align-submodules
+# Aligns all submodules based on the parent repo's current branch.
+#
+# Rule 1: On main/staging -> submodules track their main branch
+# Rule 2: On feature branches -> submodules follow their current checkout
+
+PARENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+echo "Parent branch: $PARENT_BRANCH"
+
+if [[ "$PARENT_BRANCH" == "main" || "$PARENT_BRANCH" == "staging" ]]; then
+  echo "Default branch detected. Aligning submodules to their default branches..."
+  git submodule update --remote --recursive
+else
+  echo "Feature branch detected. Following current submodule checkouts..."
+  git submodule foreach '
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$branch" != "HEAD" ]; then
+      # Try to fetch and checkout the remote tracking branch
+      git fetch origin "$branch" 2>/dev/null || true
+      git checkout -f "origin/$branch" 2>/dev/null || {
+        # Fallback: try to checkout the local branch directly
+        git checkout -f "$branch" 2>/dev/null || true
+      }
+    fi
+  '
+fi
+
+echo "Done. Run 'git submodule status' to verify."

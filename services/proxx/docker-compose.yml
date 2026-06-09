@@ -47,7 +47,7 @@ services:
       PROXY_PORT: "8789"
       PORT: "8789"
       OPENAI_OAUTH_CALLBACK_PORT: "${OPENAI_OAUTH_CALLBACK_PORT:-1455}"
-      PROXY_AUTH_TOKEN: "${PROXY_AUTH_TOKEN:REDACTED_SECRET-open-hax-proxy-token}"
+      PROXY_AUTH_TOKEN: "${PROXY_AUTH_TOKEN:-REDACTED_SECRET-open-hax-proxy-token}"
       # Seed credentials directory (keys.json here is for initial seeding only).
       # See seeds/README.md for details.
       PROXY_KEYS_FILE: /workspace/service-config/seeds/keys.json
@@ -235,7 +235,7 @@ services:
       PROXY_PORT: "8789"
       PORT: "8789"
       OPENAI_OAUTH_CALLBACK_PORT: "${OPENAI_OAUTH_CALLBACK_PORT:-1455}"
-      PROXY_AUTH_TOKEN: "${PROXY_AUTH_TOKEN:REDACTED_SECRET-open-hax-proxy-token}"
+      PROXY_AUTH_TOKEN: "${PROXY_AUTH_TOKEN:-REDACTED_SECRET-open-hax-proxy-token}"
       PROXY_KEYS_FILE: /workspace/service-config/seeds/keys.json
       PROXY_MODELS_FILE: /workspace/service-config/models.json
       PROXY_REQUEST_LOGS_FILE: /app/data/request-logs.jsonl
