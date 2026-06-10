@@ -2,7 +2,7 @@ services:
   openplanner-dev:
     profiles:
     - dev
-    image: node:22-bookworm-slim
+    image: REDACTED_SECRET:22-bookworm-slim
     working_dir: /app
     cpus: 2
     cpuset: 2-21
@@ -41,7 +41,7 @@ services:
       MONGODB_EVENTS_TTL_SECONDS: ${MONGODB_EVENTS_TTL_SECONDS:-0}
       MONGODB_COMPACTED_TTL_SECONDS: ${MONGODB_COMPACTED_TTL_SECONDS:-0}
       EMBED_PROVIDER_BASE_URL: ${OPENPLANNER_PROXX_BASE_URL:-http://proxx:8789}
-      EMBED_PROVIDER_API_KEY: ${OPENPLANNER_PROXX_AUTH_TOKEN:-${PROXX_AUTH_TOKEN:-${PROXY_AUTH_TOKEN:-REDACTED_SECRET-open-hax-proxy-token}}}
+      EMBED_PROVIDER_API_KEY: ${OPENPLANNER_PROXX_AUTH_TOKEN:-${PROXX_AUTH_TOKEN:-${PROXY_AUTH_TOKEN:REDACTED_SECRET-open-hax-proxy-token}}}
       EMBED_PROVIDER_MODEL: ${EMBED_PROVIDER_MODEL:-llamacpp-embed:qwen3-embedding:0.6b}
       EMBED_PROVIDER_COMPACT_MODEL: ${EMBED_PROVIDER_COMPACT_MODEL:-llamacpp-embed:qwen3-embedding:0.6b}
       EMBED_PROVIDER_MODEL_BY_SOURCE: ${EMBED_PROVIDER_MODEL_BY_SOURCE:-}

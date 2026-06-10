@@ -3,7 +3,7 @@ services:
     profiles:
     - graph
     - graph-3
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     working_dir: /app/workspace/devel
@@ -84,7 +84,7 @@ services:
     profiles:
     - graph
     - graph-3
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     working_dir: /app/workspace/devel
@@ -159,7 +159,7 @@ services:
     profiles:
     - graph
     - graph-3
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     working_dir: /app/workspace/devel

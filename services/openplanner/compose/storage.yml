@@ -4,30 +4,31 @@ services:
     command:
     - sh
     - -lc
-    - "set -euo pipefail\napk add --no-cache openssl >/dev/null\nmkdir -p /data/configdb\nif [ ! -f /data/configdb/keyfile ]; then\n  echo \"[secrets-init] generating /data/configdb/keyfile\"\n  # MongoDB keyFile must be sufficiently random and not world-readable.\n  openssl rand -base64 756 > /data/configdb/keyfile\nelse\n  echo \"[secrets-init] /data/configdb/keyfile already exists\"\nfi\n# mongodb/mongodb-atlas-local runs as uid=999 (mongod) and requires\n# a keyfile that is not world-readable.\nchown -R 999:999 /data/configdb\nchmod 600 /data/configdb/keyfile\n"
+    - "set -euo pipefail\napk add --no-cache openssl >/dev/null\nmkdir -p /data/configdb\nif [ ! -f /data/configdb/keyfile ]; then\n  echo \"[secrets-init] generating /data/configdb/keyfile\"\n  # MongoDB keyFile must be sufficiently random and not world-readable.\n  openssl rand -base64 756 > /data/configdb/keyfile\nelse\n  echo \"[secrets-init] /data/configdb/keyfile already exists\"\nfi\n# mongodb/mongodb-atlas-local runs as uid=1000 (mongod) and requires\n# a keyfile that is not world-readable.\nchown -R 1000:1000 /data/configdb\nchmod 600 /data/configdb/keyfile\n"
     volumes:
     - openplanner-atlas-config:/data/configdb
     user: 0:0
   mongodb:
-    image: mongo:8.0
+    image: mongodb/mongodb-atlas-local:latest
     hostname: openplanner-mongodb
     cpus: ${OPENPLANNER_MONGODB_CPUS:-4}
     cpuset: ${OPENPLANNER_CONTAINER_CPUSET:-2-21}
+    command: []
     depends_on:
       secrets-init:
         condition: service_completed_successfully
     ports:
     - 127.0.0.1:${OPENPLANNER_MONGODB_PORT:-27017}:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME:-openplannerRoot}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD:-REDACTED_SECRET-REDACTED_SECRET-password}
+      MONGODB_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USERNAME:-openplannerRoot}
+      MONGODB_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD:-REDACTED_SECRET-REDACTED_SECRET-password}
     volumes:
     - openplanner-atlas-data:/data/db
     - openplanner-atlas-config:/data/configdb
     healthcheck:
       test:
       - CMD-SHELL
-      - 'mongosh --quiet -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval ''quit(db.runCommand({ping: 1}).ok ? 0 : 1)'''
+      - 'mongosh --quiet --eval ''quit(db.hello().isWritablePrimary ? 0 : 1)'' \ || mongosh --quiet -u "$$MONGODB_INITDB_ROOT_USERNAME" -p "$$MONGODB_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval ''quit(db.hello().isWritablePrimary ? 0 : 1)'''
       interval: 15s
       timeout: 10s
       retries: 10
@@ -50,7 +51,7 @@ services:
       timeout: 5s
       retries: 1
   mongo-init:
-    image: mongo:8.0
+    image: mongodb/mongodb-community-server:8.2.0-ubi9
     depends_on:
       mongodb:
         condition: service_healthy

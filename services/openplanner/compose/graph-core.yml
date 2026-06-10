@@ -1,6 +1,6 @@
 services:
   graph-weaver:
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 2
     cpuset: 2-21
     user: ${DOCKER_USER:-1000:1000}
@@ -64,7 +64,7 @@ services:
   eros-eris-field-app:
     profiles:
     - graph-single
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     # NOTE: do not publish a fixed host port if you want horizontal scaling.
@@ -164,7 +164,7 @@ services:
     - graph-2
     - graph-3
     - graph-20
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     working_dir: /app/workspace/devel

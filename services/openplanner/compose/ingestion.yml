@@ -41,7 +41,7 @@ services:
       ai-infra: {}
     user: ${DOCKER_USER:-1000:1000}
   myrmex:
-    image: node:22-bookworm-slim
+    image: REDACTED_SECRET:22-bookworm-slim
     cpus: 1
     cpuset: 2-21
     ports:
@@ -57,7 +57,7 @@ services:
       OPENPLANNER_BASE_URL: http://openplanner:7777
       OPENPLANNER_API_KEY: ${OPENPLANNER_API_KEY:-REDACTED_SECRET}
       PROXX_BASE_URL: ${OPENPLANNER_PROXX_BASE_URL:-http://proxx:8789}
-      PROXX_AUTH_TOKEN: ${OPENPLANNER_PROXX_AUTH_TOKEN:-${PROXX_AUTH_TOKEN:-${PROXY_AUTH_TOKEN:-REDACTED_SECRET-open-hax-proxy-token}}}
+      PROXX_AUTH_TOKEN: ${OPENPLANNER_PROXX_AUTH_TOKEN:-${PROXX_AUTH_TOKEN:-${PROXY_AUTH_TOKEN:REDACTED_SECRET-open-hax-proxy-token}}}
       MYRMEX_PROJECT: ${MYRMEX_PROJECT:-web}
       MYRMEX_SOURCE: ${MYRMEX_SOURCE:-openplanner.myrmex}
       MYRMEX_INCLUDE_PATTERNS: ${MYRMEX_INCLUDE_PATTERNS:-}
@@ -108,7 +108,7 @@ services:
   semantic-graph-builder:
     profiles:
     - jobs
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 2
     cpuset: 2-21
     working_dir: /app/workspace/devel
@@ -135,7 +135,7 @@ services:
   translation-worker:
     profiles:
     - legacy-translation-worker
-    image: node:22-bookworm-slim
+    image: REDACTED_SECRET:22-bookworm-slim
     cpus: 0.5
     cpuset: 2-21
     working_dir: /app
@@ -144,7 +144,7 @@ services:
       MONGODB_URI: mongodb://${OPENPLANNER_MONGO_APP_USERNAME:-openplanner}:${OPENPLANNER_MONGO_APP_PASSWORD:-REDACTED_SECRET-openplanner-password}@mongodb:27017/${MONGODB_DB:-openplanner}?authSource=${MONGODB_DB:-openplanner}
       MONGODB_DB: ${MONGODB_DB:-openplanner}
       MT_PROVIDER_URL: ${MT_PROVIDER_URL:-http://proxx:8789}
-      MT_PROVIDER_API_KEY: ${OPENPLANNER_PROXX_AUTH_TOKEN:-${PROXX_AUTH_TOKEN:-${PROXY_AUTH_TOKEN:-REDACTED_SECRET-open-hax-proxy-token}}}
+      MT_PROVIDER_API_KEY: ${OPENPLANNER_PROXX_AUTH_TOKEN:-${PROXX_AUTH_TOKEN:-${PROXY_AUTH_TOKEN:REDACTED_SECRET-open-hax-proxy-token}}}
       MT_PROVIDER_MODEL: ${MT_PROVIDER_MODEL:-glm-4.5-flash}
       TRANSLATION_POLL_MS: ${TRANSLATION_POLL_MS:-5000}
       TRANSLATION_BATCH_SIZE: ${TRANSLATION_BATCH_SIZE:-100}

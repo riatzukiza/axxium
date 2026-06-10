@@ -10,7 +10,7 @@ services:
   # - introduce additional graph-layout-N.yml presets.
 
   eros-eris-field-app-shard0of3: &eros_eris_structural
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     user: ${DOCKER_USER:-1000:1000}

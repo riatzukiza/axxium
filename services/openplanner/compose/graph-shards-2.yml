@@ -2,7 +2,7 @@ services:
   eros-eris-field-app-shard0of2:
     profiles:
     - graph-2
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     working_dir: /app/workspace/devel
@@ -80,7 +80,7 @@ services:
   eros-eris-field-app-shard1of2:
     profiles:
     - graph-2
-    image: node:22-bookworm
+    image: REDACTED_SECRET:22-bookworm
     cpus: 1.5
     cpuset: 2-21
     working_dir: /app/workspace/devel
