@@ -1,42 +1,53 @@
-# Π fork-tax snapshot — 20260602T172342Z
+# Π fork-tax snapshot — 20260610T042416Z
 
 - Repository: riatzukiza/devel
-- Source branch: `feat/axxium-restore-and-track`
-- Base: `origin/staging` (dcb261bcc5edd2f328a5bff73dfabf89f0b9ed7c)
-- Snapshot commit: 3305c3f104ffd828d113fed534332ae94957da07
-- Π tag: `fork-tax/20260602-axxium-restore-and-track`
+- Source branch: `feat/ci-automation-1781026522`
+- Base: `origin/staging`
+- Snapshot commit: (pending)
+- Π tag: `fork-tax/20260610-ci-automation`
 
-## Scope (path-scoped, 25 files, +2176/-0)
+## Scope (33 tracked files, submodule pointers + policy + config)
 
-- `docs/morning_update_2026-04-06.md` — Hormuz Risk Clock morning update (carried forward from working tree)
-- `docs/notes/2026.06.02.10.46.20.md` — Axxium design note (today's session)
-- `orgs/open-hax/axxium/` — full ClojureScript identity/auth kernel project:
-  - `README.md`, `deps.edn`, `shadow-cljs.edn`, `package.json`
-  - `src/cljs/axxium/{auth,routes,db,config,schema,server}.cljs` and friends
-  - `docs/axxium-kernel-spec.md`, `docs/axxium-kernel-spec-v2.md`, `docs/axium-synthesis.md`, `docs/open-hax-octave-commons-axxium.md`
-  - `.github/workflows/deploy.yml`, `.env.example`
-  - `.gitignore` (extended with `session-*.md` and standard caches)
+### Submodule pointer updates (20)
+- `orgs/octave-commons/daimoi`, `eros-eris-field`, `eros-eris-field-app`, `eta-mu-sol`, `fork_tales`, `gates-of-aker`, `lineara_conversation_export`, `promethean`, `promethean-agent-system`, `shibboleth`, `simulacron`
+- `orgs/open-hax/axxium`, `commanoxx`, `depenoxx`, `eta-mu`, `openplanner`, `privaxxy`, `proxx`, `uxx`, `vexx`
+- `orgs/agustif/codex-linux`, `orgs/riatzukiza/TANF-app`, `orgs/shuv/mcporter`
 
-## Excluded (per `.gitignore` rules, intentionally not tracked)
+### File changes
+- `.factory/skills/submodule-ops/SKILL.md` — removed (66 lines)
+- `.ημ/PRINCIPLE.edn` — minor edit
+- `AGENTS.md` — removed (54 lines)
+- `README.md` — removed (70 lines)
+- `bin/align-submodules` — removed (31 lines)
+- `bin/fork-tax-submodules` — removed (24 lines)
+- `services/openplanner/compose/proxx.yml` — config update
+- `services/proxx/policies/runtime/00-manifest.edn` — policy update
+- `services/proxx/policies/runtime/10-model-families.edn` — policy update
+- `spec.json` — schema update
 
-- `orgs/open-hax/axxium/node_modules/` (150 MB)
-- `.shadow-cljs/`, `.cpcache/`, `.clj-kondo/`, `.lsp/`, `dist/`
-- `session-ses_1802.md` (171 KB Kimi K2.6 session dump; new `session-*.md` rule in axxium `.gitignore`)
+## Excluded (secrets — NOT committed)
 
-## Path-scoped staging verification
-
-- `git status -uall` shows no other untracked files
-- The `.git` submodule pointer was removed from the copied axxium directory before staging; project is added as plain tracked content under `orgs/open-hax/axxium/`
-- `.gitmodules` on `origin/staging` does not register axxium; the new commit does not reintroduce a gitlink
+- `passwords.csv` — contains website credentials, explicitly excluded
+- `services/proxx/cephalon-hive-accounts.json` — provider account data
+- `services/proxx/cephalon-hive-providers.json` — provider config
+- `services/proxx/proxx-federation-accounts.json` — federation accounts
+- `services/proxx/proxx-federation-providers.json` — federation providers
+- `services/openplanner/scripts/sync-runtime-secrets-env.sh` — secrets script
+- `services/openplanner/scripts/unfragile-mongo-reset.sh` — DB reset script
 
 ## Concurrent dirt (intentionally untouched)
 
-- Local main worktree (at `/home/err/devel`) still has branch `staging` at `db1586e03a`, which is stale relative to `origin/staging` `dcb261bcc5`.
-- The stale tip carries a `scrub secrets, re-add axxium` commit (`db1586e03a`) that is functionally redundant with `db99be843e` already on `origin/staging`; another agent's Π promotion (`pi/fork-tax/20260602T164500Z/devel-main-staging-scrubbed-promotion`) is recorded in the tag namespace.
-- Per fork-tax guardrails, no destructive reset of the main worktree was performed. The fork-tax work itself was carried out in the new worktree `.worktrees/feat-axxium-restore-and-track`.
+- **1478 untracked files** not staged:
+  - ~452 audio files (Voice/TTS MP3s, WAVs)
+  - ~200+ Lore/fork-tales events, world-states, plot-logs, world-building docs
+  - ~100+ Graphics SVGs (Symmetry Council seals, emblems)
+  - ~100+ kanban drafts, service scaffolds
+  - Music/USTX files, narrative docs, notes
+  - Services: `services/eta-mu/kanban-cljs/`, `services/eta-mu/kanban/.eta-mu/`
+  - Orgs: `orgs/octave-commons/lyrical-engine/`, `orgs/octave-commons/markov_song_engine/`
+- Per fork-tax guardrails, untracked creative artifacts and secrets are left as documented residual.
 
-## PR
+## Handoff artifacts updated
 
-- Target: `staging`
-- Source: `feat/axxium-restore-and-track`
-- Diff is the snapshot above (25 files, +2176 lines), clean against the latest `origin/staging`.
+- `.ημ/Π_LAST.md` — this file
+- `.ημ/Π_STATE.sexp` — machine-readable state
