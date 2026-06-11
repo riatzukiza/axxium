@@ -1,4 +1,24 @@
-[{:contract/id :model-family/openai-explicit
+[{:contract/id :model/claude-haiku-4-5
+  :contract/kind :model
+  :model/id "claude-haiku-4-5"}
+
+ {:contract/id :model/claude-sonnet-4-5
+  :contract/kind :model
+  :model/id "claude-sonnet-4-5"}
+
+ {:contract/id :model/claude-sonnet-4-6
+  :contract/kind :model
+  :model/id "claude-sonnet-4-6"}
+
+ {:contract/id :model/claude-opus-4-5
+  :contract/kind :model
+  :model/id "claude-opus-4-5"}
+
+ {:contract/id :model/claude-opus-4-6
+  :contract/kind :model
+  :model/id "claude-opus-4-6"}
+
+ {:contract/id :model-family/openai-explicit
   :contract/kind :model-family
   :match/model-pattern "(?i)^openai[/:].+"
   :routing/provider-id "openai"
