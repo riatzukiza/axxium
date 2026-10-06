@@ -28,3 +28,12 @@ The PR remains draft and auto-merge off because the inherited ready-triggered wo
 - `red-fixture.cljs`: SHA-256 `2beb470eb6b0cca58361baee0871da5990f258c36a5a4ec32a3c63b597733610`
 - `red-test.log`: SHA-256 `577b0c3bb9bdaf81aa33997da5943ce2d1b85c103c368ddf8c5fbf53e647f5c0`
 - `typecheck.log`: SHA-256 `a7eb0120a33d537c664553792f7f935f2c5d8c2a3b1eba4b5efd0e6c915e880d`
+
+## Native summary docstring follow-up
+
+The native summary comment `6017930818` also reports docstring coverage0% on one supported function, with38 async/other forms unsupported by that scan. Concise docstrings now describe affected public query/route adapters and repaired agent/first-login handlers. No runtime behavior changes in this follow-up. Its separate typecheck/build outputs report0warnings and both full test executions report22tests78assertions0failures0errors. The provider must recompute its own coverage; no percentage or warning waiver is claimed. Earlier raw artifacts remain unchanged.
+
+- `docstring-typecheck.log`: SHA-256 `99188ee4cc6945921c7e4a31d9880f1246e8d17e8c0a4b19c60f71d157aaec82`
+- `docstring-build.log`: SHA-256 `7a726d11d5d195d1a72b180e39ead1faeb54d04a027b76cc869791db0eb5c0d5`
+- `docstring-tests.log`: SHA-256 `ec7a75b05c6ea142c4ec134fece6c6474655c9dfa23dec9d400f9d71036fcffd`
+- `docstring-node-tests.log`: SHA-256 `91122e349aeb000652a13b4d6448e8fc17968eb172b5c0412c53bbd0679c82a6`

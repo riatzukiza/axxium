@@ -90,14 +90,18 @@
 (def q-revoke-agent-credential q/revoke-agent-credential)
 (def q-select-agent-credentials q/select-agent-credentials)
 (def q-select-actors-active q/select-actors-active)
-(defn q-insert-actor [actor]
+(defn q-insert-actor
+  "Build an actor insert with JSON-encoded capabilities and roles."
+  [actor]
   (q/insert-actor
    (-> actor
        (assoc :capabilities-json (json/encode (:capabilities actor)))
        (assoc :roles-json (json/encode (:roles actor))))))
 (def q-insert-entity q/insert-entity)
 (def q-select-entity-by-id q/select-entity-by-id)
-(defn q-update-actor-capabilities [id capabilities]
+(defn q-update-actor-capabilities
+  "Build an actor capabilities update with JSON encoding at the boundary."
+  [id capabilities]
   (q/update-actor-capabilities id (json/encode capabilities)))
 (def q-insert-session q/insert-session)
 (def q-select-actor-by-session q/select-actor-by-session)

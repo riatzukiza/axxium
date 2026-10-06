@@ -7,12 +7,16 @@
             [axxium.routes.auth-context :as auth]
             [clojure.string :as str]))
 
-(defn- ^:async agent-actor [id]
+(defn- ^:async agent-actor
+  "Return the actor only when its linked entity is an agent."
+  [id]
   (when-let [actor (await (db/query-one-sql (db/q-select-actor-by-id {:id id})))]
     (let [entity (await (db/query-one-sql (db/q-select-entity-for-actor id)))]
       (when (law/agent? entity) actor))))
 
-(defn- ^:async create-agent! [req reply _context]
+(defn- ^:async create-agent!
+  "Atomically create paired agent records after administrator admission."
+  [req reply _context]
   (try
     (let [{:keys [display-name]} (http/body req)
           name (some-> display-name str/trim)]
@@ -34,7 +38,9 @@
       (println "Agent creation failed:" (http/error-message err))
       (http/send! reply 500 {:error "Could not create agent"}))))
 
-(defn- ^:async issue-credential! [req reply admin]
+(defn- ^:async issue-credential!
+  "Issue an expiring credential for an admitted administrator and valid agent."
+  [req reply admin]
   (try
     (let [actor-id (http/param req "id")
           actor (await (agent-actor actor-id))
@@ -61,7 +67,9 @@
       (println "Credential issuance failed:" (http/error-message err))
       (http/send! reply 500 {:error "Could not issue credential"}))))
 
-(defn- ^:async list-credentials! [req reply _context]
+(defn- ^:async list-credentials!
+  "List agent credentials with controlled database-error responses."
+  [req reply _context]
   (try
     (let [actor-id (http/param req "id")]
       (if (await (agent-actor actor-id))
@@ -73,7 +81,9 @@
       (println "Credential listing failed:" (http/error-message err))
       (http/send! reply 500 {:error "Could not list credentials"}))))
 
-(defn- ^:async revoke-credential! [req reply _context]
+(defn- ^:async revoke-credential!
+  "Revoke an agent-owned credential while preserving not-found responses."
+  [req reply _context]
   (try
     (let [actor-id (http/param req "id")
           credential-id (http/param req "credentialId")]
@@ -86,7 +96,9 @@
       (println "Credential revocation failed:" (http/error-message err))
       (http/send! reply 500 {:error "Could not revoke credential"}))))
 
-(defn register-agent-routes! [app]
+(defn register-agent-routes!
+  "Mount all agent and credential endpoints behind shared administrator admission."
+  [app]
   (http/post! app "/api/actors/agents" (auth/with-admin create-agent!))
   (http/post! app "/api/actors/:id/credentials" (auth/with-admin issue-credential!))
   (http/get! app "/api/actors/:id/credentials" (auth/with-admin list-credentials!))

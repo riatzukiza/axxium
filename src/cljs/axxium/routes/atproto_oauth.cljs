@@ -12,7 +12,9 @@
 (def ^:private state-cookie "axxium_atproto_state")
 (def ^:private callback-path "/api/auth/atproto/callback")
 
-(defn- ^:async bound-actor! [did]
+(defn- ^:async bound-actor!
+  "Return the DID-bound actor, atomically creating or recovering the winning binding."
+  [did]
   (let [selection (db/q-select-actor-by-provider-subject "atproto" did)]
     (if-let [actor (await (db/query-one-sql selection))]
       actor
@@ -112,7 +114,9 @@
                                   409 "AT identity is already bound to another actor"
                                   "AT Protocol sign-in failed")})))))))
 
-(defn register-atproto-oauth-routes! [app]
+(defn register-atproto-oauth-routes!
+  "Mount AT Protocol OAuth endpoints with canonical-origin sign-in starts."
+  [app]
   (http/get! app "/api/auth/atproto/client-metadata.json" metadata!)
   (http/get! app "/api/auth/atproto/start"
              (http/with-canonical-origin

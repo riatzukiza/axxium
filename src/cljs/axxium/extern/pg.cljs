@@ -4,6 +4,7 @@
   (:require ["pg" :as pg-lib]))
 
 (defn create-pool!
+  "Construct a PostgreSQL pool from the named runtime connection options."
   [{:keys [connection-string max idle-timeout-ms connect-timeout-ms]}]
   (new (.-Pool pg-lib)
        (clj->js {:connectionString connection-string

@@ -73,7 +73,9 @@
                      (http/send! reply 400
                                  {:error "capabilities must be a list of strings"})))))))
 
-(defn register-actor-routes! [app]
+(defn register-actor-routes!
+  "Mount actor and entity endpoints with shared authentication and admin admission."
+  [app]
   (register-list-actors-route! app)
   (register-get-actor-route! app)
   (register-get-me-route! app)
