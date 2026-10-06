@@ -50,7 +50,7 @@
    reply COOKIE-NAME token
    {:secure (cfg/get-in-config [:session/cookie-secure])
     :same-site (cfg/get-in-config [:session/cookie-same-site])
-    :max-age (* (cfg/get-in-config [:jwt/expiry-hours]) 3600000)}))
+    :max-age (* (cfg/get-in-config [:jwt/expiry-hours]) 3600)}))
 
 (defn clear-session-cookie
   "Clear the session cookie."

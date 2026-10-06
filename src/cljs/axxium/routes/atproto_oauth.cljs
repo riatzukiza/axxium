@@ -13,22 +13,27 @@
 (def ^:private callback-path "/api/auth/atproto/callback")
 
 (defn- ^:async bound-actor! [did]
-  (if-let [actor (await (db/query-one-sql
-                         (db/q-select-actor-by-provider-subject "atproto" did)))]
-    actor
-    (let [entity-id (str "entity_" (random-uuid))
-          actor-id (str "actor_" (random-uuid))]
-      (await (db/query-sql
-              (db/q-insert-entity {:id entity-id :kind "human"
-                                   :display-name did})))
-      (await (db/query-sql
-              (db/q-insert-actor {:id actor-id :entity-id entity-id
-                                  :display-name did
-                                  :capabilities [:axxium/login :axxium/read]
-                                  :roles [:axxium/user] :status "active"})))
-      (await (db/query-sql
-              (db/q-insert-provider-binding "atproto" did actor-id)))
-      (db/query-one-sql (db/q-select-actor-by-id {:id actor-id})))))
+  (let [selection (db/q-select-actor-by-provider-subject "atproto" did)]
+    (if-let [actor (await (db/query-one-sql selection))]
+      actor
+      (let [entity-id (str "entity_" (random-uuid))
+            actor-id (str "actor_" (random-uuid))]
+        (try
+          (await
+           (db/with-transaction!
+            (fn ^:async bind-identity-rows [query!]
+              (await (query! (db/q-insert-entity
+                              {:id entity-id :kind "human" :display-name did})))
+              (await (query! (db/q-insert-actor
+                              {:id actor-id :entity-id entity-id :display-name did
+                               :capabilities [:axxium/login :axxium/read]
+                               :roles [:axxium/user] :status "active"})))
+              (await (query! (db/q-insert-provider-binding "atproto" did actor-id)))
+              (first (await (query! (db/q-select-actor-by-id {:id actor-id})))))))
+          (catch :default error
+            (if (db/provider-binding-conflict? error)
+              (or (await (db/query-one-sql selection)) (throw error))
+              (throw error))))))))
 
 (defn- ^:async link-actor! [req did expected-actor-id]
   (let [context (await (session/resolve-auth-context req))

@@ -32,3 +32,29 @@
   [conn sql-str params]
   (-> (query! conn sql-str params)
       (.then (fn [{:keys [rows]}] (first rows)))))
+
+(defn ^:async with-transaction!
+  "Reserve one client; commit success, roll back rejection, and always release it."
+  [pool operation]
+  (let [client (await (.connect pool))
+        discard? (atom false)]
+    (try
+      (await (.query client "BEGIN"))
+      (try
+        (let [value (await (operation client))]
+          (await (.query client "COMMIT"))
+          value)
+        (catch :default error
+          (try
+            (await (.query client "ROLLBACK"))
+            (catch :default rollback-error
+              (reset! discard? true)
+              (throw rollback-error)))
+          (throw error)))
+      (finally (.release client @discard?)))))
+
+(defn provider-binding-conflict?
+  "Decode PostgreSQL's exact provider-binding unique-constraint failure."
+  [error]
+  (and (= "23505" (.-code error))
+       (= "idx_provider_bindings_subject" (.-constraint error))))

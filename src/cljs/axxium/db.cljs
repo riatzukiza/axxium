@@ -22,12 +22,30 @@
   (let [formatted (sql/format honey-map {:numbered true})]
     [(first formatted) (rest formatted)]))
 
+(defn- ^:async query-on!
+  "Execute a HoneySQL query through one opaque pool/client handle."
+  [connection honey-map]
+  (let [[sql-str params] (honey->sql honey-map)
+        {:keys [rows]} (await (pg/query! connection sql-str params))]
+    rows))
+
 (defn query-sql
   "Execute a HoneySQL query. Returns promise of rows."
   [honey-map]
-  (let [[sql-str params] (honey->sql honey-map)]
-    (-> (pg/query! @pool sql-str params)
-        (.then (fn [{:keys [rows]}] rows)))))
+  (query-on! @pool honey-map))
+
+(defn with-transaction!
+  "Run an operation with a HoneySQL query function bound to one transaction."
+  [operation]
+  (pg/with-transaction!
+   @pool
+   (fn [connection]
+     (operation (fn [honey-map] (query-on! connection honey-map))))))
+
+(defn provider-binding-conflict?
+  "Recognize only the provider/subject uniqueness conflict for sign-in recovery."
+  [error]
+  (pg/provider-binding-conflict? error))
 
 (defn query-one-sql
   "Execute HoneySQL query and return first row or nil."

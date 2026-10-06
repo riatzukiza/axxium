@@ -1,31 +1,11 @@
 (ns axxium.routes.actor
   "Authenticated actor registry and administrator account controls."
-  (:require [axxium.auth.session :as session]
-            [axxium.db :as db]
+  (:require [axxium.db :as db]
             [axxium.extern.http :as http]
-            [axxium.law.actor :as law]))
+            [axxium.routes.auth-context :as auth]))
 
 (defn- sanitize-actor [actor]
   (dissoc actor :password_hash))
-
-(defn- with-auth [handler]
-  (fn [req reply]
-    (-> (session/resolve-auth-context req)
-        (.then (fn [context]
-                 (if context
-                   (handler req reply context)
-                   (http/send! reply 401 {:error "Unauthorized"})))))))
-
-(defn- with-admin [handler]
-  (with-auth
-   (fn [req reply context]
-     (-> (db/query-one-sql
-          (db/q-select-entity-for-actor (:auth/actor-id context)))
-         (.then (fn [entity]
-                  (if (law/system-admin? context entity)
-                    (handler req reply context)
-                    (http/send! reply 403
-                                {:error "System administrator required"}))))))))
 
 (defn- pagination [req]
   (let [limit (or (http/parse-int (http/query-param req "limit")) 50)
@@ -34,7 +14,7 @@
 
 (defn- register-list-actors-route! [app]
   (http/get! app "/api/actors"
-             (with-admin
+             (auth/with-admin
               (fn [req reply _context]
                 (-> (db/query-all-sql (db/q-select-actors-active (pagination req)))
                     (.then (fn [actors]
@@ -45,7 +25,7 @@
 
 (defn- register-get-actor-route! [app]
   (http/get! app "/api/actors/:id"
-             (with-admin
+             (auth/with-admin
               (fn [req reply _context]
                 (-> (db/query-one-sql
                      (db/q-select-actor-by-id {:id (http/param req "id")}))
@@ -57,7 +37,7 @@
 
 (defn- register-get-me-route! [app]
   (http/get! app "/api/actors/me"
-             (with-auth
+             (auth/with-auth
               (fn [_req reply context]
                 (-> (db/query-one-sql
                      (db/q-select-actor-by-id {:id (:auth/actor-id context)}))
@@ -69,7 +49,7 @@
 
 (defn- register-get-entity-route! [app]
   (http/get! app "/api/entities/:id"
-             (with-admin
+             (auth/with-admin
               (fn [req reply _context]
                 (-> (db/query-one-sql
                      (db/q-select-entity-by-id {:id (http/param req "id")}))
@@ -80,7 +60,7 @@
 
 (defn- register-update-capabilities-route! [app]
   (http/post! app "/api/actors/:id/capabilities"
-              (with-admin
+              (auth/with-admin
                (fn [req reply _context]
                  (let [capabilities (:capabilities (http/body req))]
                    (if (and (vector? capabilities)

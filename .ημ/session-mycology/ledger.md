@@ -7,3 +7,12 @@
   spore: none
   receipt-refs: open-hax/axxium#26,review-id:5388181395,.ημ/receipts.edn
   note: Dedicated shallow worktree and copied private Maven/npm caches; no service startup. Regression exposed implicit async compiler await generated for or expression before queue reservation; direct map lookup preserves synchronous admission. Receipt helper worktree discovery and malformed schema tracked by parent upstream; raw preparation row retained verbatim in archive and direct schema-valid records authored here. No skill promotion.
+- ts: 2026-10-06T14:34:15.138334689Z
+  session: /home/err/.codex/worktrees/axxium-personal1-native-20261006
+  task: Axxium personal1 native session/identity findings repair
+  p-efficiency: 0.8
+  p-friction: 0.45
+  p-skill-candidate: 0
+  spore: none
+  receipt-refs: 2026-10-06T14:34:15.127072+00:00
+  note: Observed red assertions despite compiler exit0; failure/concurrency fixtures and isolated runtimes provided lawful repair evidence. Draft preserves unsafe-controller blocker; no same-session skill promotion.

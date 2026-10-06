@@ -64,14 +64,14 @@
 (defn canonical-url
   "Return a fixed-origin redirect for a request made on another host."
   [origin path req]
-  (let [configured-host (.-host (js/URL. origin))]
-    (let [request-host (some-> req (aget "headers") (aget "host"))]
-      (when (and request-host
-                 (not= (.toLowerCase request-host) configured-host))
-        (let [target (js/URL. path origin)
-              requested (js/URL. (request-url req) origin)]
-          (set! (.-search target) (.-search requested))
-          (.toString target))))))
+  (let [configured-host (.-host (js/URL. origin))
+        request-host (some-> req (aget "headers") (aget "host"))]
+    (when (and request-host
+               (not= (.toLowerCase request-host) configured-host))
+      (let [target (js/URL. path origin)
+            requested (js/URL. (request-url req) origin)]
+        (set! (.-search target) (.-search requested))
+        (.toString target)))))
 
 (defn with-canonical-origin
   "Redirect OAuth starts to the configured host before setting state cookies."
