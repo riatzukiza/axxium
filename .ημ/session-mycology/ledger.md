@@ -16,3 +16,12 @@
   spore: none
   receipt-refs: 7c830b0b33b51e660ad449bbed0a4e753fc8b2288823f977da2b125063ed8e12
   note: Proposed missing status and rollback contracts stay explicit reviewed prerequisites. Preserve original whole migration and history; no implementation, native write or premature acceptance.
+- ts: 2026-10-07T22:29:34.424938687Z
+  session: /home/err/.codex/parallel-goal/axxium3-service-caller-correction-zp8ma7qs/worktree
+  task: axxium3-service-caller-verification-correction
+  p-efficiency: 0.90
+  p-friction: 0.10
+  p-skill-candidate: 0
+  spore: none
+  receipt-refs: .ημ/receipts.edn
+  note: Native4212604343 verified against unchanged design; add future authenticated service-caller/fixed-authority positive and missing/invalid credentials/caller-controlled authority negatives distinct from actor status. Preserve whole6/4/TodoP0/8, all old receipts/captures and card/design. New independently copied runtime/store; collector root and absent Python locator preparation mistakes retained and corrected. No endpoint execution, native board/provider write, readiness, approval or publication credit.
