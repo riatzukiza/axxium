@@ -1,0 +1,19 @@
+{
+  "number": 5,
+  "title": "Add Discord OAuth to Axxium",
+  "state": "open",
+  "draft": null,
+  "updated_at": "2026-06-09T20:48:31Z",
+  "writer": "github-actions[bot]",
+  "body": "<!-- openhax-kanban-sync uuid=\"axxium-discord-oauth\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-discord-oauth`\n- Status: `todo`\n- Priority: `P0`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-discord-oauth.md`\n- Labels: `auth`, `oauth`, `discord`, `axxium`\n\n---\n# Add Discord OAuth to Axxium\n\n## Goal\nEnable users to create accounts and authenticate with Discord OAuth, alongside existing email/password auth.\n\n## Requirements\n- [ ] Discord OAuth2 callback route (`/api/auth/discord/callback`)\n- [ ] Discord user info fetch (username, avatar, guild memberships)\n- [ ] Link Discord identity to Axxium actor (create or link existing)\n- [ ] Store Discord access token for API calls (guild role checks)\n- [ ] UI: Discord login button on portal\n- [ ] Policy: Derive capabilities from Discord guild roles\n\n## Acceptance Criteria\n- Users can sign up/login with Discord\n- Discord guild membership is stored on actor\n- Policy engine can check Discord roles for authorization decisions\n- Bearer tokens work for API access after OAuth login\n\n## Related\n- Axxium auth routes: `src/cljs/axxium/routes/auth.cljs`\n- Axxium session: `src/cljs/axxium/auth/session.cljs`\n- Axxium config: OAuth client ID/secret in env/config\n",
+  "original_body_sha256": "f22d28d8b0687330c09e84704afaaec6fe71ed16cfbe87a9c70deaaa310d5ade",
+  "labels": [
+    "kanban",
+    "status:todo",
+    "priority:P0",
+    "auth",
+    "oauth",
+    "discord",
+    "axxium"
+  ]
+}

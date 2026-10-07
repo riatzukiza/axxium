@@ -1,0 +1,96 @@
+[
+  {
+    "label": "original",
+    "committed_input_files": [
+      {
+        "path": "kanban/axxium-discord-oauth.md",
+        "bytes": 1199,
+        "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e"
+      },
+      {
+        "path": "kanban/axxium-github-workflow.md",
+        "bytes": 1360,
+        "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb"
+      },
+      {
+        "path": "kanban/axxium-knoxx-identity-migration.md",
+        "bytes": 1601,
+        "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8"
+      },
+      {
+        "path": "kanban/axxium-openplanner-identity-migration.md",
+        "bytes": 1482,
+        "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4"
+      },
+      {
+        "path": "kanban/axxium-proxx-identity-migration.md",
+        "bytes": 1704,
+        "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7"
+      },
+      {
+        "path": "kanban/axxium-service-deployment.md",
+        "bytes": 1398,
+        "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6"
+      },
+      {
+        "path": "kanban/openhax.kanban.json",
+        "bytes": 59,
+        "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9"
+      }
+    ],
+    "all_after_exact": true,
+    "native_materialized_owned_only": [
+      {
+        "path": "kanban/.events/ledger.edn",
+        "bytes": 0
+      }
+    ]
+  },
+  {
+    "label": "proposed",
+    "committed_input_files": [
+      {
+        "path": "kanban/axxium-discord-oauth.md",
+        "bytes": 8205,
+        "sha256": "fa25a8ad9075d39f0ab6c5ee179a199cb37b86727d3a1d6412b88dce36919a22"
+      },
+      {
+        "path": "kanban/axxium-github-workflow.md",
+        "bytes": 1360,
+        "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb"
+      },
+      {
+        "path": "kanban/axxium-knoxx-identity-migration.md",
+        "bytes": 1601,
+        "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8"
+      },
+      {
+        "path": "kanban/axxium-openplanner-identity-migration.md",
+        "bytes": 1482,
+        "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4"
+      },
+      {
+        "path": "kanban/axxium-proxx-identity-migration.md",
+        "bytes": 1704,
+        "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7"
+      },
+      {
+        "path": "kanban/axxium-service-deployment.md",
+        "bytes": 1398,
+        "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6"
+      },
+      {
+        "path": "kanban/openhax.kanban.json",
+        "bytes": 59,
+        "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9"
+      }
+    ],
+    "all_after_exact": true,
+    "native_materialized_owned_only": [
+      {
+        "path": "kanban/.events/ledger.edn",
+        "bytes": 0
+      }
+    ]
+  }
+]

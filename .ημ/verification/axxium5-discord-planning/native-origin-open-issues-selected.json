@@ -1,0 +1,257 @@
+{
+  "count": 18,
+  "captured_snapshot": true,
+  "items": [
+    {
+      "number": 25,
+      "title": "Preserve identity provenance across multiple transfer hops",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:23:02Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:multihop-origin -->\n\nAfter A→B→C, B’s actor retains origin_issuer=A, but transfer-payload omits it. C stores the immediate signer B as the origin and the UI describes B as the original registration host. Separate original provenance from the current signed issuer, or accurately label the stored field as the previous hop.\n\nSeverity: **P2**. Disposition: **Proposed merge blocker for provenance claims**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/domain/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/domain/identity.cljs)\n- [src/cljs/axxium/infra/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/infra/identity.cljs)\n\nAcceptance and validation:\n\n- [ ] Define the trust semantics for original origin and immediate signer independently.\n- [ ] Run an A→B→C transfer and assert stable actor/entity identifiers and accurately labeled provenance.\n- [ ] Do not treat a claimed historical origin as an independently verified issuer or use it to grant privileges; retain current signer/audience/replay validation.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3999136405)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "da85783fd7f55b2ab56de0ec32f1fe0101895db6246db243af769b4cb25c0cd7",
+      "labels": []
+    },
+    {
+      "number": 24,
+      "title": "Preserve a supported token-issuance path for API clients",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:23:01Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:bearer-compatibility -->\n\nPrevious signup/login JSON included token. The new session response exposes only actor in JSON and places the token in an HttpOnly cookie, while Bearer authentication remains supported. Existing non-browser clients lose their documented means of obtaining a token.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/routes/auth.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/routes/auth.cljs)\n- [src/cljs/axxium/extern/http.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/extern/http.cljs)\n- [README.md](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/README.md)\n\nAcceptance and validation:\n\n- [ ] Retain the established response contract or provide an explicit versioned token-issuance replacement and migration.\n- [ ] Demonstrate a non-browser client obtaining credentials and authenticating a subsequent Bearer request.\n- [ ] Preserve secure HttpOnly browser sessions and avoid exposing tokens in logs, URLs or screenshots.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3999136403)\n\nCoordinate client compatibility with open-hax/knoxx#306 and existing Axxium consumer migration issues #6–#8.\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "b35eda3ebb47cfb2aafb334389333bf2a73777898011eb19256434cb20f0ad9f",
+      "labels": []
+    },
+    {
+      "number": 23,
+      "title": "Keep login compatible with previously accepted passwords",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:59Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:legacy-login -->\n\nThe previous signup path accepted passwords of at least eight characters. Current login uses the new signup contract requiring twelve characters, rejecting existing valid 8–11 character credentials before bcrypt comparison. This is an upgrade lockout, not a request to weaken new-password requirements.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/routes/auth.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/routes/auth.cljs)\n- [src/cljs/axxium/law/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/law/identity.cljs)\n\nAcceptance and validation:\n\n- [ ] Separate authentication input validation from new-password selection policy.\n- [ ] Verify an existing 8–11 character password hash can authenticate after upgrade and an incorrect password still fails.\n- [ ] Keep the stronger rule for signup/import/new-password creation and enforce the supported bcrypt byte limit consistently.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3999136401)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "99ff9b9987b345a00b88d3ef1c88f6d9633c261f719648b74c28d9edafb5ed34",
+      "labels": []
+    },
+    {
+      "number": 22,
+      "title": "Validate authentication request shape before normalization",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:58Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:body-shape -->\n\ncredentials! normalizes input before checking the credential schema. Non-map JSON bodies such as strings or arrays can fail inside assoc and produce HTTP 500 instead of a controlled invalid_request response.\n\nSeverity: **P2**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/routes/auth.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/routes/auth.cljs)\n- [src/cljs/axxium/domain/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/domain/identity.cljs)\n\nAcceptance and validation:\n\n- [ ] Validate the boundary body shape before normalization.\n- [ ] Exercise null, scalar, array, malformed and valid map inputs through signup/login HTTP endpoints.\n- [ ] Return the defined 400 response for invalid shapes while preserving legitimate credential failures as authentication errors.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998715578)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "605747bae35b211322d91b08915d0280d3cc4e457f7fdd4b5d2085ba80c521ac",
+      "labels": []
+    },
+    {
+      "number": 21,
+      "title": "Allow legacy actors with empty names to transfer successfully",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:57Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:legacy-display-name -->\n\nPersisted actors may have NULL or empty display_name values, but transfer claims now require a nonempty display name. Export copies the stored value, producing a signed transfer the recipient rejects for those legacy actors.\n\nSeverity: **P2**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/law/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/law/identity.cljs)\n- [src/cljs/axxium/domain/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/domain/identity.cljs)\n- [src/cljs/axxium/infra/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/infra/identity.cljs)\n\nAcceptance and validation:\n\n- [ ] Choose an explicit fallback, migration, or optional-name contract and use it consistently on export and import.\n- [ ] Cover existing NULL/empty names and preserve stable actor/entity identifiers.\n- [ ] Do not weaken signature, audience, expiry or local privilege boundaries while making legacy records portable.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998715576)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "e5b1b25e2bfc7bd3d5d7e4a2c4563b399bc420c1562015c6096f23cbd2d8311e",
+      "labels": []
+    },
+    {
+      "number": 20,
+      "title": "Preserve transaction errors when rollback also fails",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:56Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:rollback-error -->\n\ntransaction! awaits ROLLBACK inside the catch block. If rollback rejects, its error replaces the original callback or COMMIT failure, hiding the initiating failure during diagnosis.\n\nSeverity: **P2**. Disposition: **Proposed deferral; diagnostics**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/extern/pg.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/extern/pg.cljs)\n\nAcceptance and validation:\n\n- [ ] Preserve the original error and retain rollback failure as secondary evidence without logging secrets.\n- [ ] Release the client once in callback, commit and rollback failure cases.\n- [ ] Cover callback-plus-rollback and commit-plus-rollback failures with bounded adapter tests.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998715575)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "ed8b918c41821ddd370eb055635ddeefa42eadbffa43c161b4b7f5dfd478fc71",
+      "labels": []
+    },
+    {
+      "number": 19,
+      "title": "Tighten existing signing-key permissions during preparation",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:54Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:existing-key-mode -->\n\nThe 0600 mode is applied only when creating identity-private.json. Reusing a group- or world-readable private key leaves its insecure permissions intact after preparation.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [scripts/prepare-instance.mjs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/scripts/prepare-instance.mjs)\n\nAcceptance and validation:\n\n- [ ] Enforce private-key mode on existing files and fail when enforcement fails.\n- [ ] Verify a pre-existing 0644 key is tightened without rotating or disclosing it.\n- [ ] Keep the runtime ownership contract compatible with the mounted-file UID issue.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998715569)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "eb96e7e6b83fc5913f6291d15c30c820adee4e16da406b9a13add098e2693d90",
+      "labels": []
+    },
+    {
+      "number": 18,
+      "title": "Reject insecure public origins during instance preparation",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:53Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:public-https -->\n\nThe preparation command accepts HTTP public origins and writes SESSION_COOKIE_SECURE=false for a service bound beyond loopback. This permits a prepared public authentication service to transmit credentials without TLS.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [scripts/prepare-instance.mjs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/scripts/prepare-instance.mjs)\n- [compose.instance.yaml](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/compose.instance.yaml)\n\nAcceptance and validation:\n\n- [ ] Require HTTPS for prepared public deployments, rejecting invalid origins before writing runtime state.\n- [ ] Keep any loopback-only HTTP test exception explicit and isolated from the public deployment command.\n- [ ] Verify secure session cookies through the supported HTTPS proxy setup.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998715563)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "873bf32a5d06a16994f628c5cdb8d74349424af628c3d7805394abe37af57c7d",
+      "labels": []
+    },
+    {
+      "number": 17,
+      "title": "Persist imported identities with canonical email addresses",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:51Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:canonical-transfer-email -->\n\nA trusted issuer can sign a mixed-case email accepted by the transfer schema. Import validates a normalized credentials copy but persists the original claims, while login lowercases its database lookup. The newly imported account can then fail its first local sign-in.\n\nSeverity: **P2**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/law/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/law/identity.cljs)\n- [src/cljs/axxium/domain/identity.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/domain/identity.cljs)\n- [src/cljs/axxium/routes/auth.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/routes/auth.cljs)\n\nAcceptance and validation:\n\n- [ ] Use one canonical email contract through verified claims, persistence, uniqueness checks and login.\n- [ ] Import a mixed-case/whitespace test address and authenticate locally with canonical and mixed-case input.\n- [ ] Preserve actor/entity identity and return the defined collision response without linking unrelated accounts.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998698684)\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998715573)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "125c7556199e83b0807ff7001c472717856aafae5a3bafcc21673599f658e086",
+      "labels": []
+    },
+    {
+      "number": 16,
+      "title": "Make the documented quick start satisfy JWT startup validation",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:50Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:jwt-quickstart -->\n\nStartup now rejects JWT secrets shorter than 32 characters, while the root compose default and README still document shorter defaults. The root compose quick start therefore fails before serving requests.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [README.md](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/README.md)\n- [docker-compose.yml](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/docker-compose.yml)\n- [src/cljs/axxium/config.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/config.cljs)\n\nAcceptance and validation:\n\n- [ ] Generate or require a sufficiently strong local secret through the documented startup path.\n- [ ] Keep the production minimum and fail closed for missing/weak production secrets.\n- [ ] Exercise the documented clean-start procedure without printing or committing generated credentials.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998698680)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "1f4f1a558c1bd90bca9bb84aea95690e51299005897ffbedc57f1350d6bb4570",
+      "labels": []
+    },
+    {
+      "number": 15,
+      "title": "Define compatible ownership for mounted identity files",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:49Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:mounted-secret-uid -->\n\nPreparation creates private identity and trust files with mode 0600 owned by the host user; the image runs as node (UID 1000). Running preparation as a different numeric UID makes the bind-mounted files unreadable by the service. Existing UID-1000 deployments do not demonstrate portability to other host users.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [Dockerfile](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/Dockerfile)\n- [scripts/prepare-instance.mjs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/scripts/prepare-instance.mjs)\n- [compose.instance.yaml](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/compose.instance.yaml)\n\nAcceptance and validation:\n\n- [ ] Specify and enforce a compatible non-root runtime UID/ownership contract.\n- [ ] Verify configuration, public-key, export and import endpoints with a preparing host UID different from 1000.\n- [ ] Preserve private-key confidentiality; do not solve readability by making secrets world-readable.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998698677)\n\nCoordinate the compose/deployment contract with open-hax/services#83 and open-hax/axxium#9.\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "5b888844ad87efea84d32afee88409db96444b46ae1be9aa7642064c3f591e99",
+      "labels": []
+    },
+    {
+      "number": 14,
+      "title": "Separate outbound transfer recipients from trusted identity issuers",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-09-13T08:22:47Z",
+      "writer": "riatzukiza",
+      "body": "<!-- promethean-review-handoff:axxium:13:directional-trust -->\n\nexport! and verify! consult the same trust map. Allowing A to send to B also authorizes B’s signing key to issue identities accepted by A, preventing an operator from configuring one-way trust.\n\nSeverity: **P1**. Disposition: **Proposed merge blocker**. This is a review handoff, not a claim that the issue is fixed or that merge is approved.\n\nChecked against open-hax/axxium PR #13 at `0e0a67299b61ae8ac309385a6400ca603ac3855f` by source inspection. No new runtime or production qualification result is claimed.\n\nAffected code:\n\n- [src/cljs/axxium/infra/transfer.cljs](https://github.com/open-hax/axxium/blob/0e0a67299b61ae8ac309385a6400ca603ac3855f/src/cljs/axxium/infra/transfer.cljs)\n\nAcceptance and validation:\n\n- [ ] Define independent recipient authorization and inbound issuer/key contracts.\n- [ ] Prove A can export to B while rejecting B-signed imports when B is only an outbound recipient.\n- [ ] Retain audience, signature, expiry, nonce replay and local-authorization checks; provide an explicit migration for existing trust configuration.\n\nSource review findings:\n\n- [Review finding](https://github.com/open-hax/axxium/pull/13#discussion_r3998698674)\n\nContinue implementation and review discussion in this issue; retain the source PR links as evidence.\n",
+      "original_body_sha256": "66afda46ecc230717bbaa400386d4d7af4dd05d5ed4113a856ac750fe4556bd4",
+      "labels": []
+    },
+    {
+      "number": 10,
+      "title": "Set up GitHub workflow for Axxium (feat -> PR -> staging -> main)",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-06-09T20:48:38Z",
+      "writer": "github-actions[bot]",
+      "body": "<!-- openhax-kanban-sync uuid=\"axxium-github-workflow\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-github-workflow`\n- Status: `todo`\n- Priority: `P1`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-github-workflow.md`\n- Labels: `axxium`, `github`, `ci`, `workflow`, `deployment`\n\n---\n# Set up GitHub Workflow for Axxium\n\n## Goal\nImplement the same branch promotion and review workflow used by other OpenHax services.\n\n## Requirements\n- [ ] GitHub Actions workflow: `feat -> PR -> staging -> PR -> main`\n- [ ] Staging deployment on merge to `staging` branch\n- [ ] Production deployment on merge to `main` branch\n- [ ] CodeRabbit AI review is required (branch protection)\n- [ ] OpenCode review is required (branch protection)\n- [ ] CI checks: build, typecheck, tests\n- [ ] Automatic tag creation on main deploy\n\n## Branch Protection Rules\n- `staging`: requires 1 review, passing CI\n- `main`: requires CodeRabbit review + OpenCode review, passing CI\n\n## Acceptance Criteria\n- Feature branches open PRs to staging\n- Staging merges open PRs to main\n- CodeRabbit comments block merge until resolved\n- OpenCode review approval blocks merge until resolved\n- Deployments trigger automatically on branch merge\n\n## Related\n- Proxx workflows: `orgs/open-hax/proxx/.github/workflows/`\n- Axxium repo: `https://github.com/open-hax/axxium`\n",
+      "original_body_sha256": "60ee33bb91b5a1cdc7668ae5a7e079d28dca676f9e75b8cb072e4ad37c46944e",
+      "labels": [
+        "kanban",
+        "status:todo",
+        "axxium",
+        "priority:P1",
+        "deployment",
+        "github",
+        "ci",
+        "workflow"
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Add Axxium to orgs/open-hax/services deployment",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-06-09T20:48:36Z",
+      "writer": "github-actions[bot]",
+      "body": "<!-- openhax-kanban-sync uuid=\"axxium-service-deployment\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-service-deployment`\n- Status: `todo`\n- Priority: `P1`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-service-deployment.md`\n- Labels: `axxium`, `deployment`, `services`, `docker`, `pm2`\n\n---\n# Add Axxium to orgs/open-hax/services Deployment\n\n## Goal\nIntegrate Axxium into the OpenHax services deployment infrastructure alongside Proxx, Knoxx, and Openplanner.\n\n## Requirements\n- [ ] Create `services/axxium/` directory with deployment configs\n- [ ] Docker Compose setup for Axxium + PostgreSQL\n- [ ] PM2 ecosystem config for production\n- [ ] Environment variable template (`.env.example`)\n- [ ] Health check endpoint integration\n- [ ] Database migration strategy\n\n## Acceptance Criteria\n- `docker compose up` in services/axxium starts the full stack\n- PM2 can manage Axxium process in production\n- Database migrations run automatically on startup\n- Health check passes for load balancer integration\n\n## Related\n- Proxx services: `services/proxx/`\n- Axxium server: `orgs/open-hax/axxium/src/cljs/axxium/server.cljs`\n",
+      "original_body_sha256": "544720ff1ddec8aa6d1afe53a20fca05e618e27ce1a3627fc2e4f18006365aaa",
+      "labels": [
+        "kanban",
+        "status:todo",
+        "axxium",
+        "priority:P1",
+        "deployment",
+        "services",
+        "docker",
+        "pm2"
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Migrate Proxx identity management to Axxium",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-06-09T20:48:35Z",
+      "writer": "github-actions[bot]",
+      "body": "<!-- openhax-kanban-sync uuid=\"axxium-proxx-identity-migration\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-proxx-identity-migration`\n- Status: `todo`\n- Priority: `P0`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-proxx-identity-migration.md`\n- Labels: `axxium`, `proxx`, `identity`, `migration`, `auth`\n\n---\n# Migrate Proxx Identity Management to Axxium\n\n## Current State\nProxx has a multi-provider auth system:\n- `src/lib/auth/` — auth types, SQL persistence, GitHub allowlist\n- `src/lib/factory-oauth.ts` — Factory OAuth flow\n- `src/lib/openai-oauth.ts` — OpenAI OAuth flow\n- `src/lib/native-auth.ts` — Native token auth\n- `src/lib/request-auth.ts` — Request authentication\n- `src/routes/credentials/` — OAuth UI routes\n\n## Goal\nReplace Proxx's native identity and OAuth management with Axxium as the canonical identity provider.\n\n## Requirements\n- [ ] Proxx validates all requests via Axxium bearer tokens\n- [ ] Proxx reads actor capabilities from Axxium for policy decisions\n- [ ] Factory/OpenAI OAuth credentials remain in Proxx (provider-specific)\n- [ ] User identity (who) moves to Axxium; provider tokens (what) stay in Proxx\n- [ ] Proxx policy engine queries Axxium for actor roles/capabilities\n- [ ] Remove Proxx-native user/session tables where redundant\n\n## Acceptance Criteria\n- Proxx API requests authenticate via Axxium tokens\n- Policy decisions use Axxium actor capabilities as input\n- Provider OAuth flows (Factory, OpenAI) still work but identity is Axxium-backed\n- No duplicate user identity tables between Proxx and Axxium\n\n## Related\n- Proxx auth: `orgs/open-hax/proxx/src/lib/auth/`\n- Axxium token verification: `orgs/open-hax/axxium/src/cljs/axxium/auth/token.cljs`\n",
+      "original_body_sha256": "2ab279de508ed871d0b02d270d032885df62765d8686bf635bb7ee937a7fbd6e",
+      "labels": [
+        "kanban",
+        "status:todo",
+        "priority:P0",
+        "auth",
+        "axxium",
+        "identity",
+        "migration",
+        "proxx"
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Migrate Openplanner identity management to Axxium",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-06-09T20:48:33Z",
+      "writer": "github-actions[bot]",
+      "body": "<!-- openhax-kanban-sync uuid=\"axxium-openplanner-identity-migration\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-openplanner-identity-migration`\n- Status: `todo`\n- Priority: `P0`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-openplanner-identity-migration.md`\n- Labels: `axxium`, `openplanner`, `identity`, `migration`, `auth`\n\n---\n# Migrate Openplanner Identity Management to Axxium\n\n## Current State\nOpenplanner (through Knoxx and related packages) has scattered auth:\n- Knoxx auth layer (part of openplanner monorepo)\n- Various package-level API keys and tokens\n- No unified identity system across graph-weaver, cephalon, etc.\n\n## Goal\nUnify Openplanner's identity and authorization under Axxium.\n\n## Requirements\n- [ ] All Openplanner services validate requests via Axxium\n- [ ] Openplanner actor context uses Axxium DIDs\n- [ ] Graph-weaver/cephalon agents authenticate as Axxium actors\n- [ ] Epistemic kernel facts are attributed to Axxium actor IDs\n- [ ] Remove package-level auth silos in favor of Axxium bearer tokens\n\n## Acceptance Criteria\n- Openplanner API endpoints require valid Axxium bearer token\n- Agent actions in cephalon/graph-weaver are attributable to Axxium actors\n- No standalone auth per package; all go through Axxium\n- Users can access Openplanner with the same Axxium identity used for Proxx/Knoxx\n\n## Related\n- Openplanner packages: `orgs/open-hax/openplanner/packages/`\n- Axxium actor routes: `orgs/open-hax/axxium/src/cljs/axxium/routes/actor.cljs`\n",
+      "original_body_sha256": "da1e3eb8361b886f5dfe60a3dd623db785560f86ea0ad017c1455f46dc9cac5d",
+      "labels": [
+        "kanban",
+        "status:todo",
+        "priority:P0",
+        "auth",
+        "axxium",
+        "identity",
+        "migration",
+        "openplanner"
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Migrate Knoxx identity management to Axxium",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-06-09T20:48:32Z",
+      "writer": "github-actions[bot]",
+      "body": "<!-- openhax-kanban-sync uuid=\"axxium-knoxx-identity-migration\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-knoxx-identity-migration`\n- Status: `todo`\n- Priority: `P0`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-knoxx-identity-migration.md`\n- Labels: `axxium`, `knoxx`, `identity`, `migration`, `auth`\n\n---\n# Migrate Knoxx Identity Management to Axxium\n\n## Current State\nKnoxx maintains its own auth layer:\n- `backend/src/cljs/knoxx/backend/auth_session.cljs` — session management\n- `backend/src/cljs/knoxx/backend/authz.cljs` — authorization logic\n- `backend/src/cljs/knoxx/backend/routes/auth.cljs` — auth routes\n- `frontend/src/pages/AuthContext.tsx` — React auth context\n\n## Goal\nReplace Knoxx's standalone identity system with Axxium as the canonical identity provider.\n\n## Requirements\n- [ ] Knoxx authenticates users via Axxium OAuth/login API\n- [ ] Knoxx receives and validates Axxium bearer tokens\n- [ ] Knoxx reads actor capabilities from Axxium for authorization decisions\n- [ ] Knoxx UI uses Axxium session cookies for auth state\n- [ ] Migrate existing Knoxx user accounts to Axxium actors\n- [ ] Remove Knoxx-native auth_session and authz modules\n\n## Acceptance Criteria\n- All Knoxx auth flows route through Axxium\n- Knoxx can make policy decisions based on Axxium actor capabilities\n- Existing users can log in via Axxium without re-registration\n- No standalone auth tables remain in Knoxx\n\n## Related\n- Knoxx auth: `orgs/open-hax/openplanner/packages/agents/knoxx/backend/src/cljs/knoxx/backend/`\n- Axxium auth routes: `orgs/open-hax/axxium/src/cljs/axxium/routes/auth.cljs`\n",
+      "original_body_sha256": "00542ab0d879f85a0a2799057e6fb308224557b8e28cc6bbb519df2e3ec47f78",
+      "labels": [
+        "kanban",
+        "status:todo",
+        "priority:P0",
+        "auth",
+        "axxium",
+        "knoxx",
+        "identity",
+        "migration"
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Add Discord OAuth to Axxium",
+      "state": "open",
+      "draft": null,
+      "updated_at": "2026-06-09T20:48:31Z",
+      "writer": "github-actions[bot]",
+      "body": "<!-- openhax-kanban-sync uuid=\"axxium-discord-oauth\" -->\n<!-- This section is managed by eta-mu kanban sync github. -->\n\n## Kanban metadata\n\n- UUID: `axxium-discord-oauth`\n- Status: `todo`\n- Priority: `P0`\n- Source: `/home/runner/work/axxium/axxium/kanban/axxium-discord-oauth.md`\n- Labels: `auth`, `oauth`, `discord`, `axxium`\n\n---\n# Add Discord OAuth to Axxium\n\n## Goal\nEnable users to create accounts and authenticate with Discord OAuth, alongside existing email/password auth.\n\n## Requirements\n- [ ] Discord OAuth2 callback route (`/api/auth/discord/callback`)\n- [ ] Discord user info fetch (username, avatar, guild memberships)\n- [ ] Link Discord identity to Axxium actor (create or link existing)\n- [ ] Store Discord access token for API calls (guild role checks)\n- [ ] UI: Discord login button on portal\n- [ ] Policy: Derive capabilities from Discord guild roles\n\n## Acceptance Criteria\n- Users can sign up/login with Discord\n- Discord guild membership is stored on actor\n- Policy engine can check Discord roles for authorization decisions\n- Bearer tokens work for API access after OAuth login\n\n## Related\n- Axxium auth routes: `src/cljs/axxium/routes/auth.cljs`\n- Axxium session: `src/cljs/axxium/auth/session.cljs`\n- Axxium config: OAuth client ID/secret in env/config\n",
+      "original_body_sha256": "f22d28d8b0687330c09e84704afaaec6fe71ed16cfbe87a9c70deaaa310d5ade",
+      "labels": [
+        "kanban",
+        "status:todo",
+        "priority:P0",
+        "auth",
+        "oauth",
+        "discord",
+        "axxium"
+      ]
+    }
+  ]
+}

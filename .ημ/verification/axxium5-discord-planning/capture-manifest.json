@@ -1,0 +1,224 @@
+[
+  {
+    "name": "native-original-board",
+    "argv": [
+      "/home/err/.volta/tools/image/node/24.14.1/bin/node",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/rheos-cli.cjs",
+      "read-board",
+      "--config",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-original/kanban/openhax.kanban.json"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-original",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:34:36.542606+00:00",
+    "stdout": {
+      "path": "native-original-board.stdout.b64",
+      "bytes": 2158,
+      "sha256": "db275240aa36cfef8cfa53cf4a4f399200171c96c0e0d762d9b9ae01216d3df2"
+    },
+    "stderr": {
+      "path": "native-original-board.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "native-original-card",
+    "argv": [
+      "/home/err/.volta/tools/image/node/24.14.1/bin/node",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/rheos-cli.cjs",
+      "read-task",
+      "axxium-discord-oauth",
+      "--config",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-original/kanban/openhax.kanban.json"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-original",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:34:37.107062+00:00",
+    "stdout": {
+      "path": "native-original-card.stdout.b64",
+      "bytes": 1607,
+      "sha256": "dcb921d17cf7b2892a51d018fd1466eec4caade7f8fbe4103e4bdfca2eed61ec"
+    },
+    "stderr": {
+      "path": "native-original-card.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "native-proposed-board",
+    "argv": [
+      "/home/err/.volta/tools/image/node/24.14.1/bin/node",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/rheos-cli.cjs",
+      "read-board",
+      "--config",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-proposed/kanban/openhax.kanban.json"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-proposed",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:34:37.658424+00:00",
+    "stdout": {
+      "path": "native-proposed-board.stdout.b64",
+      "bytes": 2158,
+      "sha256": "db275240aa36cfef8cfa53cf4a4f399200171c96c0e0d762d9b9ae01216d3df2"
+    },
+    "stderr": {
+      "path": "native-proposed-board.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "native-proposed-card",
+    "argv": [
+      "/home/err/.volta/tools/image/node/24.14.1/bin/node",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/rheos-cli.cjs",
+      "read-task",
+      "axxium-discord-oauth",
+      "--config",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-proposed/kanban/openhax.kanban.json"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/native-fixture-proposed",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:34:38.081679+00:00",
+    "stdout": {
+      "path": "native-proposed-card.stdout.b64",
+      "bytes": 8720,
+      "sha256": "a3343c0892618e51e7bae67729dc69ebcbeef17cdc7edea018aa37d674fe97fa"
+    },
+    "stderr": {
+      "path": "native-proposed-card.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "actual-owner-append",
+    "argv": [
+      "/home/err/.volta/tools/image/node/24.14.1/bin/node",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/nbb/cli.js",
+      "-cp",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/receipt-river/src/cljs",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/own-consumer.cljs",
+      "append",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree/.\u03b7\u03bc/receipts.edn"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:35:39.233832+00:00",
+    "stdout": {
+      "path": "actual-owner-append.stdout.b64",
+      "bytes": 131,
+      "sha256": "f3b832930a92d222aec0d1f2e5fbb63037d8a852708516af76f42ff75ca4aeed"
+    },
+    "stderr": {
+      "path": "actual-owner-append.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "portable-before",
+    "argv": [
+      "/usr/local/bin/bb",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/mycology/sm-list.bb",
+      "--ledger-only",
+      "--limit",
+      "1"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:35:39.252711+00:00",
+    "stdout": {
+      "path": "portable-before.stdout.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "path": "portable-before.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "portable-append",
+    "argv": [
+      "/usr/local/bin/bb",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/mycology/sm-log.bb",
+      "--task",
+      "Axxium5 complete Discord OAuth planning refinement",
+      "--efficiency",
+      "0.87",
+      "--friction",
+      "0.25",
+      "--candidate",
+      "0.18",
+      "--receipt-refs",
+      "7320c3e2e3a46ebdef298a69a5c38fbc601059aefb11b7c501f0b6d6491476f2",
+      "--note",
+      "A provider identity feature requires full callback, secret storage, role evidence, UI and local Bearer integration. Preserve existing scope, source overlap and metadata; docs-only mocks and native card visibility are not live or review qualification. No live reflection event or spore promotion."
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:35:39.284495+00:00",
+    "stdout": {
+      "path": "portable-append.stdout.b64",
+      "bytes": 137,
+      "sha256": "1b6cd8ac8b7a58ef8698f6d631a58dc1f3dc77bcf2ede3dd4a3ccd71955849bc"
+    },
+    "stderr": {
+      "path": "portable-append.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "portable-after",
+    "argv": [
+      "/usr/local/bin/bb",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/mycology/sm-list.bb",
+      "--ledger-only",
+      "--limit",
+      "1"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:35:39.299788+00:00",
+    "stdout": {
+      "path": "portable-after.stdout.b64",
+      "bytes": 690,
+      "sha256": "d44ccfb0506597024af23adb794d21421463c765ca499739bc0cadce9b20970c"
+    },
+    "stderr": {
+      "path": "portable-after.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "name": "actual-owner-worktree",
+    "argv": [
+      "/home/err/.volta/tools/image/node/24.14.1/bin/node",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/nbb/cli.js",
+      "-cp",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/runtime/receipt-river/src/cljs",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/own-consumer.cljs",
+      "file",
+      "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree/.\u03b7\u03bc/receipts.edn"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium5-discord-planning-2acbcaba83/worktree",
+    "exit": 0,
+    "captured_at": "2026-10-07T04:35:39.650355+00:00",
+    "stdout": {
+      "path": "actual-owner-worktree.stdout.b64",
+      "bytes": 357,
+      "sha256": "57c42eedf61074a39c82c5a9d51187b97c242d79091e88e1d3fcbd476087ee51"
+    },
+    "stderr": {
+      "path": "actual-owner-worktree.stderr.b64",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+]
