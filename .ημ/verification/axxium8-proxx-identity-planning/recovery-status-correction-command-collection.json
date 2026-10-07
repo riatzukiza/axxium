@@ -1,0 +1,718 @@
+{
+  "scope": "Documentary successor correction only; no implementation/backend/browser/provider/native board operation or hosted approval. The current API writer adds precisely one receipt and canonical portable SM adds precisely one entry after preserved parent prefixes. The initial preservation capture precedes accountability append; final immutable proof is separate.",
+  "predecessor": "170f66a64ea32b2318fd239c60f046b5bdf38377",
+  "commands": [
+    {
+      "label": "precommit-preservation",
+      "argv": [
+        "<owned-correction-context>/runtime/python/bin/python",
+        "<owned-correction-context>/outside/verify_correction.py"
+      ],
+      "cwd": "<owned-correction-context>/worktree",
+      "exit": 0,
+      "at": "2026-10-07T21:41:04.032655+00:00",
+      "stdout": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "eyJvbGQ1MyI6IHRydWUsICJ1bmNoYW5nZWQ0NyI6IHRydWUsICJwcmVmaXhlczYiOiB0cnVlLCAiY2FyZDE3MDQiOiB0cnVlLCAib3JpZ2luYWxfY29tbWFuZHMiOiAyNiwgIm9yaWdpbmFsX3N0cmVhbXMiOiA1MiwgInJyMTUiOiAiZXhhY3QiLCAiY29tcGxldGVfc3RvcmUiOiB0cnVlfQo=",
+        "bytes": 164,
+        "sha256": "0c76c1164925138edb977a76375579bab84f566463c37dd2d826f3f34dc0c26b",
+        "safe_private_original_bytes": 164,
+        "safe_private_original_sha256": "0c76c1164925138edb977a76375579bab84f566463c37dd2d826f3f34dc0c26b",
+        "raw_bytes": 164,
+        "raw_sha256": "0c76c1164925138edb977a76375579bab84f566463c37dd2d826f3f34dc0c26b",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      },
+      "stderr": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "safe_private_original_bytes": 0,
+        "safe_private_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      }
+    },
+    {
+      "label": "correction-current-receipt",
+      "argv": [
+        "<owned-correction-context>/runtime/bin/node",
+        "<owned-correction-context>/runtime/node_modules/nbb/cli.js",
+        "-cp",
+        "<owned-correction-context>/runtime/receipt-owner/src/cljs",
+        "<owned-correction-context>/outside/append_recovery_receipt.cljs"
+      ],
+      "cwd": "<owned-correction-context>/worktree",
+      "exit": 0,
+      "at": "2026-10-07T21:41:23.580324+00:00",
+      "stdout": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "ezpvayB0cnVlLCA6bGluZS1udW1iZXIgMiwgOmV2ZW50ICM6ZXZlbnR7OmlkICJheHhpdW04LXJlY292ZXJ5LXN0YXR1cy1jb3JyZWN0aW9uLTIwMjYtMTAtMDdUMjE6NDE6MjMuNTU1WiIsIDp0eXBlIDpyZWNlaXB0LXJpdmVyL3JlY2VpcHQtcmVjb3JkZWQsIDpyZWNvcmRlZC1hdCAiMjAyNi0xMC0wN1QyMTo0MToyMy41NTVaIiwgOnNjaGVtYSB7OmlkIDpldGEtbXUucmVjZWlwdC1yaXZlci9yZWNlaXB0LXJlY29yZGVkLCA6dmVyc2lvbiAxfSwgOnByb2R1Y2VyIHs6ZXRhLW11L3ZlcnNpb24gIjEuMS4xIiwgOnBhY2thZ2UvbmFtZSAiQGV0YS1tdS9yZWNlaXB0LXJpdmVyIiwgOnBhY2thZ2UvdmVyc2lvbiAiMC4xLjAiLCA6Y29tbWFuZCAiYWN0dWFsIGN1cnJlbnQgb3duZXIgcmVjZWlwdCB3cml0ZXI7IGxvY2FsIHJlY292ZXJ5L3N0YXR1cyBwbGFubmluZyBjb3JyZWN0aW9uIiwgOmFjdG9yL2lkICIvcm9vdC9mb3Jlc2lnaHRfcHJzIn0sIDpzdWJqZWN0IHs6cmVwb3NpdG9yeSAicmlhdHp1a2l6YS9heHhpdW0iLCA6YmFzZWxpbmUgIjI0MzlkNGQ2YjhlNTQ2Y2RhMjc2ZjA5ZjVjOTZkYjU5MjI2ZWNhZDYifSwgOnBheWxvYWQgezpwaSAiRG9jdW1lbnRhcnkgcGxhbm5pbmcgY29ycmVjdGlvbiwgcGFyZW50IHNvbGUgbmF0aXZlIHB1Ymxpc2hlciBhZnRlciBkaXN0aW5jdCBmdWxsIHBlZXIgYW5kIHJlY2VpdmluZyBndWFyZCIsIDpyZWZzIFsiMTcwZjY2YTY0ZWEzMmIyMzE4ZmQyMzljNjBmMDQ2YjViZGYzODM3NyIgIjI0MzlkNGQ2YjhlNTQ2Y2RhMjc2ZjA5ZjVjOTZkYjU5MjI2ZWNhZDYiICI4ODQ3MWVmZDdmOGNkMjdmNjRmYzczM2ExYzMxMzY5ZjAwYTZkNDMyIiAiMTU0NDQwZjNjOTk3YWE5MjA4MTk0YmJhNTliNWVkYmVmMzY1NGY3OCIgImh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuLWhheC9heHhpdW0vaXNzdWVzLzgiXSwgOmRvZCAiUHJlc2VydmUgd2hvbGUgb3JpZ2luYWwgc2l4IHJlcXVpcmVtZW50cy9mb3VyIEFDLCBUb2RvUDAvOCBhbmQgMTcwNC1ieXRlIG9yaWdpbmFsIGNhcmQ7IHN1cHBsZW1lbnQgcmVjb3ZlcnkgYXV0aG9yaXR5LCBwb3N0LWN1dG92ZXIgY29udGludWl0eSBhbmQgcHJvdmlkZXItb3duZWQgdmVyc2lvbmVkIHZlcmlmaWNhdGlvbiBmYWlsdXJlIHNlbWFudGljcyIsIDptYW5pZmVzdCBbImthbmJhbi9heHhpdW0tcHJveHgtaWRlbnRpdHktbWlncmF0aW9uLm1kIiAiZG9jcy9kZXNpZ24vcHJveHgtaWRlbnRpdHktbWlncmF0aW9uLXBsYW5uaW5nLm1kIiAiZG9jcy9kZXNpZ24vcHJveHgtaWRlbnRpdHktbWlncmF0aW9uLXZlcmlmaWNhdGlvbi5tZCIgIi7Ot868L3ZlcmlmaWNhdGlvbi9heHhpdW04LXByb3h4LWlkZW50aXR5LXBsYW5uaW5nL1JFQURNRS5tZCIgIi7Ot868L3ZlcmlmaWNhdGlvbi9heHhpdW04LXByb3h4LWlkZW50aXR5LXBsYW5uaW5nL3JlY292ZXJ5LXN0YXR1cy1jb3JyZWN0aW9uLWNvbW1hbmQtY29sbGVjdGlvbi5qc29uIl0sIDpub3RlICJBcHBlbmQgY29tcGxldGUgUHJveHgtb3duZWQgcHJvcG9zZWQgcmVjb3ZlcnkgYXV0aG9yaXR5IGFuZCBxdWFsaWZpZWQgbWlncmF0aW9uIGNoYW5nZSBwcm92ZW5hbmNlL3dhdGVybWFya3M7IHByZXNlcnZlIG5ld2x5IGNyZWF0ZWQsIGludml0ZWQgYW5kIEF4eGl1bS1vbmx5IHVzZXJzIHBsdXMgbGlua2luZy9jcmVkZW50aWFsL3Nlc3Npb24vc3RhdHVzL2NhcGFiaWxpdHkvbWVtYmVyc2hpcC90ZW5hbnQta2V5IGNoYW5nZXMuIFByZXNlcnZlIHByb3ZpZGVyL3Byb2R1Y3Qgc3RhdGUgd2l0aG91dCByZXZpdmluZyBzdGFsZSBsb2NhbCBhdXRoZW50aWNhdGlvbiBzbmFwc2hvdHMuIEFkZCBmdXR1cmUgdmVyc2lvbmVkIGtlcm5lbC1vcmlnaW4gbm9ybWFsaXphdGlvbi9jdXJyZW50IHN0YXR1cy9hdXRob3JpemVkIGNhcGFiaWxpdHkgdmVyaWZpY2F0aW9uIGNvbnRyYWN0IGFuZCBwcm9wb3NlZDQwMS80MDMvNTAzIHJlZnVzYWwgZGlzdGluY3Rpb25zLCB3aXRoIHN1c3BlbmRlZCBjbGFzc2lmaWNhdGlvbiBoZWxkLiBBbGwgcHJpb3Igc291cmNlIHBhY2tldCBieXRlcyBhbmQgb3JpZ2luYWwgY2FyZCBjcml0ZXJpYSByZW1haW47IGZ1dHVyZSBmdWxsIGdhdGVzIHVuY2hhbmdlZC4gTm8gaW1wbGVtZW50YXRpb24sIG5hdGl2ZSBib2FyZCBvcGVyYXRpb24sIHByb3ZpZGVyIGNhbGwsIHJ1bnRpbWUvYmFja2VuZC9icm93c2VyIHRlc3RzLCBSZWFkeSwgaG9zdGVkIGFwcHJvdmFsIG9yIHB1YmxpY2F0aW9uIHF1YWxpZmljYXRpb24uIEhpc3RvcmljYWwxNzBmIG1lY2hhbmljYWwgZ3VhcmQgaXMgbm90IHRyYW5zZmVycmVkIGFzIGZpbmFsLWhlYWQgc2FmZXR5LiIsIDp0cyAiMjAyNi0xMC0wN1QyMTo0MToyMy41NTVaIiwgOmhvc3QgIm5ldyBpbmRlcGVuZGVudCBjb21wbGV0ZSBHaXRzdG9yZS93b3JrdHJlZS9wcml2YXRlIHJ1bnRpbWUvY2FjaGUiLCA6a2luZCA6ZGVjaXNpb24sIDpvcmlnaW4gImF4eGl1bTgtcmVjb3Zlcnktc3RhdHVzLXBsYW5uaW5nLWNvcnJlY3Rpb24iLCA6cmVwbyAicmlhdHp1a2l6YS9heHhpdW0iLCA6b3duZXIgIi9yb290L2ZvcmVzaWdodF9wcnMifX0sIDpzb3VyY2Uvc2NoZW1hIHs6c3RhdHVzIDpkZWNsYXJlZCwgOmlkIDpldGEtbXUucmVjZWlwdC1yaXZlci9yZWNlaXB0LXJlY29yZGVkLCA6dmVyc2lvbiAxfSwgOmVycm9ycyBbXSwgOmxpbmUgIiM6ZXZlbnR7OmlkIFwiYXh4aXVtOC1yZWNvdmVyeS1zdGF0dXMtY29ycmVjdGlvbi0yMDI2LTEwLTA3VDIxOjQxOjIzLjU1NVpcIiwgOnR5cGUgOnJlY2VpcHQtcml2ZXIvcmVjZWlwdC1yZWNvcmRlZCwgOnJlY29yZGVkLWF0IFwiMjAyNi0xMC0wN1QyMTo0MToyMy41NTVaXCIsIDpzY2hlbWEgezppZCA6ZXRhLW11LnJlY2VpcHQtcml2ZXIvcmVjZWlwdC1yZWNvcmRlZCwgOnZlcnNpb24gMX0sIDpwcm9kdWNlciB7OmV0YS1tdS92ZXJzaW9uIFwiMS4xLjFcIiwgOnBhY2thZ2UvbmFtZSBcIkBldGEtbXUvcmVjZWlwdC1yaXZlclwiLCA6cGFja2FnZS92ZXJzaW9uIFwiMC4xLjBcIiwgOmNvbW1hbmQgXCJhY3R1YWwgY3VycmVudCBvd25lciByZWNlaXB0IHdyaXRlcjsgbG9jYWwgcmVjb3Zlcnkvc3RhdHVzIHBsYW5uaW5nIGNvcnJlY3Rpb25cIiwgOmFjdG9yL2lkIFwiL3Jvb3QvZm9yZXNpZ2h0X3Byc1wifSwgOnN1YmplY3QgezpyZXBvc2l0b3J5IFwicmlhdHp1a2l6YS9heHhpdW1cIiwgOmJhc2VsaW5lIFwiMjQzOWQ0ZDZiOGU1NDZjZGEyNzZmMDlmNWM5NmRiNTkyMjZlY2FkNlwifSwgOnBheWxvYWQgezpwaSBcIkRvY3VtZW50YXJ5IHBsYW5uaW5nIGNvcnJlY3Rpb24sIHBhcmVudCBzb2xlIG5hdGl2ZSBwdWJsaXNoZXIgYWZ0ZXIgZGlzdGluY3QgZnVsbCBwZWVyIGFuZCByZWNlaXZpbmcgZ3VhcmRcIiwgOnJlZnMgW1wiMTcwZjY2YTY0ZWEzMmIyMzE4ZmQyMzljNjBmMDQ2YjViZGYzODM3N1wiIFwiMjQzOWQ0ZDZiOGU1NDZjZGEyNzZmMDlmNWM5NmRiNTkyMjZlY2FkNlwiIFwiODg0NzFlZmQ3ZjhjZDI3ZjY0ZmM3MzNhMWMzMTM2OWYwMGE2ZDQzMlwiIFwiMTU0NDQwZjNjOTk3YWE5MjA4MTk0YmJhNTliNWVkYmVmMzY1NGY3OFwiIFwiaHR0cHM6Ly9naXRodWIuY29tL29wZW4taGF4L2F4eGl1bS9pc3N1ZXMvOFwiXSwgOmRvZCBcIlByZXNlcnZlIHdob2xlIG9yaWdpbmFsIHNpeCByZXF1aXJlbWVudHMvZm91ciBBQywgVG9kb1AwLzggYW5kIDE3MDQtYnl0ZSBvcmlnaW5hbCBjYXJkOyBzdXBwbGVtZW50IHJlY292ZXJ5IGF1dGhvcml0eSwgcG9zdC1jdXRvdmVyIGNvbnRpbnVpdHkgYW5kIHByb3ZpZGVyLW93bmVkIHZlcnNpb25lZCB2ZXJpZmljYXRpb24gZmFpbHVyZSBzZW1hbnRpY3NcIiwgOm1hbmlmZXN0IFtcImthbmJhbi9heHhpdW0tcHJveHgtaWRlbnRpdHktbWlncmF0aW9uLm1kXCIgXCJkb2NzL2Rlc2lnbi9wcm94eC1pZGVudGl0eS1taWdyYXRpb24tcGxhbm5pbmcubWRcIiBcImRvY3MvZGVzaWduL3Byb3h4LWlkZW50aXR5LW1pZ3JhdGlvbi12ZXJpZmljYXRpb24ubWRcIiBcIi7Ot868L3ZlcmlmaWNhdGlvbi9heHhpdW04LXByb3h4LWlkZW50aXR5LXBsYW5uaW5nL1JFQURNRS5tZFwiIFwiLs63zrwvdmVyaWZpY2F0aW9uL2F4eGl1bTgtcHJveHgtaWRlbnRpdHktcGxhbm5pbmcvcmVjb3Zlcnktc3RhdHVzLWNvcnJlY3Rpb24tY29tbWFuZC1jb2xsZWN0aW9uLmpzb25cIl0sIDpub3RlIFwiQXBwZW5kIGNvbXBsZXRlIFByb3h4LW93bmVkIHByb3Bvc2VkIHJlY292ZXJ5IGF1dGhvcml0eSBhbmQgcXVhbGlmaWVkIG1pZ3JhdGlvbiBjaGFuZ2UgcHJvdmVuYW5jZS93YXRlcm1hcmtzOyBwcmVzZXJ2ZSBuZXdseSBjcmVhdGVkLCBpbnZpdGVkIGFuZCBBeHhpdW0tb25seSB1c2VycyBwbHVzIGxpbmtpbmcvY3JlZGVudGlhbC9zZXNzaW9uL3N0YXR1cy9jYXBhYmlsaXR5L21lbWJlcnNoaXAvdGVuYW50LWtleSBjaGFuZ2VzLiBQcmVzZXJ2ZSBwcm92aWRlci9wcm9kdWN0IHN0YXRlIHdpdGhvdXQgcmV2aXZpbmcgc3RhbGUgbG9jYWwgYXV0aGVudGljYXRpb24gc25hcHNob3RzLiBBZGQgZnV0dXJlIHZlcnNpb25lZCBrZXJuZWwtb3JpZ2luIG5vcm1hbGl6YXRpb24vY3VycmVudCBzdGF0dXMvYXV0aG9yaXplZCBjYXBhYmlsaXR5IHZlcmlmaWNhdGlvbiBjb250cmFjdCBhbmQgcHJvcG9zZWQ0MDEvNDAzLzUwMyByZWZ1c2FsIGRpc3RpbmN0aW9ucywgd2l0aCBzdXNwZW5kZWQgY2xhc3NpZmljYXRpb24gaGVsZC4gQWxsIHByaW9yIHNvdXJjZSBwYWNrZXQgYnl0ZXMgYW5kIG9yaWdpbmFsIGNhcmQgY3JpdGVyaWEgcmVtYWluOyBmdXR1cmUgZnVsbCBnYXRlcyB1bmNoYW5nZWQuIE5vIGltcGxlbWVudGF0aW9uLCBuYXRpdmUgYm9hcmQgb3BlcmF0aW9uLCBwcm92aWRlciBjYWxsLCBydW50aW1lL2JhY2tlbmQvYnJvd3NlciB0ZXN0cywgUmVhZHksIGhvc3RlZCBhcHByb3ZhbCBvciBwdWJsaWNhdGlvbiBxdWFsaWZpY2F0aW9uLiBIaXN0b3JpY2FsMTcwZiBtZWNoYW5pY2FsIGd1YXJkIGlzIG5vdCB0cmFuc2ZlcnJlZCBhcyBmaW5hbC1oZWFkIHNhZmV0eS5cIiwgOnRzIFwiMjAyNi0xMC0wN1QyMTo0MToyMy41NTVaXCIsIDpob3N0IFwibmV3IGluZGVwZW5kZW50IGNvbXBsZXRlIEdpdHN0b3JlL3dvcmt0cmVlL3ByaXZhdGUgcnVudGltZS9jYWNoZVwiLCA6a2luZCA6ZGVjaXNpb24sIDpvcmlnaW4gXCJheHhpdW04LXJlY292ZXJ5LXN0YXR1cy1wbGFubmluZy1jb3JyZWN0aW9uXCIsIDpyZXBvIFwicmlhdHp1a2l6YS9heHhpdW1cIiwgOm93bmVyIFwiL3Jvb3QvZm9yZXNpZ2h0X3Byc1wifX0ifQo=",
+        "bytes": 5228,
+        "sha256": "68865e490bbffaa5be4d6f17fd3d8f1f80f969995d7306a534b8296abcbd27f0",
+        "safe_private_original_bytes": 5228,
+        "safe_private_original_sha256": "68865e490bbffaa5be4d6f17fd3d8f1f80f969995d7306a534b8296abcbd27f0",
+        "raw_bytes": 5228,
+        "raw_sha256": "68865e490bbffaa5be4d6f17fd3d8f1f80f969995d7306a534b8296abcbd27f0",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      },
+      "stderr": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "safe_private_original_bytes": 0,
+        "safe_private_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      }
+    },
+    {
+      "label": "canonical-discovery",
+      "argv": [
+        "<owned-correction-context>/runtime/bin/bb",
+        "<owned-correction-context>/outside/sm-preflight.bb"
+      ],
+      "cwd": "<owned-correction-context>/worktree",
+      "exit": 0,
+      "at": "2026-10-07T21:41:23.780829+00:00",
+      "stdout": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "Y2Fub25pY2FsIGRpc2NvdmVyeSBpcyBvd25lZCBjb3JyZWN0aW9uIHdvcmt0cmVlCg==",
+        "bytes": 49,
+        "sha256": "2941f23a64bd10e4243b55a7aaec17bc4643878af480b2971905d14b6d756bcd",
+        "safe_private_original_bytes": 49,
+        "safe_private_original_sha256": "2941f23a64bd10e4243b55a7aaec17bc4643878af480b2971905d14b6d756bcd",
+        "raw_bytes": 49,
+        "raw_sha256": "2941f23a64bd10e4243b55a7aaec17bc4643878af480b2971905d14b6d756bcd",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      },
+      "stderr": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "safe_private_original_bytes": 0,
+        "safe_private_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      }
+    },
+    {
+      "label": "correction-canonical-reflection",
+      "argv": [
+        "<owned-correction-context>/runtime/bin/bb",
+        "<owned-correction-context>/runtime/canonical-session-mycology/sm-log.bb",
+        "--task",
+        "axxium8-recovery-status-planning-correction",
+        "--efficiency",
+        "0.9",
+        "--friction",
+        "0.1",
+        "--candidate",
+        "0",
+        "--receipt-refs",
+        ".ημ/receipts.edn",
+        "--note",
+        "Independent whole-scope peer exposed missing post-cutover recovery authority and user continuity detail. Add proposed qualified change provenance, watermarks, new/invited-user continuity and versioned authentication/authorization/unavailable-verification semantics. Preserve original proposal bytes; documentary controls do not supply runtime admission or transfer another consumer approval."
+      ],
+      "cwd": "<owned-correction-context>/worktree",
+      "exit": 0,
+      "at": "2026-10-07T21:41:31.674127+00:00",
+      "stdout": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "QXBwZW5kZWQgdG8gPG93bmVkLWNvcnJlY3Rpb24tY29udGV4dD4vd29ya3RyZWUvLs63zrwvc2Vzc2lvbi1teWNvbG9neS9sZWRnZXIubWQK",
+        "bytes": 81,
+        "sha256": "30288038dddf434311fe19d2e494bbb1c4c77af80100a908d3df393469127355",
+        "safe_private_original_bytes": 131,
+        "safe_private_original_sha256": "69be2453e44c87c193db7c232b2467da2385951cc17d5910b9a7c29e27d225a7",
+        "raw_bytes": 131,
+        "raw_sha256": "69be2453e44c87c193db7c232b2467da2385951cc17d5910b9a7c29e27d225a7",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": true,
+        "lossless_native": false,
+        "original_location": "private outside capture only; no published availability claim"
+      },
+      "stderr": {
+        "transport": "inline canonical unwrapped Base64 NO terminal LF",
+        "base64": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "safe_private_original_bytes": 0,
+        "safe_private_original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "raw_bytes": 0,
+        "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "structurally_withheld_urls": [],
+        "derived_owned_path_display": false,
+        "lossless_native": true,
+        "original_location": "private outside capture only; no published availability claim"
+      }
+    }
+  ],
+  "setup_clone_streams": [
+    {
+      "stream": "stdout",
+      "base64": "",
+      "raw_bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "actual private complete-clone setup output; derived context display, not a source/native test"
+    },
+    {
+      "stream": "stderr",
+      "base64": "Q2xvbmluZyBpbnRvIGJhcmUgcmVwb3NpdG9yeSAnPG93bmVkLWNvcnJlY3Rpb24tY29udGV4dD4vc291cmNlLmdpdCcuLi4K",
+      "raw_bytes": 122,
+      "raw_sha256": "ceed0948bd5fbeaefb745c53168f9d592d64f53f3c7507f50587d3495f8083e3",
+      "scope": "actual private complete-clone setup output; derived context display, not a source/native test"
+    }
+  ],
+  "pre_accountability_preservation": {
+    "predecessor": "170f66a64ea32b2318fd239c60f046b5bdf38377",
+    "source_base": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+    "old_entries": 53,
+    "unchanged_entries": [
+      {
+        "path": ".clj-kondo/config.edn",
+        "mode": "100644",
+        "oid": "0f18642d69ef75dca15fe48763d02539c34a625d",
+        "bytes": 928,
+        "sha256": "758703bfb9714a8ffa7224e8c69d8d7783454f23fd22c8d0e283de57dbec2c34"
+      },
+      {
+        "path": ".clj-kondo/imports/funcool/promesa/config.edn",
+        "mode": "100644",
+        "oid": "1844f77c5a6369be0fb2c8f6519acd70c3e516b9",
+        "bytes": 492,
+        "sha256": "8a4630da65dd79f5ee0a9622506280b8fad96f822bcf4c6320e4219f9e4df6ed"
+      },
+      {
+        "path": ".clj-kondo/imports/metosin/malli/config.edn",
+        "mode": "100644",
+        "oid": "0f8b25ccfd9c80aefea40f69399f90ce801f133f",
+        "bytes": 114,
+        "sha256": "4adba0583d80d7ffcb98b28583dd4d68069205db26089ddfed49c016d1803bda"
+      },
+      {
+        "path": ".env.example",
+        "mode": "100644",
+        "oid": "8dbe44507135656720ffb9d8f78c34db59f064d8",
+        "bytes": 583,
+        "sha256": "f23293bb2d1377c2011483791a96d09cf42b5142990ed6babb6286aa7040c101"
+      },
+      {
+        "path": ".github/workflows/auto-merge.yml",
+        "mode": "100644",
+        "oid": "cc604230142e6fd979e48ed31af5e5dbb63506e1",
+        "bytes": 488,
+        "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2"
+      },
+      {
+        "path": ".github/workflows/ci.yml",
+        "mode": "100644",
+        "oid": "e0fa4fe1776c529eef443b9bea978f1d9c402e04",
+        "bytes": 1029,
+        "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae"
+      },
+      {
+        "path": ".github/workflows/kanban-sync.yml",
+        "mode": "100644",
+        "oid": "75b8b75a30442379797fb96528003911ad95891c",
+        "bytes": 615,
+        "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e"
+      },
+      {
+        "path": ".github/workflows/review-resolution-gate.yml",
+        "mode": "100644",
+        "oid": "f0a4400f148cd7c4bfabab2c5f14d2768343b1c5",
+        "bytes": 479,
+        "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53"
+      },
+      {
+        "path": ".gitignore",
+        "mode": "100644",
+        "oid": "51a450640b469665d56d209c25d1e673204ad6cf",
+        "bytes": 134,
+        "sha256": "c6ff2bba03c391e7ab2991965c8c1b1128210ca04d19d5fd21e0b7da5a08dd74"
+      },
+      {
+        "path": ".ημ/verification/axxium8-proxx-identity-planning/command-collection.json",
+        "mode": "100644",
+        "oid": "1470d0cfac3652b69d726f120ff38e1e425ba428",
+        "bytes": 529209,
+        "sha256": "785964528bd622cb3fde130c080d46128464899bd72f6d704c9878afd774b6a2"
+      },
+      {
+        "path": ".ημ/verification/axxium8-proxx-identity-planning/native-read-only-proof.json",
+        "mode": "100644",
+        "oid": "927376606a366d087c349fa6b9068e50752fbf19",
+        "bytes": 1410,
+        "sha256": "83cbb3e1568fa6096587fa164a62e426d944d6d74be16b816b333e8069952edd"
+      },
+      {
+        "path": ".ημ/verification/axxium8-proxx-identity-planning/source-bindings.json",
+        "mode": "100644",
+        "oid": "acbdab2bc81cb6bc806a12fc6e748c57a228eddd",
+        "bytes": 37320,
+        "sha256": "e0e7a5f14d29ee8c35cc061f700337ec6be6faabdd2caab3359080b1b682afd8"
+      },
+      {
+        "path": "AGENTS.md",
+        "mode": "100644",
+        "oid": "146c8c00117e45fb93036d59f663ae63700e16ae",
+        "bytes": 5573,
+        "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819"
+      },
+      {
+        "path": "Dockerfile",
+        "mode": "100644",
+        "oid": "335df2a3e1f6af440868d328280f983a899ee9b4",
+        "bytes": 358,
+        "sha256": "08a67d66f385f25ea3d1f73173c3eb8ea839c490fd90e60ee3b094d90db87f88"
+      },
+      {
+        "path": "README.md",
+        "mode": "100644",
+        "oid": "1164abd6dff7c3bd36985545aff92165a1354471",
+        "bytes": 3357,
+        "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a"
+      },
+      {
+        "path": "deps.edn",
+        "mode": "100644",
+        "oid": "f765302c788224596948c8694c31308e40f10502",
+        "bytes": 341,
+        "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53"
+      },
+      {
+        "path": "docker-compose.yml",
+        "mode": "100644",
+        "oid": "54f3f2ee725cf768b785cbdf09c50b4e6dd9739c",
+        "bytes": 1240,
+        "sha256": "45b1403a9d0d0542b1c35851333c1f595d95dde8170c0ae904fa9a0db2d32a7c"
+      },
+      {
+        "path": "docs/axxium-kernel-spec-v2.md",
+        "mode": "100644",
+        "oid": "8cf373b05f21550b7797d6bafe9373bb65241ed6",
+        "bytes": 12547,
+        "sha256": "81645a2b53e3f2e77d971cb4a1b618ad1b77a8e2e814ebe665cebf04e070a36d"
+      },
+      {
+        "path": "docs/axxium-kernel-spec.md",
+        "mode": "100644",
+        "oid": "3a96bb8dac76dd1dac2a2d43fe23591afc8dbd44",
+        "bytes": 7745,
+        "sha256": "ef671e6f63fb9d14a9e113c7d5444876264fbb2a1526c043ea5e51b3cdaae6b7"
+      },
+      {
+        "path": "docs/axxium-synthesis.md",
+        "mode": "100644",
+        "oid": "b44a2d08a0b1d941ae7f5b444124f907ee8775bb",
+        "bytes": 7320,
+        "sha256": "7bbe19018cf9a5df7605a3a0dbde70b48e6d9a36f38735c18917cf94c1bd7750"
+      },
+      {
+        "path": "docs/open-hax-octave-commons-axxium.md",
+        "mode": "100644",
+        "oid": "c5c06ed666fd1892aad93f47b4f42cd9df5e1850",
+        "bytes": 966,
+        "sha256": "fcb18925bfc044f845b571b13355ac2d2d666a64763d44f6bb388aaf87a913a6"
+      },
+      {
+        "path": "kanban/axxium-discord-oauth.md",
+        "mode": "100644",
+        "oid": "ed917c0580a068d71f466a861f0567ce7dddafa7",
+        "bytes": 1199,
+        "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e"
+      },
+      {
+        "path": "kanban/axxium-github-workflow.md",
+        "mode": "100644",
+        "oid": "082baab9edf8d11954d2cd2638e0e3361b5de81b",
+        "bytes": 1360,
+        "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb"
+      },
+      {
+        "path": "kanban/axxium-knoxx-identity-migration.md",
+        "mode": "100644",
+        "oid": "2c0f35edbfa11ecd7da5f32c2287872ed21fe4dd",
+        "bytes": 1601,
+        "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8"
+      },
+      {
+        "path": "kanban/axxium-openplanner-identity-migration.md",
+        "mode": "100644",
+        "oid": "1abd081deaed3e40116040b277ef0dc0e1a2b741",
+        "bytes": 1482,
+        "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4"
+      },
+      {
+        "path": "kanban/axxium-service-deployment.md",
+        "mode": "100644",
+        "oid": "e8a632cd2383a3012a8b71e3eb9a87ba9b80abac",
+        "bytes": 1398,
+        "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6"
+      },
+      {
+        "path": "kanban/openhax.kanban.json",
+        "mode": "100644",
+        "oid": "d7953748e4e87e74e8abd57b02ef12d2a6dd502c",
+        "bytes": 59,
+        "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9"
+      },
+      {
+        "path": "package-lock.json",
+        "mode": "100644",
+        "oid": "40f35a71a7484b55fb183b7959f4e74f2b2bc9ba",
+        "bytes": 51592,
+        "sha256": "6d38a247e31ff17637f1162c6724470fef77323e4093d153467f5917b9049681"
+      },
+      {
+        "path": "package.json",
+        "mode": "100644",
+        "oid": "93cc8d33bdb0b08eaa8971ddb2f6937a499e7169",
+        "bytes": 691,
+        "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67"
+      },
+      {
+        "path": "package.prod.json",
+        "mode": "100644",
+        "oid": "9ab0c8adaefc4f4911fb4865ace27fb9d18be8ad",
+        "bytes": 399,
+        "sha256": "fac110e9a234fa61cd3eb2ea7f913bd8de5647fdf2257b7bdbf146f63e92b39a"
+      },
+      {
+        "path": "resources/public/index.html",
+        "mode": "100644",
+        "oid": "cbff78f2d27200881f26da67002d66b8a01481ed",
+        "bytes": 3702,
+        "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f"
+      },
+      {
+        "path": "scripts/check-deployment-boundary.mjs",
+        "mode": "100644",
+        "oid": "4f225e0a1071837397e833ad3da0987c3a90d37e",
+        "bytes": 4417,
+        "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e"
+      },
+      {
+        "path": "scripts/check-js-boundary.mjs",
+        "mode": "100644",
+        "oid": "a94fa3e250b78437a7f294da57e8b6bf89a2de72",
+        "bytes": 1856,
+        "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e"
+      },
+      {
+        "path": "shadow-cljs.edn",
+        "mode": "100644",
+        "oid": "64231c066923da04992f27882d0b49f414250d4d",
+        "bytes": 1546,
+        "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4"
+      },
+      {
+        "path": "src/cljs/axxium/auth/session.cljs",
+        "mode": "100644",
+        "oid": "1a276ddbc8950476d41a36e3e494ad60891a418e",
+        "bytes": 3721,
+        "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820"
+      },
+      {
+        "path": "src/cljs/axxium/auth/token.cljs",
+        "mode": "100644",
+        "oid": "ee148a738071d4999f9b4b3b2574e2c6d367d6eb",
+        "bytes": 1777,
+        "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315"
+      },
+      {
+        "path": "src/cljs/axxium/config.cljs",
+        "mode": "100644",
+        "oid": "bdb7fc3a0dd324f97534a1db566dcdbf19cb34f5",
+        "bytes": 1865,
+        "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446"
+      },
+      {
+        "path": "src/cljs/axxium/db.cljs",
+        "mode": "100644",
+        "oid": "cf19fc4f804ee7e000d5837dc3bbd39e5be79016",
+        "bytes": 2398,
+        "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f"
+      },
+      {
+        "path": "src/cljs/axxium/extern/bcrypt.cljs",
+        "mode": "100644",
+        "oid": "7beea7c48fa8862d72019faa71c6dea7efccc323",
+        "bytes": 450,
+        "sha256": "10b0307b80b803a1f93962d73927b45fb6bdee99748b280f6a790808bea4fbfc"
+      },
+      {
+        "path": "src/cljs/axxium/extern/jose.cljs",
+        "mode": "100644",
+        "oid": "206b22a0367b183d6e1f05a60b2ccfd8dedbe3bb",
+        "bytes": 188,
+        "sha256": "cb781f7ff48fc9dcc0b34634154e5d46f0b97a2d57c470f0cfa816027f141573"
+      },
+      {
+        "path": "src/cljs/axxium/extern/pg.cljs",
+        "mode": "100644",
+        "oid": "d703fa0b2e7c35170bb77aaae988384b4077e79f",
+        "bytes": 1241,
+        "sha256": "29d56670b873b4af97cc701ac50552ed7d8e17534c5c6f8c348cef61d278eace"
+      },
+      {
+        "path": "src/cljs/axxium/routes/actor.cljs",
+        "mode": "100644",
+        "oid": "e9f8394cf8e08e394dd77b37bd7b7c358fcd9762",
+        "bytes": 4016,
+        "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa"
+      },
+      {
+        "path": "src/cljs/axxium/routes/auth.cljs",
+        "mode": "100644",
+        "oid": "c56c6ba50cf053c0f54d1122dbc177985c9196e7",
+        "bytes": 7299,
+        "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f"
+      },
+      {
+        "path": "src/cljs/axxium/routes/health.cljs",
+        "mode": "100644",
+        "oid": "b58c49d65cd7a1dcf0de3f2ea1a25cdf1d15d0f6",
+        "bytes": 860,
+        "sha256": "ba2bfd66f2d5df3d6ad6320ab32e6c19a0e83645543f1b9a588342972fc1ebe1"
+      },
+      {
+        "path": "src/cljs/axxium/schema.cljs",
+        "mode": "100644",
+        "oid": "fc4a7500144245f1133d2d2b45089ca7530c2e07",
+        "bytes": 4472,
+        "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f"
+      },
+      {
+        "path": "src/cljs/axxium/server.cljs",
+        "mode": "100644",
+        "oid": "8e87dc55dcdf5c6f26d536da4402fe344aaad4f9",
+        "bytes": 2460,
+        "sha256": "aed7bae437ec6a580a4f3352e4dcd2a71ea58c32b074e828a81a518b64aeec7a"
+      },
+      {
+        "path": "src/cljs/axxium/shape/db.cljs",
+        "mode": "100644",
+        "oid": "559d514a10e997cea36254b69067b77364e7da44",
+        "bytes": 5478,
+        "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317"
+      }
+    ],
+    "append_prefixes": [
+      {
+        "path": ".ημ/receipts.edn",
+        "old_bytes": 2304,
+        "old_sha256": "605df26b182c1d27c8d28d7eb6d72b7153c7cc9b180f70d05f677165b7ea2c14",
+        "new_bytes": 2304,
+        "prefix_exact": true
+      },
+      {
+        "path": ".ημ/session-mycology/ledger.md",
+        "old_bytes": 700,
+        "old_sha256": "c6c3cb021fc6250a669fb7870644a861341a227a57561f2cc6bdb9e7ba324658",
+        "new_bytes": 700,
+        "prefix_exact": true
+      },
+      {
+        "path": ".ημ/verification/axxium8-proxx-identity-planning/README.md",
+        "old_bytes": 2910,
+        "old_sha256": "02d656fc36e2a3cc66e2f5725cf491a0ff5d5964dbd861e4ce1cd88d2b88a6c2",
+        "new_bytes": 3854,
+        "prefix_exact": true
+      },
+      {
+        "path": "docs/design/proxx-identity-migration-planning.md",
+        "old_bytes": 17090,
+        "old_sha256": "827e08f01caa6df297e782d75cae1afd1f69723f8507d87ad559f9dcaa559725",
+        "new_bytes": 22439,
+        "prefix_exact": true
+      },
+      {
+        "path": "docs/design/proxx-identity-migration-verification.md",
+        "old_bytes": 8060,
+        "old_sha256": "02b7e5fd7fceca722e6e191a9591ce8b0725d6c02488599c4ce3c0ceef39bb99",
+        "new_bytes": 11539,
+        "prefix_exact": true
+      },
+      {
+        "path": "kanban/axxium-proxx-identity-migration.md",
+        "old_bytes": 6756,
+        "old_sha256": "71aff8c7fba8b243c963342e914d1425a1e06d0873d248ea2820005ed8d06edc",
+        "new_bytes": 8146,
+        "prefix_exact": true
+      }
+    ],
+    "original_card_prefix": {
+      "bytes": 1704,
+      "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7",
+      "exact": true
+    },
+    "old_collection_commands": 26,
+    "old_collection_streams": 52,
+    "old_collection_grammar": "NO terminal LF; safe/derived/raw distinction remains exact",
+    "owning_rr_pin": "154440f3c997aa9208194bba59b5edbef3654f78",
+    "current_rr15": [
+      {
+        "path": "src/cljs/eta_mu/receipt_river/api.cljs",
+        "mode": "100644",
+        "oid": "ed64a327e65398d9327c37c1b20e0c626a663d9d",
+        "bytes": 1594,
+        "sha256": "c027fff0ef9dcbb2b3fa7b2ab77bf9afd0b240a6e8304661fcb2e4be332a0812"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/archaeology/provider.cljs",
+        "mode": "100644",
+        "oid": "80198de9a104054cdc2c7ade7a8ceb2ba5c82165",
+        "bytes": 546,
+        "sha256": "fc0df23a5d857ad95506b646d0b9f7c4d6c34f30aec6b0b0bba8e416c4e71a63"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/domain/discovery.cljs",
+        "mode": "100644",
+        "oid": "057cded1ffc01212c50d743fa12867976eb10b19",
+        "bytes": 11188,
+        "sha256": "a70b60ec4bed9df4c0f026d1ce71e918e3055526eae5467a3de9c955b6a646df"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/domain/event.cljs",
+        "mode": "100644",
+        "oid": "511ce035d57998c8ebf01e5d84b57f981ab37e91",
+        "bytes": 1388,
+        "sha256": "bd284edccb1e355b19a6b356593a7daa2cb1f52055024f8efc4aca9d90762253"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/domain/receipt.cljs",
+        "mode": "100644",
+        "oid": "d9829c12e4dcdf3c1c6fd23a95a193ace17bd710",
+        "bytes": 1869,
+        "sha256": "adc98967a40d80cde6f3fdf9e328a221986c3f16b8b1631e18e1f4fa78b10a35"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/bus.cljs",
+        "mode": "100644",
+        "oid": "dc62d8918c92c3bc253986d9adb6c30964ff6345",
+        "bytes": 273,
+        "sha256": "068f93ced2662e2493e5b6f42ce47b566b02b21eab225aab994b71de2e2a99fe"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/crypto.cljs",
+        "mode": "100644",
+        "oid": "bf451006f8e5ed50fb778879da7d6d0832cb6d7d",
+        "bytes": 282,
+        "sha256": "5e852c2782c15b1f89e8157597272cf5965353c6cc31961929003d44932ea05b"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/fs.cljs",
+        "mode": "100644",
+        "oid": "429d5af9c0ccf9ba7babf034a5e23b5c5766037c",
+        "bytes": 1094,
+        "sha256": "1d6cc5136f40231c6926ef9f16602cd27361df15f80b0f60af78db196bcdf2cb"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/git.cljs",
+        "mode": "100644",
+        "oid": "1ed8e4d6a94dc20c7664a51c73f3ca2433affd6a",
+        "bytes": 2587,
+        "sha256": "12140ed090349f961ae4119b68a8750f2ff63c211531eed2396c1b8a35155852"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/glob.cljs",
+        "mode": "100644",
+        "oid": "711308be17c66301f70a0668fc1a125b8f93b342",
+        "bytes": 1233,
+        "sha256": "bd8c5ce5e36264271b4383e688ee44ff043f78c0912c98edb98d8f9623b0871d"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/runtime.cljs",
+        "mode": "100644",
+        "oid": "581852ff30ec6df65362d5cf70c13806ceb4a790",
+        "bytes": 508,
+        "sha256": "75d863014e3d633fd9467cfd303d90d2326fc9dde0200da768252d19be24a888"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/infra/cli.cljs",
+        "mode": "100644",
+        "oid": "2bfead484aa8f3c33b26eb739eeb94464b87a376",
+        "bytes": 9944,
+        "sha256": "7642faa1097748df724b85d2ade3e5035be14f09334e04b6bd980c1355377ef1"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/infra/local_git_provider.cljs",
+        "mode": "100644",
+        "oid": "a6f0b96f5a5f9e1a73f901d4146f812515ca3b57",
+        "bytes": 6197,
+        "sha256": "aebdd62166f66c16877ab952095b85fb84e177141043981333ac82aa3ad0d251"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/law/receipt.cljs",
+        "mode": "100644",
+        "oid": "99f480e1c3fc5be282b3d5bb64310eb052ace2b8",
+        "bytes": 4927,
+        "sha256": "a40dd843cf298926dfbe229d5544470dbd51682fd538e841a0fad62d29bed320"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/shape/edn.cljs",
+        "mode": "100644",
+        "oid": "dc540c11a609b13646c8445d3b3392b373334cb7",
+        "bytes": 234,
+        "sha256": "0e06bef509eda4cf3aa63e53577d14b74e780563608aa52d6161ae296ceb3914"
+      }
+    ],
+    "reader_namespaces": [
+      "api",
+      "domain.event",
+      "extern.bus",
+      "law.receipt",
+      "shape.edn"
+    ],
+    "writer_additional_namespace": "domain.receipt",
+    "store": {
+      "reachable_objects": 64767,
+      "complete": true,
+      "no_shallow_alternates_promisor": true,
+      "object_files": 3,
+      "all_nlink1": true,
+      "fsck_exit": 0
+    },
+    "runtime_internal_symlinks": [],
+    "node_sha256": "b1cbec894e45a5814b6ab756e1e14f8a76516273197e67e0412b57c1e10d0d9f",
+    "nbb_cli_sha256": "ba3b676b3c283a90a4c703bb7101916a6a997ed1296a8196c23a947d72945474",
+    "source_scope": "documentary proposed recovery/status supplement only; no implementation/backend/browser/provider/board test or runtime authority claim"
+  },
+  "peer_source_feedback": "Independent issues peer read complete four revised appended products and reported no remaining semantic finding; this is local preliminary assessment, not native approval.",
+  "semantic_changes": [
+    "Axxium authority through rollback or fail-closed forward repair",
+    "qualified migration epochs/change provenance/watermarks",
+    "post-cutover created/invited/Axxium-only users and current identity/capability/membership/tenant-key continuity",
+    "Proxx provider/product references and pending operations",
+    "provider-owned versioned verification and proposed401/403/503 refusal semantics, suspended disposition held"
+  ],
+  "limitations": [
+    "Full original six requirements/four AC and future gates remain; no scope reduction",
+    "Historical 170f receiving guard is bound to old source; final successor needs distinct mechanical guard",
+    "All prior source/capture/API records remain historical, not replaced or reused as current runtime qualification"
+  ]
+}
