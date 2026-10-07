@@ -1,0 +1,279 @@
+[
+  {
+    "name": "own-receipt-append",
+    "at": "2026-10-07T21:24:47.004691+00:00",
+    "argv": [
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/runtime/bin/node",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/runtime/node_modules/nbb/cli.js",
+      "-cp",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/runtime/receipt-owner/src/cljs",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/outside/own_writer.cljs",
+      "append",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/outside/receipt-fields.json",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree/.\u03b7\u03bc/receipts.edn"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+    "exit": 0,
+    "stdout": {
+      "path": "own-receipt-append.stdout.b64",
+      "raw_sha256": "ee0bab0760dfec748daec13836e9874f01fc5ea311d478de3027292c90299cfd",
+      "raw_bytes": 115,
+      "display_sha256": "ee0bab0760dfec748daec13836e9874f01fc5ea311d478de3027292c90299cfd",
+      "display_bytes": 115,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/own-receipt-append.stdout",
+      "original_raw_retained": true,
+      "private_stored_sha256": "ee0bab0760dfec748daec13836e9874f01fc5ea311d478de3027292c90299cfd",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "stderr": {
+      "path": "own-receipt-append.stderr.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/own-receipt-append.stderr",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "containers": {
+      "stdout": {
+        "encoded": "ezpvayB0cnVlLCA6c291cmNlL3NjaGVtYSB7OnN0YXR1cyA6ZGVjbGFyZWQsIDppZCA6ZXRhLW11LnJlY2VpcHQtcml2ZXIvcmVjZWlwdC1yZWNvcmRlZCwgOnZlcnNpb24gMX0sIDplcnJvcnMgW119Cg==\n",
+        "container_bytes": 157,
+        "container_sha256": "d1f3f488151c2eb02505f70f6b70731675330e3bd72f69298f46b0ef53d05791"
+      },
+      "stderr": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      }
+    }
+  },
+  {
+    "name": "canonical-portable-reflection",
+    "at": "2026-10-07T21:24:48.009980+00:00",
+    "argv": [
+      "bwrap",
+      "--ro-bind",
+      "/",
+      "/",
+      "--dev",
+      "/dev",
+      "--proc",
+      "/proc",
+      "--bind",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+      "--bind",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/tmp",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/tmp",
+      "--bind",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/cache",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/cache",
+      "--unshare-net",
+      "--die-with-parent",
+      "--chdir",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+      "/usr/local/bin/bb",
+      "/home/err/.agents/skills/session-mycology/scripts/sm-log.bb",
+      "--task",
+      "Axxium3 full three native planning-review corrections",
+      "--efficiency",
+      "0.9",
+      "--friction",
+      "0.1",
+      "--candidate",
+      "0.1",
+      "--receipt-refs",
+      "7c830b0b33b51e660ad449bbed0a4e753fc8b2288823f977da2b125063ed8e12",
+      "--note",
+      "Proposed missing status and rollback contracts stay explicit reviewed prerequisites. Preserve original whole migration and history; no implementation, native write or premature acceptance."
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+    "exit": 0,
+    "stdout": {
+      "path": "canonical-portable-reflection.stdout.b64",
+      "raw_sha256": "0982eed900851603cb4728275a76ebbd218497cfa396a3f2f9192a7177ced858",
+      "raw_bytes": 148,
+      "display_sha256": "0982eed900851603cb4728275a76ebbd218497cfa396a3f2f9192a7177ced858",
+      "display_bytes": 148,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/canonical-portable-reflection.stdout",
+      "original_raw_retained": true,
+      "private_stored_sha256": "0982eed900851603cb4728275a76ebbd218497cfa396a3f2f9192a7177ced858",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "stderr": {
+      "path": "canonical-portable-reflection.stderr.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/canonical-portable-reflection.stderr",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "containers": {
+      "stdout": {
+        "encoded": "QXBwZW5kZWQgdG8gL2hvbWUvZXJyLy5jb2RleC9wYXJhbGxlbC1nb2FsL2NoaWxkLXBycy0yMDI2MTAwNi9heHhpdW0zLXBsYW5uaW5nLXJldmlldy1jb3JyZWN0aW9uLWk5anR1aTFvL3dvcmt0cmVlLy7Ot868L3Nlc3Npb24tbXljb2xvZ3kvbGVkZ2VyLm1kCg==\n",
+        "container_bytes": 201,
+        "container_sha256": "0873b8a07959f49d2fc010587d86583456b304798a094ba7957bcd173d1c1dbd"
+      },
+      "stderr": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      }
+    }
+  },
+  {
+    "name": "canonical-portable-reader",
+    "at": "2026-10-07T21:24:48.134195+00:00",
+    "argv": [
+      "/usr/local/bin/bb",
+      "/home/err/.agents/skills/session-mycology/scripts/sm-list.bb",
+      "--ledger-only",
+      "--limit",
+      "1"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+    "exit": 0,
+    "stdout": {
+      "path": "canonical-portable-reader.stdout.b64",
+      "raw_sha256": "097ae7e3e41a252d6dbe856766360e49564ebca760175193d24a7fe985b08d6c",
+      "raw_bytes": 594,
+      "display_sha256": "097ae7e3e41a252d6dbe856766360e49564ebca760175193d24a7fe985b08d6c",
+      "display_bytes": 594,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/canonical-portable-reader.stdout",
+      "original_raw_retained": true,
+      "private_stored_sha256": "097ae7e3e41a252d6dbe856766360e49564ebca760175193d24a7fe985b08d6c",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "stderr": {
+      "path": "canonical-portable-reader.stderr.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/canonical-portable-reader.stderr",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "containers": {
+      "stdout": {
+        "encoded": "CiMjIFJlY2VudCBsZWRnZXIgZW50cmllcwotIHRzOiAyMDI2LTEwLTA3VDIxOjI0OjQ4LjExMjI0MTk2NVoKICBzZXNzaW9uOiAvaG9tZS9lcnIvLmNvZGV4L3BhcmFsbGVsLWdvYWwvY2hpbGQtcHJzLTIwMjYxMDA2L2F4eGl1bTMtcGxhbm5pbmctcmV2aWV3LWNvcnJlY3Rpb24taTlqdHVpMW8vd29ya3RyZWUKICB0YXNrOiBBeHhpdW0zIGZ1bGwgdGhyZWUgbmF0aXZlIHBsYW5uaW5nLXJldmlldyBjb3JyZWN0aW9ucwogIHAtZWZmaWNpZW5jeTogMC45CiAgcC1mcmljdGlvbjogMC4xCiAgcC1za2lsbC1jYW5kaWRhdGU6IDAuMQogIHNwb3JlOiBub25lCiAgcmVjZWlwdC1yZWZzOiA3YzgzMGIwYjMzYjUxZTY2MGFkNDQ5YmJlZDBhNGU3NTNmYzhiMjI4ODgyM2Y5NzdkYTJiMTI1MDYzZWQ4ZTEyCiAgbm90ZTogUHJvcG9zZWQgbWlzc2luZyBzdGF0dXMgYW5kIHJvbGxiYWNrIGNvbnRyYWN0cyBzdGF5IGV4cGxpY2l0IHJldmlld2VkIHByZXJlcXVpc2l0ZXMuIFByZXNlcnZlIG9yaWdpbmFsIHdob2xlIG1pZ3JhdGlvbiBhbmQgaGlzdG9yeTsgbm8gaW1wbGVtZW50YXRpb24sIG5hdGl2ZSB3cml0ZSBvciBwcmVtYXR1cmUgYWNjZXB0YW5jZS4K\n",
+        "container_bytes": 793,
+        "container_sha256": "9306bfe38dc26d6378e6ba92828526f66362ee38fee922c2ebec05951030a475"
+      },
+      "stderr": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      }
+    }
+  },
+  {
+    "name": "documentation-diff-check",
+    "at": "2026-10-07T21:24:48.214445+00:00",
+    "argv": [
+      "git",
+      "-C",
+      "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/worktree",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o",
+    "exit": 0,
+    "stdout": {
+      "path": "documentation-diff-check.stdout.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/documentation-diff-check.stdout",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "stderr": {
+      "path": "documentation-diff-check.stderr.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/documentation-diff-check.stderr",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "containers": {
+      "stdout": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      "stderr": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      }
+    }
+  },
+  {
+    "name": "complete-source-connectivity",
+    "at": "2026-10-07T21:24:48.345621+00:00",
+    "argv": [
+      "git",
+      "--git-dir=/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/source.git",
+      "fsck",
+      "--connectivity-only"
+    ],
+    "cwd": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o",
+    "exit": 0,
+    "stdout": {
+      "path": "complete-source-connectivity.stdout.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/complete-source-connectivity.stdout",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "stderr": {
+      "path": "complete-source-connectivity.stderr.b64",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_bytes": 0,
+      "display_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "display_bytes": 0,
+      "redacted": false,
+      "raw_private": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium3-planning-review-correction-i9jtui1o/private/complete-source-connectivity.stderr",
+      "original_raw_retained": true,
+      "private_stored_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "grammar": "unwrapped standard base64 followed by exactly one LF"
+    },
+    "containers": {
+      "stdout": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      "stderr": {
+        "encoded": "\n",
+        "container_bytes": 1,
+        "container_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      }
+    }
+  }
+]

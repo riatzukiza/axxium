@@ -1,0 +1,518 @@
+[
+  {
+    "fixture": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium6-identity-planning-2lozt5sp/fixture-original",
+    "before": {
+      ".clj-kondo/config.edn": {
+        "sha256": "758703bfb9714a8ffa7224e8c69d8d7783454f23fd22c8d0e283de57dbec2c34",
+        "bytes": 928,
+        "mode": 436
+      },
+      ".clj-kondo/imports/funcool/promesa/config.edn": {
+        "sha256": "8a4630da65dd79f5ee0a9622506280b8fad96f822bcf4c6320e4219f9e4df6ed",
+        "bytes": 492,
+        "mode": 436
+      },
+      ".clj-kondo/imports/metosin/malli/config.edn": {
+        "sha256": "4adba0583d80d7ffcb98b28583dd4d68069205db26089ddfed49c016d1803bda",
+        "bytes": 114,
+        "mode": 436
+      },
+      ".env.example": {
+        "sha256": "f23293bb2d1377c2011483791a96d09cf42b5142990ed6babb6286aa7040c101",
+        "bytes": 583,
+        "mode": 436
+      },
+      ".github/workflows/auto-merge.yml": {
+        "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2",
+        "bytes": 488,
+        "mode": 436
+      },
+      ".github/workflows/ci.yml": {
+        "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae",
+        "bytes": 1029,
+        "mode": 436
+      },
+      ".github/workflows/kanban-sync.yml": {
+        "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e",
+        "bytes": 615,
+        "mode": 436
+      },
+      ".github/workflows/review-resolution-gate.yml": {
+        "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53",
+        "bytes": 479,
+        "mode": 436
+      },
+      ".gitignore": {
+        "sha256": "c6ff2bba03c391e7ab2991965c8c1b1128210ca04d19d5fd21e0b7da5a08dd74",
+        "bytes": 134,
+        "mode": 436
+      },
+      "AGENTS.md": {
+        "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819",
+        "bytes": 5573,
+        "mode": 436
+      },
+      "Dockerfile": {
+        "sha256": "08a67d66f385f25ea3d1f73173c3eb8ea839c490fd90e60ee3b094d90db87f88",
+        "bytes": 358,
+        "mode": 436
+      },
+      "README.md": {
+        "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a",
+        "bytes": 3357,
+        "mode": 436
+      },
+      "deps.edn": {
+        "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53",
+        "bytes": 341,
+        "mode": 436
+      },
+      "docker-compose.yml": {
+        "sha256": "45b1403a9d0d0542b1c35851333c1f595d95dde8170c0ae904fa9a0db2d32a7c",
+        "bytes": 1240,
+        "mode": 436
+      },
+      "docs/axxium-kernel-spec-v2.md": {
+        "sha256": "81645a2b53e3f2e77d971cb4a1b618ad1b77a8e2e814ebe665cebf04e070a36d",
+        "bytes": 12547,
+        "mode": 436
+      },
+      "docs/axxium-kernel-spec.md": {
+        "sha256": "ef671e6f63fb9d14a9e113c7d5444876264fbb2a1526c043ea5e51b3cdaae6b7",
+        "bytes": 7745,
+        "mode": 436
+      },
+      "docs/axxium-synthesis.md": {
+        "sha256": "7bbe19018cf9a5df7605a3a0dbde70b48e6d9a36f38735c18917cf94c1bd7750",
+        "bytes": 7320,
+        "mode": 436
+      },
+      "docs/open-hax-octave-commons-axxium.md": {
+        "sha256": "fcb18925bfc044f845b571b13355ac2d2d666a64763d44f6bb388aaf87a913a6",
+        "bytes": 966,
+        "mode": 436
+      },
+      "kanban/axxium-discord-oauth.md": {
+        "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e",
+        "bytes": 1199,
+        "mode": 436
+      },
+      "kanban/axxium-github-workflow.md": {
+        "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb",
+        "bytes": 1360,
+        "mode": 436
+      },
+      "kanban/axxium-knoxx-identity-migration.md": {
+        "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8",
+        "bytes": 1601,
+        "mode": 436
+      },
+      "kanban/axxium-openplanner-identity-migration.md": {
+        "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4",
+        "bytes": 1482,
+        "mode": 436
+      },
+      "kanban/axxium-proxx-identity-migration.md": {
+        "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7",
+        "bytes": 1704,
+        "mode": 436
+      },
+      "kanban/axxium-service-deployment.md": {
+        "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6",
+        "bytes": 1398,
+        "mode": 436
+      },
+      "kanban/openhax.kanban.json": {
+        "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9",
+        "bytes": 59,
+        "mode": 436
+      },
+      "package-lock.json": {
+        "sha256": "6d38a247e31ff17637f1162c6724470fef77323e4093d153467f5917b9049681",
+        "bytes": 51592,
+        "mode": 436
+      },
+      "package.json": {
+        "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67",
+        "bytes": 691,
+        "mode": 436
+      },
+      "package.prod.json": {
+        "sha256": "fac110e9a234fa61cd3eb2ea7f913bd8de5647fdf2257b7bdbf146f63e92b39a",
+        "bytes": 399,
+        "mode": 436
+      },
+      "resources/public/index.html": {
+        "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f",
+        "bytes": 3702,
+        "mode": 436
+      },
+      "scripts/check-deployment-boundary.mjs": {
+        "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e",
+        "bytes": 4417,
+        "mode": 436
+      },
+      "scripts/check-js-boundary.mjs": {
+        "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e",
+        "bytes": 1856,
+        "mode": 436
+      },
+      "shadow-cljs.edn": {
+        "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4",
+        "bytes": 1546,
+        "mode": 436
+      },
+      "src/cljs/axxium/auth/session.cljs": {
+        "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820",
+        "bytes": 3721,
+        "mode": 436
+      },
+      "src/cljs/axxium/auth/token.cljs": {
+        "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315",
+        "bytes": 1777,
+        "mode": 436
+      },
+      "src/cljs/axxium/config.cljs": {
+        "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446",
+        "bytes": 1865,
+        "mode": 436
+      },
+      "src/cljs/axxium/db.cljs": {
+        "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f",
+        "bytes": 2398,
+        "mode": 436
+      },
+      "src/cljs/axxium/extern/bcrypt.cljs": {
+        "sha256": "10b0307b80b803a1f93962d73927b45fb6bdee99748b280f6a790808bea4fbfc",
+        "bytes": 450,
+        "mode": 436
+      },
+      "src/cljs/axxium/extern/jose.cljs": {
+        "sha256": "cb781f7ff48fc9dcc0b34634154e5d46f0b97a2d57c470f0cfa816027f141573",
+        "bytes": 188,
+        "mode": 436
+      },
+      "src/cljs/axxium/extern/pg.cljs": {
+        "sha256": "29d56670b873b4af97cc701ac50552ed7d8e17534c5c6f8c348cef61d278eace",
+        "bytes": 1241,
+        "mode": 436
+      },
+      "src/cljs/axxium/routes/actor.cljs": {
+        "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa",
+        "bytes": 4016,
+        "mode": 436
+      },
+      "src/cljs/axxium/routes/auth.cljs": {
+        "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f",
+        "bytes": 7299,
+        "mode": 436
+      },
+      "src/cljs/axxium/routes/health.cljs": {
+        "sha256": "ba2bfd66f2d5df3d6ad6320ab32e6c19a0e83645543f1b9a588342972fc1ebe1",
+        "bytes": 860,
+        "mode": 436
+      },
+      "src/cljs/axxium/schema.cljs": {
+        "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f",
+        "bytes": 4472,
+        "mode": 436
+      },
+      "src/cljs/axxium/server.cljs": {
+        "sha256": "aed7bae437ec6a580a4f3352e4dcd2a71ea58c32b074e828a81a518b64aeec7a",
+        "bytes": 2460,
+        "mode": 436
+      },
+      "src/cljs/axxium/shape/db.cljs": {
+        "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317",
+        "bytes": 5478,
+        "mode": 436
+      }
+    },
+    "after_equal": true,
+    "native": {
+      "uuid": "axxium-knoxx-identity-migration",
+      "frontmatter": {
+        "category": "migration",
+        "labels": [
+          "axxium",
+          "knoxx",
+          "identity",
+          "migration",
+          "auth"
+        ],
+        "points": "8",
+        "source": "axxium/kanban/axxium-knoxx-identity-migration.md",
+        "title": "Migrate Knoxx identity management to Axxium",
+        "priority": "P0",
+        "status": "todo",
+        "uuid": "axxium-knoxx-identity-migration",
+        "created_at": "2026-06-02T00:00:00Z"
+      },
+      "sections": [
+        {
+          "type": "body",
+          "content": "# Migrate Knoxx Identity Management to Axxium\n\n## Current State\nKnoxx maintains its own auth layer:\n- `backend/src/cljs/knoxx/backend/auth_session.cljs` \u2014 session management\n- `backend/src/cljs/knoxx/backend/authz.cljs` \u2014 authorization logic\n- `backend/src/cljs/knoxx/backend/routes/auth.cljs` \u2014 auth routes\n- `frontend/src/pages/AuthContext.tsx` \u2014 React auth context\n\n## Goal\nReplace Knoxx's standalone identity system with Axxium as the canonical identity provider.\n\n## Requirements\n- [ ] Knoxx authenticates users via Axxium OAuth/login API\n- [ ] Knoxx receives and validates Axxium bearer tokens\n- [ ] Knoxx reads actor capabilities from Axxium for authorization decisions\n- [ ] Knoxx UI uses Axxium session cookies for auth state\n- [ ] Migrate existing Knoxx user accounts to Axxium actors\n- [ ] Remove Knoxx-native auth_session and authz modules\n\n## Acceptance Criteria\n- All Knoxx auth flows route through Axxium\n- Knoxx can make policy decisions based on Axxium actor capabilities\n- Existing users can log in via Axxium without re-registration\n- No standalone auth tables remain in Knoxx\n\n## Related\n- Knoxx auth: `orgs/open-hax/openplanner/packages/agents/knoxx/backend/src/cljs/knoxx/backend/`\n- Axxium auth routes: `orgs/open-hax/axxium/src/cljs/axxium/routes/auth.cljs`"
+        }
+      ],
+      "source-path": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium6-identity-planning-2lozt5sp/fixture-original/kanban/axxium-knoxx-identity-migration.md"
+    }
+  },
+  {
+    "fixture": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium6-identity-planning-2lozt5sp/fixture-proposed",
+    "before": {
+      ".clj-kondo/config.edn": {
+        "sha256": "758703bfb9714a8ffa7224e8c69d8d7783454f23fd22c8d0e283de57dbec2c34",
+        "bytes": 928,
+        "mode": 436
+      },
+      ".clj-kondo/imports/funcool/promesa/config.edn": {
+        "sha256": "8a4630da65dd79f5ee0a9622506280b8fad96f822bcf4c6320e4219f9e4df6ed",
+        "bytes": 492,
+        "mode": 436
+      },
+      ".clj-kondo/imports/metosin/malli/config.edn": {
+        "sha256": "4adba0583d80d7ffcb98b28583dd4d68069205db26089ddfed49c016d1803bda",
+        "bytes": 114,
+        "mode": 436
+      },
+      ".env.example": {
+        "sha256": "f23293bb2d1377c2011483791a96d09cf42b5142990ed6babb6286aa7040c101",
+        "bytes": 583,
+        "mode": 436
+      },
+      ".github/workflows/auto-merge.yml": {
+        "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2",
+        "bytes": 488,
+        "mode": 436
+      },
+      ".github/workflows/ci.yml": {
+        "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae",
+        "bytes": 1029,
+        "mode": 436
+      },
+      ".github/workflows/kanban-sync.yml": {
+        "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e",
+        "bytes": 615,
+        "mode": 436
+      },
+      ".github/workflows/review-resolution-gate.yml": {
+        "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53",
+        "bytes": 479,
+        "mode": 436
+      },
+      ".gitignore": {
+        "sha256": "c6ff2bba03c391e7ab2991965c8c1b1128210ca04d19d5fd21e0b7da5a08dd74",
+        "bytes": 134,
+        "mode": 436
+      },
+      "AGENTS.md": {
+        "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819",
+        "bytes": 5573,
+        "mode": 436
+      },
+      "Dockerfile": {
+        "sha256": "08a67d66f385f25ea3d1f73173c3eb8ea839c490fd90e60ee3b094d90db87f88",
+        "bytes": 358,
+        "mode": 436
+      },
+      "README.md": {
+        "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a",
+        "bytes": 3357,
+        "mode": 436
+      },
+      "deps.edn": {
+        "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53",
+        "bytes": 341,
+        "mode": 436
+      },
+      "docker-compose.yml": {
+        "sha256": "45b1403a9d0d0542b1c35851333c1f595d95dde8170c0ae904fa9a0db2d32a7c",
+        "bytes": 1240,
+        "mode": 436
+      },
+      "docs/axxium-kernel-spec-v2.md": {
+        "sha256": "81645a2b53e3f2e77d971cb4a1b618ad1b77a8e2e814ebe665cebf04e070a36d",
+        "bytes": 12547,
+        "mode": 436
+      },
+      "docs/axxium-kernel-spec.md": {
+        "sha256": "ef671e6f63fb9d14a9e113c7d5444876264fbb2a1526c043ea5e51b3cdaae6b7",
+        "bytes": 7745,
+        "mode": 436
+      },
+      "docs/axxium-synthesis.md": {
+        "sha256": "7bbe19018cf9a5df7605a3a0dbde70b48e6d9a36f38735c18917cf94c1bd7750",
+        "bytes": 7320,
+        "mode": 436
+      },
+      "docs/open-hax-octave-commons-axxium.md": {
+        "sha256": "fcb18925bfc044f845b571b13355ac2d2d666a64763d44f6bb388aaf87a913a6",
+        "bytes": 966,
+        "mode": 436
+      },
+      "kanban/axxium-discord-oauth.md": {
+        "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e",
+        "bytes": 1199,
+        "mode": 436
+      },
+      "kanban/axxium-github-workflow.md": {
+        "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb",
+        "bytes": 1360,
+        "mode": 436
+      },
+      "kanban/axxium-knoxx-identity-migration.md": {
+        "sha256": "656bb896b75b6fa799c69c8c6fe000c6d05278011c8231acdd374d8cdcb38451",
+        "bytes": 9307,
+        "mode": 436
+      },
+      "kanban/axxium-openplanner-identity-migration.md": {
+        "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4",
+        "bytes": 1482,
+        "mode": 436
+      },
+      "kanban/axxium-proxx-identity-migration.md": {
+        "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7",
+        "bytes": 1704,
+        "mode": 436
+      },
+      "kanban/axxium-service-deployment.md": {
+        "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6",
+        "bytes": 1398,
+        "mode": 436
+      },
+      "kanban/openhax.kanban.json": {
+        "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9",
+        "bytes": 59,
+        "mode": 436
+      },
+      "package-lock.json": {
+        "sha256": "6d38a247e31ff17637f1162c6724470fef77323e4093d153467f5917b9049681",
+        "bytes": 51592,
+        "mode": 436
+      },
+      "package.json": {
+        "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67",
+        "bytes": 691,
+        "mode": 436
+      },
+      "package.prod.json": {
+        "sha256": "fac110e9a234fa61cd3eb2ea7f913bd8de5647fdf2257b7bdbf146f63e92b39a",
+        "bytes": 399,
+        "mode": 436
+      },
+      "resources/public/index.html": {
+        "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f",
+        "bytes": 3702,
+        "mode": 436
+      },
+      "scripts/check-deployment-boundary.mjs": {
+        "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e",
+        "bytes": 4417,
+        "mode": 436
+      },
+      "scripts/check-js-boundary.mjs": {
+        "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e",
+        "bytes": 1856,
+        "mode": 436
+      },
+      "shadow-cljs.edn": {
+        "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4",
+        "bytes": 1546,
+        "mode": 436
+      },
+      "src/cljs/axxium/auth/session.cljs": {
+        "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820",
+        "bytes": 3721,
+        "mode": 436
+      },
+      "src/cljs/axxium/auth/token.cljs": {
+        "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315",
+        "bytes": 1777,
+        "mode": 436
+      },
+      "src/cljs/axxium/config.cljs": {
+        "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446",
+        "bytes": 1865,
+        "mode": 436
+      },
+      "src/cljs/axxium/db.cljs": {
+        "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f",
+        "bytes": 2398,
+        "mode": 436
+      },
+      "src/cljs/axxium/extern/bcrypt.cljs": {
+        "sha256": "10b0307b80b803a1f93962d73927b45fb6bdee99748b280f6a790808bea4fbfc",
+        "bytes": 450,
+        "mode": 436
+      },
+      "src/cljs/axxium/extern/jose.cljs": {
+        "sha256": "cb781f7ff48fc9dcc0b34634154e5d46f0b97a2d57c470f0cfa816027f141573",
+        "bytes": 188,
+        "mode": 436
+      },
+      "src/cljs/axxium/extern/pg.cljs": {
+        "sha256": "29d56670b873b4af97cc701ac50552ed7d8e17534c5c6f8c348cef61d278eace",
+        "bytes": 1241,
+        "mode": 436
+      },
+      "src/cljs/axxium/routes/actor.cljs": {
+        "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa",
+        "bytes": 4016,
+        "mode": 436
+      },
+      "src/cljs/axxium/routes/auth.cljs": {
+        "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f",
+        "bytes": 7299,
+        "mode": 436
+      },
+      "src/cljs/axxium/routes/health.cljs": {
+        "sha256": "ba2bfd66f2d5df3d6ad6320ab32e6c19a0e83645543f1b9a588342972fc1ebe1",
+        "bytes": 860,
+        "mode": 436
+      },
+      "src/cljs/axxium/schema.cljs": {
+        "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f",
+        "bytes": 4472,
+        "mode": 436
+      },
+      "src/cljs/axxium/server.cljs": {
+        "sha256": "aed7bae437ec6a580a4f3352e4dcd2a71ea58c32b074e828a81a518b64aeec7a",
+        "bytes": 2460,
+        "mode": 436
+      },
+      "src/cljs/axxium/shape/db.cljs": {
+        "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317",
+        "bytes": 5478,
+        "mode": 436
+      }
+    },
+    "after_equal": true,
+    "native": {
+      "uuid": "axxium-knoxx-identity-migration",
+      "frontmatter": {
+        "category": "migration",
+        "labels": [
+          "axxium",
+          "knoxx",
+          "identity",
+          "migration",
+          "auth"
+        ],
+        "points": "8",
+        "source": "axxium/kanban/axxium-knoxx-identity-migration.md",
+        "title": "Migrate Knoxx identity management to Axxium",
+        "priority": "P0",
+        "status": "todo",
+        "uuid": "axxium-knoxx-identity-migration",
+        "created_at": "2026-06-02T00:00:00Z"
+      },
+      "sections": [
+        {
+          "type": "body",
+          "content": "# Migrate Knoxx Identity Management to Axxium\n\n## Current State\nKnoxx maintains its own auth layer:\n- `backend/src/cljs/knoxx/backend/auth_session.cljs` \u2014 session management\n- `backend/src/cljs/knoxx/backend/authz.cljs` \u2014 authorization logic\n- `backend/src/cljs/knoxx/backend/routes/auth.cljs` \u2014 auth routes\n- `frontend/src/pages/AuthContext.tsx` \u2014 React auth context\n\n## Goal\nReplace Knoxx's standalone identity system with Axxium as the canonical identity provider.\n\n## Requirements\n- [ ] Knoxx authenticates users via Axxium OAuth/login API\n- [ ] Knoxx receives and validates Axxium bearer tokens\n- [ ] Knoxx reads actor capabilities from Axxium for authorization decisions\n- [ ] Knoxx UI uses Axxium session cookies for auth state\n- [ ] Migrate existing Knoxx user accounts to Axxium actors\n- [ ] Remove Knoxx-native auth_session and authz modules\n\n## Acceptance Criteria\n- All Knoxx auth flows route through Axxium\n- Knoxx can make policy decisions based on Axxium actor capabilities\n- Existing users can log in via Axxium without re-registration\n- No standalone auth tables remain in Knoxx\n\n## Related\n- Knoxx auth: `orgs/open-hax/openplanner/packages/agents/knoxx/backend/src/cljs/knoxx/backend/`\n- Axxium auth routes: `orgs/open-hax/axxium/src/cljs/axxium/routes/auth.cljs`\n\n\n## Proposed complete planning refinement for issue 6\n\nThis is authored planning input for [open-hax/axxium issue 6](https://github.com/open-hax/axxium/issues/6), using the existing canonical UUID `axxium-knoxx-identity-migration`. All six original requirements, four acceptance criteria, scope and Todo/P0/8 metadata above remain controlling. No requirement is marked complete. The original Current State paths are historical: the accepted Knoxx snapshot now places auth in `backend/src/cljs/knoxx/backend/infra/auth/` and `infra/routes/auth.cljs`, with a mounted CLJS frontend auth boundary.\n\n### Context and outcome\n\nAxxium accepted and personal main at `2439d4d6b8e546cda276f09f5c96db59226ecad6` owns the identity kernel. Independently read Knoxx accepted `3409977bca4ba35e09967f9a99d50867a679a73c` already has an operator-configured HTTPS Axxium password-login adapter. It deliberately discards the remote cookie, creates a local Knoxx session, binds issuer plus actor subject, and retains local roles. This partial coexistence is accepted source behavior, not proof of the whole migration. The outcome remains Axxium-backed login, Bearer admission, capabilities, browser session state, existing-user continuity and retirement of standalone Knoxx authentication authority.\n\n### Scope and ownership\n\nAxxium owns portable actor/session/capability admission and identity-migration decisions plus its outer login, verification, cookie, database and migration adapters. Knoxx independently owns request authentication, tenant policy integration, actual mounted UI, its old account/storage readers and eventual retirement of its auth modules. Services owns deployment/ingress and operator environments; this plan neither configures nor deploys them. No OpenPlanner companion implementation, fork synchronization, foreign PR adoption or new board engine is included. Knoxx source remains unchanged in this planning PR.\n\n### Complete requirement crosswalk\n\n| Original requirement | Proposed full obligation |\n| --- | --- |\n| Knoxx authenticates users via Axxium OAuth/login API | Use the actual Axxium login API as the first integration boundary. Inventory GitHub callbacks, local signup/password, invitations, bootstrap and machine callers; review every replacement/forwarding route. OAuth authorization-server/callback behavior must be separately specified and tested if selected; current config flags/schema are not implemented OAuth grants. No hidden local fallback after Axxium refusal. |\n| Knoxx receives and validates Axxium bearer tokens | Select exact issuer, audience, algorithm/key trust, expiry and actor/session revocation contract before code. Validate supplied tokens at the trusted edge with Axxium-owned verification/status evidence, normalize to a typed principal, refuse ambiguous cookie/Bearer identities and never admit by decoded claims alone. |\n| Knoxx reads actor capabilities from Axxium for authorization decisions | Use authenticated, active, fresh Axxium capability evidence as a required authorization input. Review explicit capability-to-Knoxx permission mapping and combine with tenant/membership/resource policy by restriction; remote role strings never create local administrator rights. |\n| Knoxx UI uses Axxium session cookies for auth state | Replace the current local-cookie behavior through a reviewed same-origin Axxium-auth routing contract or a reviewed cross-origin contract. The selected proposal is same-origin proxying of Axxium auth, with Axxium-issued HttpOnly cookies and Axxium-backed context/logout; no JavaScript-readable token or fresh standalone Knoxx session. Cookie scope, CSRF/origin, CORS/credentials, expiry and logout/revocation are mandatory tested decisions. |\n| Migrate existing Knoxx user accounts to Axxium actors | Inventory all existing account kinds. Preserve stable subject/resource attribution and existing access using explicit migration bindings, credential compatibility or proof-bound linking. No email-only automatic merge, re-registration requirement or privilege upgrade; collisions, retries, partial failure and concurrent login must be handled before cutover. |\n| Remove Knoxx-native auth_session and authz modules | Retire current `infra.auth.auth-session`, local auth/session implementation and `infra.auth.authz` after callers are migrated to reviewed Knoxx policy adapters consuming Axxium context. Preserve their resource/tenant/tool/conversation authorization obligations; deleting authorization checks is not migration. |\n\n### All four original acceptance outcomes remain mandatory\n\n1. **All Knoxx auth flows route through Axxium:** complete route, background and browser inventory with refusal controls; no selectable local credential/session bypass in the qualified final mode.\n2. **Knoxx can make policy decisions based on Axxium actor capabilities:** explicit reviewed capability mapping, fresh/revoked evidence, tenant/resource restrictions and audited decisions before effects.\n3. **Existing users can log in via Axxium without re-registration:** every supported legacy account kind has a proof-backed mapping and migration/rollback fixture; conflicting accounts remain held rather than silently merged.\n4. **No standalone auth tables remain in Knoxx:** inventory actual Mongo collections and every writer/bootstrap/index path, not only SQL tables. Remove redundant passwords, auth tokens and session authority after cutover and rollback-window review; any retained actor-ID or membership/resource projection is non-authenticating and justified explicitly. Relabeling an active auth collection is insufficient.\n\n### Proposed sequencing and review decisions\n\nRetain the eight-point aggregate. An implementation breakdown, if required by actual cross-repository cost, must be reviewed against this full outcome before new operational cards or estimates are admitted; this refinement creates no duplicate umbrella or readiness claim. First review the [design](../docs/design/knoxx-identity-migration-planning.md) and [verification contract](../docs/verification/knoxx-identity-migration-planning.md), including token/cookie trust, capability mapping, existing-account proof and rollback. Then use each owner's lawful planning and native Ready admission. Write portable laws and meaningful dual-host failing tests first, implement owner adapters second, prove coexistence with legacy flows unchanged, migrate and test every account kind, switch qualified auth admission, and only then remove old modules/standalone storage with removal and rollback evidence. The full acceptance gate includes both owning repositories and their current receiving/deployment holds.\n\n### Verification, non-goals and risks\n\nFuture verification includes portable JVM plus compiled CLJS admission laws; actual Axxium login/Bearer/session/capability adapters; actual Knoxx request hooks/routes and mounted frontend; repeatable isolated migration/rollback/concurrency tests; non-empty relevant suites, zero warnings, production builds and boundary gates in both owners; and a runnable human Knoxx/Axxium verification script with owned fixture teardown and a browser tour. Required integration is not replaced by mocked responses or successful compilation.\n\nThis PR contains no implementation, executed backend suite, provider login, database migration, cookie setting, deployment, token/key change, operational board comment/transition or user-account modification. It does not close issue 6, adopt current foreign kernel proposals, complete Discord issue 5 or deployment/workflow issues 9/10, or grant publication trust. Missing approved trust/credential migration/capability mapping or mandatory integration evidence remains an explicit hold."
+        }
+      ],
+      "source-path": "/home/err/.codex/parallel-goal/child-prs-20261006/axxium6-identity-planning-2lozt5sp/fixture-proposed/kanban/axxium-knoxx-identity-migration.md"
+    }
+  }
+]
