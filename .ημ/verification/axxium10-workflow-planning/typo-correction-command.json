@@ -1,0 +1,56 @@
+{
+  "parent": "63da256bd18d9434364ecfeb9f3a3359c76dfd1d",
+  "source": "own actual command execution",
+  "commands": [
+    {
+      "label": "one-word-typo-correction",
+      "argv": [
+        "python3",
+        "-c",
+        "from pathlib import Path\nimport subprocess,hashlib,json\nw=Path.cwd();p=w/\"docs/design/github-workflow-planning.md\";old=p.read_bytes();bound=subprocess.check_output([\"git\",\"show\",\"63da256bd18d9434364ecfeb9f3a3359c76dfd1d:docs/design/github-workflow-planning.md\"]);assert old==bound;before=b\"Review authorun/explicit-run strategy\";after=b\"Review autorun/explicit-run strategy\";assert old.count(before)==1;new=old.replace(before,after,1);p.write_bytes(new);print(json.dumps({\"parent\":\"63da256bd18d9434364ecfeb9f3a3359c76dfd1d\",\"path\":str(p.relative_to(w)),\"old_bytes\":len(old),\"new_bytes\":len(new),\"old_sha256\":hashlib.sha256(old).hexdigest(),\"new_sha256\":hashlib.sha256(new).hexdigest(),\"one_word_reconstruction\":new==old.replace(before,after,1),\"scope\":\"Spelling only; Shadow autorun setting, no policy/source/card/ledger change\"}))\n"
+      ],
+      "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium10-workflow-planning-16a9f6e337/worktree",
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "encoded": "eyJwYXJlbnQiOiAiNjNkYTI1NmJkMThkOTQzNDM2NGVjZmViOWYzYTMzNTljNzZkZmQxZCIsICJwYXRoIjogImRvY3MvZGVzaWduL2dpdGh1Yi13b3JrZmxvdy1wbGFubmluZy5tZCIsICJvbGRfYnl0ZXMiOiAxMjA5NCwgIm5ld19ieXRlcyI6IDEyMDkzLCAib2xkX3NoYTI1NiI6ICI1NGM0MTBmNmFmOTE0MDhiY2UzNmRkZmZjYTk1NWVjYTg0NzA1YjZjMzgzNmE3YTI0ODMzYWM3MGI2NjdlZWZhIiwgIm5ld19zaGEyNTYiOiAiN2QwZmRlZmFlM2JhYTViYTRiYzBkZTgyNzI2MmExYjhhNjIxNzMwOWNjYWRiNDI0ZTBlMDQ4MTQ2MThiZTgzMCIsICJvbmVfd29yZF9yZWNvbnN0cnVjdGlvbiI6IHRydWUsICJzY29wZSI6ICJTcGVsbGluZyBvbmx5OyBTaGFkb3cgYXV0b3J1biBzZXR0aW5nLCBubyBwb2xpY3kvc291cmNlL2NhcmQvbGVkZ2VyIGNoYW5nZSJ9Cg==\n",
+          "bytes": 430,
+          "sha256": "7fea617fda1796affccfa59fbedeb618b5bfab84e0c181337351b0e78b089343",
+          "grammar": "ONE-LF exact command stream"
+        },
+        "stderr": {
+          "encoded": "\n",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "grammar": "ONE-LF exact command stream"
+        }
+      }
+    },
+    {
+      "label": "correction-diff-hygiene",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/err/.codex/parallel-goal/issues-20261006/Axxium10-workflow-planning-16a9f6e337/worktree",
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "encoded": "\n",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "grammar": "ONE-LF exact command stream"
+        },
+        "stderr": {
+          "encoded": "\n",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "grammar": "ONE-LF exact command stream"
+        }
+      }
+    }
+  ],
+  "no_extra_receipt_or_reflection": "Tiny spelling correction; existing canonical planning receipt and reflection retained byte-exact. Actual immutable successor receipt revalidation remains outside proof.",
+  "no_native_or_board_or_runtime_source_changes": true
+}

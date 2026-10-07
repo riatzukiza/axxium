@@ -131,7 +131,7 @@ restore intended async success/rejection/catch semantics in the owning runtime,
 and prove warning rejection independently of compiler exit0. It must discover
 and execute meaningful real laws/adapters through the configured test target;
 missing/empty suites, zero assertions, suppressed namespaces, deliberate async
-rejection and failures/errors cannot pass. Review authorun/explicit-run strategy
+rejection and failures/errors cannot pass. Review autorun/explicit-run strategy
 and count provenance so output duplication does not create extra suite credit.
 Keep current real identity tests when integrating qualified PR1/13; do not port
 unqualified code or delete tests just to obtain a green pipeline. All source
