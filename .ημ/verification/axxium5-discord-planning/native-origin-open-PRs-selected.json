@@ -1,0 +1,34 @@
+{
+  "count": 2,
+  "captured_snapshot": true,
+  "items": [
+    {
+      "number": 26,
+      "title": "Add federated actor identity and agent credentials",
+      "state": "open",
+      "draft": false,
+      "updated_at": "2026-10-06T14:03:00Z",
+      "writer": "riatzukiza",
+      "body": "Axxium now represents humans and agents as separate actor kinds, reserves the configured administrator email for verified Google sign-in, and lets administrators issue expiring, revocable agent credentials. A verified AT Protocol OAuth callback can sign in or link a hosted DID; reciprocal handle/DID resolution remains a lookup rather than an authentication grant.\n\nThe production image contains only runtime dependencies and the compiled server, while `open-hax/services` owns the PDS and ingress. Locally, Axxium and Knoxx run under PM2 with Google OIDC and the shared account manager.\n\nValidation: `npm run typecheck`, `npm test`, `npm run boundary:check`, `npm run build`, and `npm audit --omit=dev --audit-level=moderate` passed. The image built, and the public PDS OAuth flow returned a signed-in Axxium human actor through `[private external reference]\n\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n## Summary by CodeRabbit\n\n* **New Features**\n  * Sign in with Google or an AT Protocol identity, and link an AT Protocol identity to an existing account.\n  * System administrators can create agents, issue time-limited credentials, review credentials, and revoke them.\n  * Administrators can look up AT Protocol identities and manage actors and their capabilities.\n  * The account portal provides sign-in options, actor details, identity linking, and administrative tools.\n* **Security**\n  * Sign-up enforces password requirements and reserves the configured administrator email for federated sign-in.\n  * Administrative features are restricted to system administrators.\n  * Cross-origin requests are limited to the configured public address, and the application container runs as a non-root user.\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
+      "original_body_sha256": "920cc9068de620b6ab8c2fd5471160cb647c790f2d4fdfdbecd4815353cebcc0",
+      "labels": [
+        "blocked"
+      ],
+      "head": "18f92db5ea106b4f9dd3eb4d84b9da0fc6ee9f04",
+      "base": "2439d4d6b8e546cda276f09f5c96db59226ecad6"
+    },
+    {
+      "number": 13,
+      "title": "Support independent cross-host identities and service environments",
+      "state": "open",
+      "draft": false,
+      "updated_at": "2026-09-13T09:02:10Z",
+      "writer": "riatzukiza",
+      "body": "Axxium can now copy a signed identity from one host instance to another. The browser portal registers accounts, requires password reauthentication for export, copies a five-minute recipient-bound Ed25519 transfer, and imports it once with a new recipient password. Actor/entity IDs survive; sessions, passwords and permissions remain local. Issuer public keys are explicitly pinned, and account conflicts fail closed.\n\nThis also repairs PostgreSQL parameter/session handling and exposes actor data only to the authenticated actor. The isolated non-root compose runtime has separate database state and secrets per host. The environment workflow calls the immutable Services controller for code-owner testing leases and main-merge staging; CODEOWNERS names the existing repository admins.\n\nValidation: warning-free compile and release build; 5 tests / 20 assertions; boundary check; 28 real HTTP/database assertions; actual browser registration, clipboard transfer, recipient registration and fresh Yoga login while Stealth's Axxium container was stopped. Browser screenshots are retained in the operator acceptance artifacts. No production deployment was performed.\n\nActivation requires this workflow and CODEOWNERS to reach main. Testing/staging keys and isolated receiver slots are already installed; Services controller is pinned to f9bfe1724a662930fc10fcb9ba0f46eac78fbc52.\n\n\n<!-- This is an auto-generated comment: release notes by coderabbit.ai -->\n\n## Summary by CodeRabbit\n\n- **New Features**\n  - Added an identity portal for account creation, sign-in, logout, and account details.\n  - Added secure identity export and import between configured Axxium instances.\n  - Added host preparation and Compose-based deployment with persistent PostgreSQL storage.\n  - Added automated testing and staging environment promotion workflows.\n\n- **Security**\n  - Added stronger session, transfer-token, password, and request protections.\n  - Restricted account and entity access to the signed-in account.\n\n- **Documentation**\n  - Expanded setup guidance for hosted environments, identity transfer, verification, and deployment.\n\n<!-- end of auto-generated comment: release notes by coderabbit.ai -->",
+      "original_body_sha256": "fa89726289b00c55e6374a63fef4e371ffa5fa65f3f5f1ec7df1775fc2c7fb57",
+      "labels": [],
+      "head": "0e0a67299b61ae8ac309385a6400ca603ac3855f",
+      "base": "2439d4d6b8e546cda276f09f5c96db59226ecad6"
+    }
+  ]
+}

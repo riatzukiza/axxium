@@ -1,0 +1,126 @@
+{
+  "base": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "oid": "146c8c00117e45fb93036d59f663ae63700e16ae",
+      "bytes": 5573,
+      "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819"
+    },
+    {
+      "path": "README.md",
+      "oid": "1164abd6dff7c3bd36985545aff92165a1354471",
+      "bytes": 3357,
+      "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a"
+    },
+    {
+      "path": "package.json",
+      "oid": "93cc8d33bdb0b08eaa8971ddb2f6937a499e7169",
+      "bytes": 691,
+      "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67"
+    },
+    {
+      "path": "shadow-cljs.edn",
+      "oid": "64231c066923da04992f27882d0b49f414250d4d",
+      "bytes": 1546,
+      "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4"
+    },
+    {
+      "path": "deps.edn",
+      "oid": "f765302c788224596948c8694c31308e40f10502",
+      "bytes": 341,
+      "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53"
+    },
+    {
+      "path": "src/cljs/axxium/routes/auth.cljs",
+      "oid": "c56c6ba50cf053c0f54d1122dbc177985c9196e7",
+      "bytes": 7299,
+      "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f"
+    },
+    {
+      "path": "src/cljs/axxium/routes/actor.cljs",
+      "oid": "e9f8394cf8e08e394dd77b37bd7b7c358fcd9762",
+      "bytes": 4016,
+      "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa"
+    },
+    {
+      "path": "src/cljs/axxium/auth/session.cljs",
+      "oid": "1a276ddbc8950476d41a36e3e494ad60891a418e",
+      "bytes": 3721,
+      "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820"
+    },
+    {
+      "path": "src/cljs/axxium/auth/token.cljs",
+      "oid": "ee148a738071d4999f9b4b3b2574e2c6d367d6eb",
+      "bytes": 1777,
+      "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315"
+    },
+    {
+      "path": "src/cljs/axxium/config.cljs",
+      "oid": "bdb7fc3a0dd324f97534a1db566dcdbf19cb34f5",
+      "bytes": 1865,
+      "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446"
+    },
+    {
+      "path": "src/cljs/axxium/schema.cljs",
+      "oid": "fc4a7500144245f1133d2d2b45089ca7530c2e07",
+      "bytes": 4472,
+      "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f"
+    },
+    {
+      "path": "src/cljs/axxium/db.cljs",
+      "oid": "cf19fc4f804ee7e000d5837dc3bbd39e5be79016",
+      "bytes": 2398,
+      "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f"
+    },
+    {
+      "path": "src/cljs/axxium/shape/db.cljs",
+      "oid": "559d514a10e997cea36254b69067b77364e7da44",
+      "bytes": 5478,
+      "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317"
+    },
+    {
+      "path": "resources/public/index.html",
+      "oid": "cbff78f2d27200881f26da67002d66b8a01481ed",
+      "bytes": 3702,
+      "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f"
+    },
+    {
+      "path": ".github/workflows/auto-merge.yml",
+      "oid": "cc604230142e6fd979e48ed31af5e5dbb63506e1",
+      "bytes": 488,
+      "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "oid": "e0fa4fe1776c529eef443b9bea978f1d9c402e04",
+      "bytes": 1029,
+      "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae"
+    },
+    {
+      "path": "scripts/check-js-boundary.mjs",
+      "oid": "a94fa3e250b78437a7f294da57e8b6bf89a2de72",
+      "bytes": 1856,
+      "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e"
+    },
+    {
+      "path": "scripts/check-deployment-boundary.mjs",
+      "oid": "4f225e0a1071837397e833ad3da0987c3a90d37e",
+      "bytes": 4417,
+      "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e"
+    },
+    {
+      "path": ".github/workflows/kanban-sync.yml",
+      "oid": "75b8b75a30442379797fb96528003911ad95891c",
+      "bytes": 615,
+      "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e"
+    },
+    {
+      "path": ".github/workflows/review-resolution-gate.yml",
+      "oid": "f0a4400f148cd7c4bfabab2c5f14d2768343b1c5",
+      "bytes": 479,
+      "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53"
+    }
+  ],
+  "all_source_blobs_remain_unmodified": true
+}

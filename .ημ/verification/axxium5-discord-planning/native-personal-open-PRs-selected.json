@@ -1,0 +1,21 @@
+{
+  "count": 1,
+  "captured_snapshot": true,
+  "items": [
+    {
+      "number": 1,
+      "title": "feat: add federated actor identity and agent credentials",
+      "state": "open",
+      "draft": true,
+      "updated_at": "2026-10-06T14:45:34Z",
+      "writer": "riatzukiza",
+      "body": "Adds federated actor identity and revocable agent credentials, continuing [origin PR26](https://github.com/open-hax/axxium/pull/26) on the mapped personal fork. Original implementation/repair history stays in the ancestry; development belongs in `riatzukiza/axxium`, with an origin release proposal only after current-head development qualification.\n\nThe fresh native review exposed five bounded defects. Session cookie lifetime now uses seconds, matching JWT/session expiry. Actor and agent endpoints share authentication/administrator admission, so unauthenticated requests return401 and authenticated non-administrators return403. Agent creation commits entity and actor records together. First AT Protocol sign-in commits entity, actor and provider binding together; a concurrent provider-subject uniqueness conflict rolls back the losing attempt before returning the winning actor. Credential listing/revocation failures are logged and return controlled500 responses, preserving successful/not-found responses.\n\nThe database façade supplies a transaction-bound HoneySQL query function; raw PostgreSQL clients stay within the extern adapter. One pre-existing redundant `let` was flattened without semantic change for zero-warning lint. Concise docstrings describe affected public query/route adapters and repaired handlers, addressing the native summary warning; provider coverage must be recomputed and no percentage is claimed.\n\nValidation of source repair `ab21dba125bddb4ce23077bdd3647926781511e9`, with final verified documentation/evidence publication at `539409b169302793a0b67f97d75ddd6265cf9d12`:\n\n- Before implementation:17 tests/59 assertions/19 failures/0 errors, reproducing all five findings; zero compiler warnings. Compiler exit0 did not override failed assertions.\n- Complete compiled suite and emitted Node runner:22 tests/78 assertions/0 failures/0 errors each.\n- `npm run typecheck` and production `npm run build`:zero warnings.\n- Whole-source clj-kondo:zero errors/zero warnings; JS/deployment boundaries and diff hygiene PASS.\n- Original receipt/reflection prefixes unchanged; all three appended receipts pass the reusable canonical envelope contract.\n\nFixtures invoke real route registration/handlers, the HoneySQL façade and transaction adapter against in-memory PostgreSQL/client responses. They cover rollback, concurrent first-login convergence, success/not-found behavior and discarding clients after rollback failure. This supplies no live database/provider/service or deployment proof. Raw red/green/typecheck/build logs and the baseline fixture are retained under `.ημ/verification/axxium-personal1-native-findings-20261006/`.\n\nThis PR remains **draft**, with auto-merge off. Its inherited ready-triggered workflow uses floating eta-mu code, eager squash merging and inherited secrets; safe readiness remains an unresolved controller/publisher dependency. No workflow, protection, secret, account setting, service or Rheos state was changed. Fresh native exact-head review/hosted qualification and review-loop convergence remain required. Quota notices, skipped jobs and historical approvals provide no approval credit. No merge, force push, origin closure or release activation occurred.\n",
+      "original_body_sha256": "3ad90f0f6389bf48233fede1869d125ac13133589474619a8e75dcb500595ab0",
+      "labels": [
+        "blocked"
+      ],
+      "head": "539409b169302793a0b67f97d75ddd6265cf9d12",
+      "base": "2439d4d6b8e546cda276f09f5c96db59226ecad6"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "repo": "riatzukiza/axxium",
+  "number": 1,
+  "head": "539409b169302793a0b67f97d75ddd6265cf9d12",
+  "captured_at": "2026-10-07T04:29:44.554391+00:00",
+  "exit": 0,
+  "draft": true,
+  "coderabbit": "skipped",
+  "checks_pass": 3,
+  "native_threads_total": 5,
+  "unresolved": 0,
+  "exact_head_approvals": [],
+  "stage": "code",
+  "completed_rounds": 0,
+  "gate": "BLOCKED",
+  "original_stdout_sha256": "04ad0d6b79d99fc16ba1f6e283178125f66c2aa79e4ab8f5d1e788b6be9c06fe",
+  "original_raw_private": true,
+  "native_review_qualification": false
+}
