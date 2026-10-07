@@ -1,0 +1,968 @@
+{
+  "scope": "Git identity binding for45 Axxium base entries and selected Proxx source/workflows; archived availability is not all-tree semantic review or accepted Foresight pin authority. Product design marks inspected observations vs future dispositions. Exact source blobs available in privately complete independent stores, not embedded public availability claims.",
+  "axxium_base": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+  "proxx_observed_main": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+  "bindings": [
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".clj-kondo/config.edn",
+      "mode": "100644",
+      "oid": "0f18642d69ef75dca15fe48763d02539c34a625d",
+      "bytes": 928,
+      "sha256": "758703bfb9714a8ffa7224e8c69d8d7783454f23fd22c8d0e283de57dbec2c34"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".clj-kondo/imports/funcool/promesa/config.edn",
+      "mode": "100644",
+      "oid": "1844f77c5a6369be0fb2c8f6519acd70c3e516b9",
+      "bytes": 492,
+      "sha256": "8a4630da65dd79f5ee0a9622506280b8fad96f822bcf4c6320e4219f9e4df6ed"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".clj-kondo/imports/metosin/malli/config.edn",
+      "mode": "100644",
+      "oid": "0f8b25ccfd9c80aefea40f69399f90ce801f133f",
+      "bytes": 114,
+      "sha256": "4adba0583d80d7ffcb98b28583dd4d68069205db26089ddfed49c016d1803bda"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".env.example",
+      "mode": "100644",
+      "oid": "8dbe44507135656720ffb9d8f78c34db59f064d8",
+      "bytes": 583,
+      "sha256": "f23293bb2d1377c2011483791a96d09cf42b5142990ed6babb6286aa7040c101"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".github/workflows/auto-merge.yml",
+      "mode": "100644",
+      "oid": "cc604230142e6fd979e48ed31af5e5dbb63506e1",
+      "bytes": 488,
+      "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".github/workflows/ci.yml",
+      "mode": "100644",
+      "oid": "e0fa4fe1776c529eef443b9bea978f1d9c402e04",
+      "bytes": 1029,
+      "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".github/workflows/kanban-sync.yml",
+      "mode": "100644",
+      "oid": "75b8b75a30442379797fb96528003911ad95891c",
+      "bytes": 615,
+      "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".github/workflows/review-resolution-gate.yml",
+      "mode": "100644",
+      "oid": "f0a4400f148cd7c4bfabab2c5f14d2768343b1c5",
+      "bytes": 479,
+      "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": ".gitignore",
+      "mode": "100644",
+      "oid": "51a450640b469665d56d209c25d1e673204ad6cf",
+      "bytes": 134,
+      "sha256": "c6ff2bba03c391e7ab2991965c8c1b1128210ca04d19d5fd21e0b7da5a08dd74"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "AGENTS.md",
+      "mode": "100644",
+      "oid": "146c8c00117e45fb93036d59f663ae63700e16ae",
+      "bytes": 5573,
+      "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "Dockerfile",
+      "mode": "100644",
+      "oid": "335df2a3e1f6af440868d328280f983a899ee9b4",
+      "bytes": 358,
+      "sha256": "08a67d66f385f25ea3d1f73173c3eb8ea839c490fd90e60ee3b094d90db87f88"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "README.md",
+      "mode": "100644",
+      "oid": "1164abd6dff7c3bd36985545aff92165a1354471",
+      "bytes": 3357,
+      "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "deps.edn",
+      "mode": "100644",
+      "oid": "f765302c788224596948c8694c31308e40f10502",
+      "bytes": 341,
+      "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "docker-compose.yml",
+      "mode": "100644",
+      "oid": "54f3f2ee725cf768b785cbdf09c50b4e6dd9739c",
+      "bytes": 1240,
+      "sha256": "45b1403a9d0d0542b1c35851333c1f595d95dde8170c0ae904fa9a0db2d32a7c"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "docs/axxium-kernel-spec-v2.md",
+      "mode": "100644",
+      "oid": "8cf373b05f21550b7797d6bafe9373bb65241ed6",
+      "bytes": 12547,
+      "sha256": "81645a2b53e3f2e77d971cb4a1b618ad1b77a8e2e814ebe665cebf04e070a36d"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "docs/axxium-kernel-spec.md",
+      "mode": "100644",
+      "oid": "3a96bb8dac76dd1dac2a2d43fe23591afc8dbd44",
+      "bytes": 7745,
+      "sha256": "ef671e6f63fb9d14a9e113c7d5444876264fbb2a1526c043ea5e51b3cdaae6b7"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "docs/axxium-synthesis.md",
+      "mode": "100644",
+      "oid": "b44a2d08a0b1d941ae7f5b444124f907ee8775bb",
+      "bytes": 7320,
+      "sha256": "7bbe19018cf9a5df7605a3a0dbde70b48e6d9a36f38735c18917cf94c1bd7750"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "docs/open-hax-octave-commons-axxium.md",
+      "mode": "100644",
+      "oid": "c5c06ed666fd1892aad93f47b4f42cd9df5e1850",
+      "bytes": 966,
+      "sha256": "fcb18925bfc044f845b571b13355ac2d2d666a64763d44f6bb388aaf87a913a6"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/axxium-discord-oauth.md",
+      "mode": "100644",
+      "oid": "ed917c0580a068d71f466a861f0567ce7dddafa7",
+      "bytes": 1199,
+      "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/axxium-github-workflow.md",
+      "mode": "100644",
+      "oid": "082baab9edf8d11954d2cd2638e0e3361b5de81b",
+      "bytes": 1360,
+      "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/axxium-knoxx-identity-migration.md",
+      "mode": "100644",
+      "oid": "2c0f35edbfa11ecd7da5f32c2287872ed21fe4dd",
+      "bytes": 1601,
+      "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/axxium-openplanner-identity-migration.md",
+      "mode": "100644",
+      "oid": "1abd081deaed3e40116040b277ef0dc0e1a2b741",
+      "bytes": 1482,
+      "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/axxium-proxx-identity-migration.md",
+      "mode": "100644",
+      "oid": "1010d9a31599866e7f1dd315429a36074e496fd6",
+      "bytes": 1704,
+      "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/axxium-service-deployment.md",
+      "mode": "100644",
+      "oid": "e8a632cd2383a3012a8b71e3eb9a87ba9b80abac",
+      "bytes": 1398,
+      "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "kanban/openhax.kanban.json",
+      "mode": "100644",
+      "oid": "d7953748e4e87e74e8abd57b02ef12d2a6dd502c",
+      "bytes": 59,
+      "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "package-lock.json",
+      "mode": "100644",
+      "oid": "40f35a71a7484b55fb183b7959f4e74f2b2bc9ba",
+      "bytes": 51592,
+      "sha256": "6d38a247e31ff17637f1162c6724470fef77323e4093d153467f5917b9049681"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "package.json",
+      "mode": "100644",
+      "oid": "93cc8d33bdb0b08eaa8971ddb2f6937a499e7169",
+      "bytes": 691,
+      "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "package.prod.json",
+      "mode": "100644",
+      "oid": "9ab0c8adaefc4f4911fb4865ace27fb9d18be8ad",
+      "bytes": 399,
+      "sha256": "fac110e9a234fa61cd3eb2ea7f913bd8de5647fdf2257b7bdbf146f63e92b39a"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "resources/public/index.html",
+      "mode": "100644",
+      "oid": "cbff78f2d27200881f26da67002d66b8a01481ed",
+      "bytes": 3702,
+      "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "scripts/check-deployment-boundary.mjs",
+      "mode": "100644",
+      "oid": "4f225e0a1071837397e833ad3da0987c3a90d37e",
+      "bytes": 4417,
+      "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "scripts/check-js-boundary.mjs",
+      "mode": "100644",
+      "oid": "a94fa3e250b78437a7f294da57e8b6bf89a2de72",
+      "bytes": 1856,
+      "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "shadow-cljs.edn",
+      "mode": "100644",
+      "oid": "64231c066923da04992f27882d0b49f414250d4d",
+      "bytes": 1546,
+      "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/auth/session.cljs",
+      "mode": "100644",
+      "oid": "1a276ddbc8950476d41a36e3e494ad60891a418e",
+      "bytes": 3721,
+      "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/auth/token.cljs",
+      "mode": "100644",
+      "oid": "ee148a738071d4999f9b4b3b2574e2c6d367d6eb",
+      "bytes": 1777,
+      "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/config.cljs",
+      "mode": "100644",
+      "oid": "bdb7fc3a0dd324f97534a1db566dcdbf19cb34f5",
+      "bytes": 1865,
+      "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/db.cljs",
+      "mode": "100644",
+      "oid": "cf19fc4f804ee7e000d5837dc3bbd39e5be79016",
+      "bytes": 2398,
+      "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/extern/bcrypt.cljs",
+      "mode": "100644",
+      "oid": "7beea7c48fa8862d72019faa71c6dea7efccc323",
+      "bytes": 450,
+      "sha256": "10b0307b80b803a1f93962d73927b45fb6bdee99748b280f6a790808bea4fbfc"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/extern/jose.cljs",
+      "mode": "100644",
+      "oid": "206b22a0367b183d6e1f05a60b2ccfd8dedbe3bb",
+      "bytes": 188,
+      "sha256": "cb781f7ff48fc9dcc0b34634154e5d46f0b97a2d57c470f0cfa816027f141573"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/extern/pg.cljs",
+      "mode": "100644",
+      "oid": "d703fa0b2e7c35170bb77aaae988384b4077e79f",
+      "bytes": 1241,
+      "sha256": "29d56670b873b4af97cc701ac50552ed7d8e17534c5c6f8c348cef61d278eace"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/routes/actor.cljs",
+      "mode": "100644",
+      "oid": "e9f8394cf8e08e394dd77b37bd7b7c358fcd9762",
+      "bytes": 4016,
+      "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/routes/auth.cljs",
+      "mode": "100644",
+      "oid": "c56c6ba50cf053c0f54d1122dbc177985c9196e7",
+      "bytes": 7299,
+      "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/routes/health.cljs",
+      "mode": "100644",
+      "oid": "b58c49d65cd7a1dcf0de3f2ea1a25cdf1d15d0f6",
+      "bytes": 860,
+      "sha256": "ba2bfd66f2d5df3d6ad6320ab32e6c19a0e83645543f1b9a588342972fc1ebe1"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/schema.cljs",
+      "mode": "100644",
+      "oid": "fc4a7500144245f1133d2d2b45089ca7530c2e07",
+      "bytes": 4472,
+      "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/server.cljs",
+      "mode": "100644",
+      "oid": "8e87dc55dcdf5c6f26d536da4402fe344aaad4f9",
+      "bytes": 2460,
+      "sha256": "aed7bae437ec6a580a4f3352e4dcd2a71ea58c32b074e828a81a518b64aeec7a"
+    },
+    {
+      "repository": "open-hax/axxium",
+      "head": "2439d4d6b8e546cda276f09f5c96db59226ecad6",
+      "path": "src/cljs/axxium/shape/db.cljs",
+      "mode": "100644",
+      "oid": "559d514a10e997cea36254b69067b77364e7da44",
+      "bytes": 5478,
+      "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "AGENTS.md",
+      "mode": "100644",
+      "oid": "089339136501daadb1696f20009aa578a593b253",
+      "bytes": 17985,
+      "sha256": "56f09883ee22231241551f74ab44674c629207a5742e90193fe60c5500225b16"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "package.json",
+      "mode": "100644",
+      "oid": "dce188e7a785639b0ce12718ec3d1b8f3de9fe47",
+      "bytes": 4306,
+      "sha256": "1f35c7a55d3c8e668c7634b3975cdbf57288f87345f2a534895294bdfb13e0df"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/main.ts",
+      "mode": "100644",
+      "oid": "e66adb722dccd194a37e7fcfe8329a5e90df1ee6",
+      "bytes": 2193,
+      "sha256": "8105fd3f6c02464804a6bb84f64c824439cbbdeb87899b58c33e502d5848fd65"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/app.ts",
+      "mode": "100644",
+      "oid": "1a0cef9b947891a37eeb468eb067863d8fcc99ee",
+      "bytes": 30906,
+      "sha256": "86cba99dfd3b5c37116bd05ba33b84a0d803e69147ae43c988cb6938906a2e67"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/request-auth.ts",
+      "mode": "100644",
+      "oid": "976b678da1466b2eee53e2f6a8bd9246bdf85aba",
+      "bytes": 4213,
+      "sha256": "a557a51544f15ce05968794f034163efbd879ef931868fd6707e3bf980009577"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/native-auth.ts",
+      "mode": "100644",
+      "oid": "b2feba0955c5b342f38cad018d69e88e6a6630ae",
+      "bytes": 694,
+      "sha256": "dfd545a1fb30b80425af18eba2a91606e222ae6ccff4eae66df7c3375ba4726a"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/auth/types.ts",
+      "mode": "100644",
+      "oid": "266139a0903bed111df06c3a2fd898f22732f06c",
+      "bytes": 1794,
+      "sha256": "6ca0900108f1fd6febb414e08544f6aeabb1c525f4ded1f5789572ab694ee8cc"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/auth/sql-persistence.ts",
+      "mode": "100644",
+      "oid": "ae6450de8fde2c06a201cf804542fc5717d0043f",
+      "bytes": 8449,
+      "sha256": "cc1dbeced344091c19f88801dce1bab6079c3413670c15df69b31e07d512a41d"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/oauth-routes.ts",
+      "mode": "100644",
+      "oid": "9dc0eca340bd877ca252cf1305aa6dc995310669",
+      "bytes": 13099,
+      "sha256": "23a54878220ea25408c97c535c8917bd17f8610460434dbece473bf3fb0e2aae"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/tenant-api-key.ts",
+      "mode": "100644",
+      "oid": "8ddb8551ab2648968e9c38d3670b87ff0e7e1c68",
+      "bytes": 1286,
+      "sha256": "9c612d237de120c5d22c2d2f67eba79d5b684db13f1bbaee22c9ddc99a91fb37"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/credential-store.ts",
+      "mode": "100644",
+      "oid": "902106a9be72fe873b707695488913b863fa2f23",
+      "bytes": 18066,
+      "sha256": "4cea54e7381dc1a53d971f15aeb88c1db4c400aa1ed9ac946558524e3c454521"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/db/sql-credential-store.ts",
+      "mode": "100644",
+      "oid": "572ad72f5feacb0a424822fb4d308d403cca56bf",
+      "bytes": 26436,
+      "sha256": "0b50f85566d1884c7d48bbf8866977873fb123cec6e35ec38c09f71714ddb30a"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/db/schema.ts",
+      "mode": "100644",
+      "oid": "5da2ec8e272c30e7b2d6d24fa0a8629b449e1d4c",
+      "bytes": 18734,
+      "sha256": "ded8809e4db50f399cbae4fbebbafec87561f517dcb9ce9e4767bf8b4ba1a8ef"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/shared/ui-auth.ts",
+      "mode": "100644",
+      "oid": "4901da06fe8fcc5ad26eef3e9753be77232100f6",
+      "bytes": 5091,
+      "sha256": "12fc8e9ac841677c79eb1df0c1f21fef16d9955e8f92f7a92566cfc537d6474a"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/api/ui/ws.ts",
+      "mode": "100644",
+      "oid": "1de15ed812d14bc3d8ba51501f974c445c094c2c",
+      "bytes": 5645,
+      "sha256": "c024376980b9823b03ff60dcd41eb87b2bbe663edb510e8e1939fd5b1550f87a"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/api/ui/bridge-sse.ts",
+      "mode": "100644",
+      "oid": "8fe75b524fb05eec73ef5ac4f8395fb959de0522",
+      "bytes": 10106,
+      "sha256": "2e20a8cfae7df2dae8cd050aa9656891ba5a09d9eac6bbd52dde8b6cc588511f"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/api/ui/request-log-sse.ts",
+      "mode": "100644",
+      "oid": "734d5d10ae6a5f728513739460bbdad2704b16ff",
+      "bytes": 3599,
+      "sha256": "9a87f2fccb8d92ac97a0880770eb820f6f3806a76f8ccf6155f700cf7b2ff24c"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/settings/post-tenant-select-ui.ts",
+      "mode": "100644",
+      "oid": "decdfc02280fbca22eba28131c4dd3c2abe1be04",
+      "bytes": 2420,
+      "sha256": "04e4a0068232aefd0ff4f11f2ba1d238367fc9a5153cfa4876d029be19cc5542"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/settings/post-tenant-api-keys-ui.ts",
+      "mode": "100644",
+      "oid": "754ae70ce99100264a3a88dad95610f3a21e636e",
+      "bytes": 1644,
+      "sha256": "440004886f1b7502cc1d2307bb65fde0b31a4ff31ce264dfbdf74b85d5f54723"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/credentials/factory-browser-oauth-ui.ts",
+      "mode": "100644",
+      "oid": "81860e940f81be48034b05bd78f2c4140c50ca66",
+      "bytes": 3039,
+      "sha256": "c48a2126010d89f02352a94fc3f4ed34057a7e3caa7efcde44939b768b486a81"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/credentials/openai-browser-oauth-ui.ts",
+      "mode": "100644",
+      "oid": "55ed6dc947dd8311e92df9edda7f1ba577345525",
+      "bytes": 5717,
+      "sha256": "5f28e4c69c004b31f91e44b5b585d583742f31dd13e0c38aa38164d1218114fc"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/credentials/factory-device-oauth-ui.ts",
+      "mode": "100644",
+      "oid": "b9052f62e1f538cedbd54ec9f9a08ac82682371e",
+      "bytes": 1918,
+      "sha256": "c29fce053847e322bdc55660ebddc5350aea121fc746beb15b296a5e7a53d381"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/routes/credentials/openai-device-oauth-ui.ts",
+      "mode": "100644",
+      "oid": "3ef12f6816fd01d4c402ee7335c878281028e8f0",
+      "bytes": 2227,
+      "sha256": "c8cedb25cd84573cb186d1386693b2f1cd26efe7ff5bb4770fa1383ab2e94bb5"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/factory-oauth.ts",
+      "mode": "100644",
+      "oid": "159863d761e3bfe7d1238f0b14550bb56f63c1cb",
+      "bytes": 14038,
+      "sha256": "1dac8248e74e17ea03d9dfa09d379a82773c77210cc3427848603c79c10dfb18"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "src/lib/openai-oauth.ts",
+      "mode": "100644",
+      "oid": "a9d3c47d83ed0dff0f326d0d5dbaabb92ada9c95",
+      "bytes": 21535,
+      "sha256": "2c7358b8afb15a029983ee6059aec2c581898219d1b46b960f83c28f7023cb46"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "web/src/App.tsx",
+      "mode": "100644",
+      "oid": "9b02ca1275c774eca37261d7cde5f9734c9f2dab",
+      "bytes": 8864,
+      "sha256": "140bfce099d51dfb70ab72d51593c00e2f647ac68c0a8f81c349ba78ccd89faf"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "web/src/lib/api.ts",
+      "mode": "100644",
+      "oid": "7f7b219270096aea8084248506fbfc8a27a4ac58",
+      "bytes": 35390,
+      "sha256": "f27ed96a12300336941435f50cbac79cbfe677153368389f5bcc76ed0cac0056"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": "resources/policies/runtime/60-tenant-enforcement.edn",
+      "mode": "100644",
+      "oid": "fb66ab46b2c3316fb1f942f9f0302dec0a353769",
+      "bytes": 1154,
+      "sha256": "b2cd0a0e9ce95743fde3969a46614d95e8aa9c42c5bd67207884419f9866d595"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/auto-merge.yml",
+      "mode": "100644",
+      "oid": "cc604230142e6fd979e48ed31af5e5dbb63506e1",
+      "bytes": 488,
+      "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/cljs-test.yml",
+      "mode": "100644",
+      "oid": "04472a9e46df484d5fc41b3476abc311fa7ed9d7",
+      "bytes": 1753,
+      "sha256": "c4ab49fc18df732aed3cd7b2de85d5c31d542c825090d737daec81a85b763ec3"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/code-quality.yml",
+      "mode": "100644",
+      "oid": "bfbde16cdecf055b263cee079400cbfb3e06715e",
+      "bytes": 689,
+      "sha256": "0a14d7a90eb33482dffea331595fbef3a665f4958b97bfee3092a73a8133b3ad"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/code-review-comments-discord.yml",
+      "mode": "100644",
+      "oid": "45210ee2ea84b688e4063e177d0c8bce895516b6",
+      "bytes": 2469,
+      "sha256": "d4e3b9a9c32c811e7236f9781f622ae5c1350621afe3ca08ebd4c8cb4e12e4c0"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/deploy-production.yml",
+      "mode": "100644",
+      "oid": "4c44207cd2e1460b4f18e9f1b6b77e1a08c44fb6",
+      "bytes": 1592,
+      "sha256": "7e850b3c8efc516aa888673b1f2ea4b27d421ddd3b8a6a77f1735a9bff7c4134"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/deploy-staging.yml",
+      "mode": "100644",
+      "oid": "a653c9b89bc17e7d0c648a17549f3969c7af0a6e",
+      "bytes": 2531,
+      "sha256": "06f0c6614ab0fdd1fe65c026e00c1bc570596c6b1b01b52a9e5791645980165e"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/ensure-pr-to-staging.yml",
+      "mode": "100644",
+      "oid": "7a20cc1f7406011a87ec4df3c93e6ff531a8cdef",
+      "bytes": 414,
+      "sha256": "e633a4fcfcb844c15a8343b8172f19102ab3151a2b067999694c7e1ebd76dca3"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/eta-mu-review-gate.yml",
+      "mode": "100644",
+      "oid": "85deb7c7c9d26ed5f28117ac15f9b13492337c9f",
+      "bytes": 3833,
+      "sha256": "e9bd960465060eaa4a2f8e011f93f78a1f23d5f53c7362d7b36d5a280b80f7a0"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/eta-mu-review.yml",
+      "mode": "100644",
+      "oid": "ca8655b33cf316c881318f35b38d1d368622ab75",
+      "bytes": 1035,
+      "sha256": "faf0d52ae94a76e6f07fc63918e57da0ac0c6cdd267742eabe0ca1b910112857"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/eta-mu.yml",
+      "mode": "100644",
+      "oid": "e6b799a3f58a60f18966b141a6b09a64f9396a1f",
+      "bytes": 4136,
+      "sha256": "ba3f5e765a4f5a43fb9be795bddeeda9279a1f28531338735d61423c0ae023a9"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/github-events-discord.yml",
+      "mode": "100644",
+      "oid": "9f85b0fd189b368b227a2ac1cf33888239ae13aa",
+      "bytes": 6464,
+      "sha256": "96a7c87da759a1def4757c36bdd9b83846335cc87a8da84de6667e0a039885e5"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/kanban-sync.yml",
+      "mode": "100644",
+      "oid": "6037dc55d6e885761f878f1b64002a9362667693",
+      "bytes": 568,
+      "sha256": "e2be02969aa9a2186fa9d33d6d1da768e1311bb40b0e3330b3aa2fa71c1cf69d"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/main-pr-gate.yml",
+      "mode": "100644",
+      "oid": "77c70f877b2f7e685445655853cde291d6cd79b5",
+      "bytes": 6074,
+      "sha256": "df8ade8950ef2a424e5f1c06160565b896fdad2bb0baf6330ee549f6ff1decd9"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/main-pr-redirect.yml",
+      "mode": "100644",
+      "oid": "0dbb48923cedca616bb20192860b829243ee6905",
+      "bytes": 1619,
+      "sha256": "e2ea9af596783c612a696491d45751bd7dddee433c3de8281f497d784ac40266"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/opencode-code-review.yml",
+      "mode": "100644",
+      "oid": "b8899b4ee898956896657b4a109bc90d34dc3c4d",
+      "bytes": 2119,
+      "sha256": "29eaad348b72a082508b50649b0eb9ad5adbcb185058314ff75573632ce9a044"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/opencode-issue-agent.yml",
+      "mode": "100644",
+      "oid": "e7c19cbf8cf30aa7f55d227c0c1dd55ea11cbbd6",
+      "bytes": 5105,
+      "sha256": "70d4321803f90588cbb2a62d34cdb3a1ad6066ff71a29d9808734d09dec34732"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/opencode.yml",
+      "mode": "100644",
+      "oid": "a29700731b380c74a70de8970934d378daccd840",
+      "bytes": 990,
+      "sha256": "c52828954f38f115ecf338e5063ba9cc47aaf37b3d5c707a237bd6c9267f7d23"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/release-on-merge.yml",
+      "mode": "100644",
+      "oid": "456d8bf251c6f0ba73ba0093a24aef25851f5379",
+      "bytes": 418,
+      "sha256": "5900c2234cad3dcde34100997a3a11d038341ae71fd0fbff65d6080f9cd230c6"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/review-resolution-gate.yml",
+      "mode": "100644",
+      "oid": "82cf327461a737f91e64e98f657ce493d98ebeab",
+      "bytes": 719,
+      "sha256": "aa52e5236e00e3b9d3de8148a0fb6b4179021e4e64979856719ee043803b4596"
+    },
+    {
+      "repository": "open-hax/proxx",
+      "head": "88471efd7f8cd27f64fc733a1c31369f00a6d432",
+      "path": ".github/workflows/staging-pr.yml",
+      "mode": "100644",
+      "oid": "81fd4eaf04c16210b451e8401e119cc51924ac90",
+      "bytes": 3265,
+      "sha256": "bfbdcf00d8e74a0696c21239c4ba689ad385bbee38392c6184fcb060830b67a8"
+    }
+  ],
+  "published_source_paths": [
+    "kanban/axxium-proxx-identity-migration.md",
+    "docs/design/proxx-identity-migration-planning.md",
+    "docs/design/proxx-identity-migration-verification.md"
+  ],
+  "receiving_boundary": "No publication safety qualification. Axxium auto-merge non-draft condition is not universal draft protection; unpinned review-resolution@main secrets inheritance/current native defaults/transitive effects need parent receiving guard. Proxx unsafe controller routes remain separate owners.",
+  "receipt_owner": {
+    "pin": "154440f3c997aa9208194bba59b5edbef3654f78",
+    "all15_byte_bindings": [
+      {
+        "path": "src/cljs/eta_mu/receipt_river/api.cljs",
+        "mode": "100644",
+        "oid": "ed64a327e65398d9327c37c1b20e0c626a663d9d",
+        "bytes": 1594,
+        "sha256": "c027fff0ef9dcbb2b3fa7b2ab77bf9afd0b240a6e8304661fcb2e4be332a0812"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/archaeology/provider.cljs",
+        "mode": "100644",
+        "oid": "80198de9a104054cdc2c7ade7a8ceb2ba5c82165",
+        "bytes": 546,
+        "sha256": "fc0df23a5d857ad95506b646d0b9f7c4d6c34f30aec6b0b0bba8e416c4e71a63"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/domain/discovery.cljs",
+        "mode": "100644",
+        "oid": "057cded1ffc01212c50d743fa12867976eb10b19",
+        "bytes": 11188,
+        "sha256": "a70b60ec4bed9df4c0f026d1ce71e918e3055526eae5467a3de9c955b6a646df"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/domain/event.cljs",
+        "mode": "100644",
+        "oid": "511ce035d57998c8ebf01e5d84b57f981ab37e91",
+        "bytes": 1388,
+        "sha256": "bd284edccb1e355b19a6b356593a7daa2cb1f52055024f8efc4aca9d90762253"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/domain/receipt.cljs",
+        "mode": "100644",
+        "oid": "d9829c12e4dcdf3c1c6fd23a95a193ace17bd710",
+        "bytes": 1869,
+        "sha256": "adc98967a40d80cde6f3fdf9e328a221986c3f16b8b1631e18e1f4fa78b10a35"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/bus.cljs",
+        "mode": "100644",
+        "oid": "dc62d8918c92c3bc253986d9adb6c30964ff6345",
+        "bytes": 273,
+        "sha256": "068f93ced2662e2493e5b6f42ce47b566b02b21eab225aab994b71de2e2a99fe"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/crypto.cljs",
+        "mode": "100644",
+        "oid": "bf451006f8e5ed50fb778879da7d6d0832cb6d7d",
+        "bytes": 282,
+        "sha256": "5e852c2782c15b1f89e8157597272cf5965353c6cc31961929003d44932ea05b"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/fs.cljs",
+        "mode": "100644",
+        "oid": "429d5af9c0ccf9ba7babf034a5e23b5c5766037c",
+        "bytes": 1094,
+        "sha256": "1d6cc5136f40231c6926ef9f16602cd27361df15f80b0f60af78db196bcdf2cb"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/git.cljs",
+        "mode": "100644",
+        "oid": "1ed8e4d6a94dc20c7664a51c73f3ca2433affd6a",
+        "bytes": 2587,
+        "sha256": "12140ed090349f961ae4119b68a8750f2ff63c211531eed2396c1b8a35155852"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/glob.cljs",
+        "mode": "100644",
+        "oid": "711308be17c66301f70a0668fc1a125b8f93b342",
+        "bytes": 1233,
+        "sha256": "bd8c5ce5e36264271b4383e688ee44ff043f78c0912c98edb98d8f9623b0871d"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/extern/runtime.cljs",
+        "mode": "100644",
+        "oid": "581852ff30ec6df65362d5cf70c13806ceb4a790",
+        "bytes": 508,
+        "sha256": "75d863014e3d633fd9467cfd303d90d2326fc9dde0200da768252d19be24a888"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/infra/cli.cljs",
+        "mode": "100644",
+        "oid": "2bfead484aa8f3c33b26eb739eeb94464b87a376",
+        "bytes": 9944,
+        "sha256": "7642faa1097748df724b85d2ade3e5035be14f09334e04b6bd980c1355377ef1"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/infra/local_git_provider.cljs",
+        "mode": "100644",
+        "oid": "a6f0b96f5a5f9e1a73f901d4146f812515ca3b57",
+        "bytes": 6197,
+        "sha256": "aebdd62166f66c16877ab952095b85fb84e177141043981333ac82aa3ad0d251"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/law/receipt.cljs",
+        "mode": "100644",
+        "oid": "99f480e1c3fc5be282b3d5bb64310eb052ace2b8",
+        "bytes": 4927,
+        "sha256": "a40dd843cf298926dfbe229d5544470dbd51682fd538e841a0fad62d29bed320"
+      },
+      {
+        "path": "src/cljs/eta_mu/receipt_river/shape/edn.cljs",
+        "mode": "100644",
+        "oid": "dc540c11a609b13646c8445d3b3392b373334cb7",
+        "bytes": 234,
+        "sha256": "0e06bef509eda4cf3aa63e53577d14b74e780563608aa52d6161ae296ceb3914"
+      }
+    ],
+    "reader_consumed_namespaces": [
+      "api",
+      "domain.event",
+      "extern.bus",
+      "law.receipt",
+      "shape.edn"
+    ],
+    "writer_extra_namespace": "domain.receipt"
+  }
+}

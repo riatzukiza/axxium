@@ -1,0 +1,41 @@
+{
+  "scope": "Actual native read-task visibility only; no board state, Ready, runtime, hosted review or whole migration qualification",
+  "original_card": {
+    "bytes": 1704,
+    "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7",
+    "candidate_prefix_exact": true
+  },
+  "frontmatter": {
+    "category": "migration",
+    "labels": [
+      "axxium",
+      "proxx",
+      "identity",
+      "migration",
+      "auth"
+    ],
+    "points": "8",
+    "source": "axxium/kanban/axxium-proxx-identity-migration.md",
+    "title": "Migrate Proxx identity management to Axxium",
+    "priority": "P0",
+    "status": "todo",
+    "uuid": "axxium-proxx-identity-migration",
+    "created_at": "2026-06-02T00:00:00Z"
+  },
+  "original_native_body_prefix_preserved": true,
+  "fixtures": {
+    "base_entries": 45,
+    "all_original_modes_bytes_exact": true,
+    "candidate_only_card_append": true,
+    "read_only_mount": true,
+    "network_unshared": true,
+    "environment_cleared": true
+  },
+  "native_cli": {
+    "source": "ef3c4abf1ea75199486f693e9470df3fec88dd49",
+    "bytes": 2115588,
+    "sha256": "791418bc9767260df804b5a972acb4bee7a5ffb409ea1edb899c348a2b8546a4",
+    "private_internal_dependency_links": 515
+  },
+  "stderr": "Both native commands exit0 with JSON-config deprecation advisories; derived public display neutralizes only owned fixture root, raw hashes retained, not lossless."
+}
