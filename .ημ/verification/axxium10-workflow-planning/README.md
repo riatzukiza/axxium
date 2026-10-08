@@ -44,3 +44,30 @@ proof is sealed outside source after the ordinary commit to avoid hash cycles.
 Full required future gates/human artifacts remain in the verification design.
 Prospective publication is DRAFT/blocked/auto-off only after root's fresh selected
 receiving guard; root alone publishes or requests reviewers. GPL-3.0-or-later.
+
+
+## Additive complete-proposal hygiene adjudication — current review
+
+CodeRabbit review `5450390348`, root `4213742945`, thread
+`PRRT_kwDOU4Vg086qKULY`, item `cr-comment:v1:fd9529522496112e2552843f`
+correctly identifies the limited scope of the historical `diff-hygiene` command
+in `command-collection.json` at `/commands/9`. Its actual bare `git diff --check`
+exit 0 is retained byte-for-byte; it checks unstaged tracked differences and does
+not establish hygiene for staged-only or untracked planning/evidence additions.
+Do not reinterpret that historical result as a whole-proposal pass.
+
+`complete-hygiene-correction-command.json` now records an actual committed range
+check from base `2439d4d6b8e546cda276f09f5c96db59226ecad6` to published
+`b44a3aca6dfb51163b6793694289d65d592367b1`, with the exact 13-path inventory.
+The range check exited 0 with empty stdout/stderr. This is whole committed b44
+diff hygiene only; it supplies no compiler/test, review approval, Ready, workflow
+activation, deployment or release qualification. Every original seven requirement
+and five acceptance criterion, both mandatory reviewers/protection clauses and
+R6/issue 9/issue 27/source-owner holds remain controlling.
+
+A complete result for the corrective candidate itself requires explicit staging,
+an ordinary commit, and a separate actual base-to-exact-final-head `git diff
+--check` plus complete changed-path inventory. That immutable final result is
+sealed outside the frozen source packet to avoid a hash cycle; the present b44
+range result cannot stand in for it. Precommit checks must distinguish index,
+working-tree and untracked scope rather than silently claiming complete coverage.

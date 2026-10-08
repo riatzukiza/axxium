@@ -16,3 +16,12 @@
   spore: none
   receipt-refs: .ημ/receipts.edn
   note: Preserve wholeworkflow planning while correcting file-count label, cited prose counts and warning/status0 wording. Source currentowner contract evidence and historical values remain distinct from future gates. No nativeapproval, board or runtime authority.
+- ts: 2026-10-08T01:48:51.842351257Z
+  session: /home/err/.codex/parallel-goal/issues-20261006/Axxium5-complete-hygiene-correction-364660eeef/worktree
+  task: Axxium5-complete-committed-proposal-hygiene
+  p-efficiency: 0.9
+  p-friction: 0.15
+  p-skill-candidate: 0
+  spore: none
+  receipt-refs: .ημ/receipts.edn:3
+  note: Bare worktree diff hygiene cannot admit staged/untracked proposal files. Preserve historical outputs and bind complete range checks to exact immutable head and complete changed-path inventory.

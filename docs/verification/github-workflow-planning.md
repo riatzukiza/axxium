@@ -110,3 +110,19 @@ issue27's separately held composition, with actual duplicate/ADD-ADD controls.
 Original card UUID/Todo/P1/5 remains; review complete sizing or lawful breakdown,
 not a fixture-only/CI-only substitute. Missing live/operator prerequisites hold
 operational qualification, but do not prevent reviewing this complete plan.
+
+
+## Complete planning-diff evidence boundary
+
+The historical unstaged-only `git diff --check` result does not verify added
+planning/evidence files. The additive adjudication and actual committed base-to-
+b44 check in `.ημ/verification/axxium10-workflow-planning/complete-hygiene-correction-command.json`
+retain that historical observation without rewriting it and bind its replacement
+whole-range evidence to the exact 13-path source inventory. Before recording a
+whole corrected-proposal hygiene pass, explicitly stage every owned corrective
+path, ordinarily commit, then run the complete base-to-exact-final-head range
+check with its exact changed-path inventory. Retain every failure and refusal;
+never substitute an unstaged-only pass for staged/untracked or committed scope.
+Final immutable range results are outside the frozen source packet. These local
+Git checks do not satisfy R6's compiler/warnings/nonempty-test obligations or
+any native review, Ready, protection, staging, production or release requirement.
