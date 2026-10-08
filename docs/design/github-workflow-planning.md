@@ -75,13 +75,13 @@ current qualified heads, agree source ownership and either consume a qualified
 accepted repair or propose an independently owned compatible repair. Do not
 silently carry pending identity code into a workflow change.
 
-Native `axxium-service-deployment` / issue9 retains Services-owned immutable
+Native `axxium-service-deployment` / issue 9 retains Services-owned immutable
 image, host placement, migration, ingress health and protected host-trust proof.
 Services owns host effects; Axxium owns its source/build/runtime contracts.
 Eta-mu owns trusted publisher/review/promotion machinery and Rheos board behavior;
 root project/fork mapping must be qualified where consumed. These are explicit
 owner integration prerequisites, not implementation permission or fabricated
-UUID dependencies. Issue27 owns the separate append-only ADD/ADD composition
+UUID dependencies. Issue 27 owns the separate append-only ADD/ADD composition
 contract: preserve both receipt/reflection histories and event identities across
 future integration; successful isolated planning does not resolve it.
 
@@ -113,7 +113,7 @@ opened/ready/synchronize/edited/retargeted PR, check-suite, merge, release/tag a
 manual dispatch. DRAFT alone is not a universal trust proof. Activation requires
 real selected-event evidence; no settings/credential change is made here.
 
-## Requirement6: actual warning and empty-suite cause
+## Requirement 6: actual warning and empty-suite cause
 
 Existing MEMBER comments6031359488 and6047124243 preserve hosted CI SUCCESS plus
 six undeclared-variable warnings in `src/cljs/axxium/routes/auth.cljs` at
@@ -138,10 +138,10 @@ unqualified code or delete tests just to obtain a green pipeline. All source
 changes still require full relevant npm typecheck/test/build and boundary gates.
 
 Local planning preparation also ran the unchanged static JS-boundary scanner:
-`node scripts/check-js-boundary.mjs --check` exits1 and reports53 pattern findings
+`node scripts/check-js-boundary.mjs --check` exits 1 and reports 53 pattern findings
 across seven accepted files (auth/session, auth/token, config, routes/actor,
 routes/auth, routes/health and shape/db). The deployment-boundary self-test/check
-exit0. These are exact recorded scanner outcomes, not full compiler/test proof.
+exit 0. These are exact recorded scanner outcomes, not full compiler/test proof.
 The raw-interop baseline remains an R6 qualification hold. Coordinate qualified
 owner repairs/current PR1/13 integration before claiming full required gates;
 this documentation proposal does not repair those files, weaken the scanner,

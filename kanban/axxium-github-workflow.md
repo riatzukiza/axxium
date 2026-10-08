@@ -104,8 +104,8 @@ personal PR1 at `539409b169302793a0b67f97d75ddd6265cf9d12` owns concrete
 identity repair/test changes. Neither is accepted main or imported into this
 plan. Fresh qualification, merge/overlap review and full-source gate evidence
 are needed before implementation; source/code from those proposals is not
-adopted. Existing `axxium-service-deployment`/issue9 owns Services placement and
-live verification. Issue27 independently owns parallel receipt/reflection
+adopted. Existing `axxium-service-deployment`/issue 9 owns Services placement and
+live verification. Issue 27 independently owns parallel receipt/reflection
 composition. No hard dependency metadata or new child UUID is invented here.
 
 The original five points remain. Review must decide whether the entire workflow,

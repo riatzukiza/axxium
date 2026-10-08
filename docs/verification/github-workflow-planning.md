@@ -39,8 +39,9 @@ GREEN implements pure contracts before compiler/process/GitHub/Services adapters
 Consume canonical review/promotion laws rather than shadowing their parser/FSM.
 
 For R6 reproduce accepted malformed `handle-login`/top-level catch with the
-owning compiler in a private no-provider environment, preserving actual warnings
-and exit even if0; then exercise real registered login handler success, rejection
+owning compiler in a private no-provider environment, preserving the actual
+warnings and exit status even when the compiler exits with status 0;
+then exercise real registered login handler success, rejection
 and catch paths with isolated DB/session/token response doubles. Test async
 rejection exits nonzero in the official runner. Discover every required source
 and test namespace; preserve existing meaningful suite. Prove zero discovered
