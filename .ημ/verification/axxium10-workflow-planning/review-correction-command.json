@@ -503,7 +503,19 @@
     "all_first_ledger_bytes_prefix_exact": true,
     "original_source_card_prefix": 1360,
     "one_existing_SM_exact_no_second_append": true,
-    "large_inventory_exact_private_or_immutable_Git_original_external_not_current_stream": true
+    "large_inventory_exact_private_or_immutable_Git_original_external_not_current_stream": true,
+    "joined_suffix_byte_offset": 1367,
+    "adjudication_binding": {
+      "immutable_history": "15e28e38c90cdeaba4e8781f3175bf01c335f65a",
+      "path": ".\u03b7\u03bc/receipts.edn",
+      "offset": 1367,
+      "bytes": 2262,
+      "sha256": "5076f2de29ada492feedaa2560ae55e87e2f5e8e680dc2e48804c52439b99ce7",
+      "physical_line": 1,
+      "separately_admitted": false,
+      "current_owning_physical_line": 2,
+      "current_payload_refs_manifest_this_collection": true
+    }
   },
   "current_correction_commands": [
     {
