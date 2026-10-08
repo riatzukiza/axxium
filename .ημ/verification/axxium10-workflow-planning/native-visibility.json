@@ -1,0 +1,693 @@
+{
+  "artifact": {
+    "bytes": 2115588,
+    "sha256": "791418bc9767260df804b5a972acb4bee7a5ffb409ea1edb899c348a2b8546a4",
+    "source": "ef3 private compiled capability reused readonly, no new build/release qualification"
+  },
+  "fixtures": [
+    {
+      "label": "before",
+      "input_entries_exact_after": 45,
+      "inputs": [
+        {
+          "path": ".clj-kondo/config.edn",
+          "mode": "100644",
+          "bytes": 928,
+          "sha256": "758703bfb9714a8ffa7224e8c69d8d7783454f23fd22c8d0e283de57dbec2c34",
+          "base_oid": "0f18642d69ef75dca15fe48763d02539c34a625d"
+        },
+        {
+          "path": ".clj-kondo/imports/funcool/promesa/config.edn",
+          "mode": "100644",
+          "bytes": 492,
+          "sha256": "8a4630da65dd79f5ee0a9622506280b8fad96f822bcf4c6320e4219f9e4df6ed",
+          "base_oid": "1844f77c5a6369be0fb2c8f6519acd70c3e516b9"
+        },
+        {
+          "path": ".clj-kondo/imports/metosin/malli/config.edn",
+          "mode": "100644",
+          "bytes": 114,
+          "sha256": "4adba0583d80d7ffcb98b28583dd4d68069205db26089ddfed49c016d1803bda",
+          "base_oid": "0f8b25ccfd9c80aefea40f69399f90ce801f133f"
+        },
+        {
+          "path": ".env.example",
+          "mode": "100644",
+          "bytes": 583,
+          "sha256": "f23293bb2d1377c2011483791a96d09cf42b5142990ed6babb6286aa7040c101",
+          "base_oid": "8dbe44507135656720ffb9d8f78c34db59f064d8"
+        },
+        {
+          "path": ".github/workflows/auto-merge.yml",
+          "mode": "100644",
+          "bytes": 488,
+          "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2",
+          "base_oid": "cc604230142e6fd979e48ed31af5e5dbb63506e1"
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "mode": "100644",
+          "bytes": 1029,
+          "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae",
+          "base_oid": "e0fa4fe1776c529eef443b9bea978f1d9c402e04"
+        },
+        {
+          "path": ".github/workflows/kanban-sync.yml",
+          "mode": "100644",
+          "bytes": 615,
+          "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e",
+          "base_oid": "75b8b75a30442379797fb96528003911ad95891c"
+        },
+        {
+          "path": ".github/workflows/review-resolution-gate.yml",
+          "mode": "100644",
+          "bytes": 479,
+          "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53",
+          "base_oid": "f0a4400f148cd7c4bfabab2c5f14d2768343b1c5"
+        },
+        {
+          "path": ".gitignore",
+          "mode": "100644",
+          "bytes": 134,
+          "sha256": "c6ff2bba03c391e7ab2991965c8c1b1128210ca04d19d5fd21e0b7da5a08dd74",
+          "base_oid": "51a450640b469665d56d209c25d1e673204ad6cf"
+        },
+        {
+          "path": "AGENTS.md",
+          "mode": "100644",
+          "bytes": 5573,
+          "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819",
+          "base_oid": "146c8c00117e45fb93036d59f663ae63700e16ae"
+        },
+        {
+          "path": "Dockerfile",
+          "mode": "100644",
+          "bytes": 358,
+          "sha256": "08a67d66f385f25ea3d1f73173c3eb8ea839c490fd90e60ee3b094d90db87f88",
+          "base_oid": "335df2a3e1f6af440868d328280f983a899ee9b4"
+        },
+        {
+          "path": "README.md",
+          "mode": "100644",
+          "bytes": 3357,
+          "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a",
+          "base_oid": "1164abd6dff7c3bd36985545aff92165a1354471"
+        },
+        {
+          "path": "deps.edn",
+          "mode": "100644",
+          "bytes": 341,
+          "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53",
+          "base_oid": "f765302c788224596948c8694c31308e40f10502"
+        },
+        {
+          "path": "docker-compose.yml",
+          "mode": "100644",
+          "bytes": 1240,
+          "sha256": "45b1403a9d0d0542b1c35851333c1f595d95dde8170c0ae904fa9a0db2d32a7c",
+          "base_oid": "54f3f2ee725cf768b785cbdf09c50b4e6dd9739c"
+        },
+        {
+          "path": "docs/axxium-kernel-spec-v2.md",
+          "mode": "100644",
+          "bytes": 12547,
+          "sha256": "81645a2b53e3f2e77d971cb4a1b618ad1b77a8e2e814ebe665cebf04e070a36d",
+          "base_oid": "8cf373b05f21550b7797d6bafe9373bb65241ed6"
+        },
+        {
+          "path": "docs/axxium-kernel-spec.md",
+          "mode": "100644",
+          "bytes": 7745,
+          "sha256": "ef671e6f63fb9d14a9e113c7d5444876264fbb2a1526c043ea5e51b3cdaae6b7",
+          "base_oid": "3a96bb8dac76dd1dac2a2d43fe23591afc8dbd44"
+        },
+        {
+          "path": "docs/axxium-synthesis.md",
+          "mode": "100644",
+          "bytes": 7320,
+          "sha256": "7bbe19018cf9a5df7605a3a0dbde70b48e6d9a36f38735c18917cf94c1bd7750",
+          "base_oid": "b44a2d08a0b1d941ae7f5b444124f907ee8775bb"
+        },
+        {
+          "path": "docs/open-hax-octave-commons-axxium.md",
+          "mode": "100644",
+          "bytes": 966,
+          "sha256": "fcb18925bfc044f845b571b13355ac2d2d666a64763d44f6bb388aaf87a913a6",
+          "base_oid": "c5c06ed666fd1892aad93f47b4f42cd9df5e1850"
+        },
+        {
+          "path": "kanban/axxium-discord-oauth.md",
+          "mode": "100644",
+          "bytes": 1199,
+          "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e",
+          "base_oid": "ed917c0580a068d71f466a861f0567ce7dddafa7"
+        },
+        {
+          "path": "kanban/axxium-github-workflow.md",
+          "mode": "100644",
+          "bytes": 1360,
+          "sha256": "55004eccb1a188bfc40c380cecbe9bc8710333acd5a6484e70c7e236a35fc4fb",
+          "base_oid": "082baab9edf8d11954d2cd2638e0e3361b5de81b"
+        },
+        {
+          "path": "kanban/axxium-knoxx-identity-migration.md",
+          "mode": "100644",
+          "bytes": 1601,
+          "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8",
+          "base_oid": "2c0f35edbfa11ecd7da5f32c2287872ed21fe4dd"
+        },
+        {
+          "path": "kanban/axxium-openplanner-identity-migration.md",
+          "mode": "100644",
+          "bytes": 1482,
+          "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4",
+          "base_oid": "1abd081deaed3e40116040b277ef0dc0e1a2b741"
+        },
+        {
+          "path": "kanban/axxium-proxx-identity-migration.md",
+          "mode": "100644",
+          "bytes": 1704,
+          "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7",
+          "base_oid": "1010d9a31599866e7f1dd315429a36074e496fd6"
+        },
+        {
+          "path": "kanban/axxium-service-deployment.md",
+          "mode": "100644",
+          "bytes": 1398,
+          "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6",
+          "base_oid": "e8a632cd2383a3012a8b71e3eb9a87ba9b80abac"
+        },
+        {
+          "path": "kanban/openhax.kanban.json",
+          "mode": "100644",
+          "bytes": 59,
+          "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9",
+          "base_oid": "d7953748e4e87e74e8abd57b02ef12d2a6dd502c"
+        },
+        {
+          "path": "package-lock.json",
+          "mode": "100644",
+          "bytes": 51592,
+          "sha256": "6d38a247e31ff17637f1162c6724470fef77323e4093d153467f5917b9049681",
+          "base_oid": "40f35a71a7484b55fb183b7959f4e74f2b2bc9ba"
+        },
+        {
+          "path": "package.json",
+          "mode": "100644",
+          "bytes": 691,
+          "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67",
+          "base_oid": "93cc8d33bdb0b08eaa8971ddb2f6937a499e7169"
+        },
+        {
+          "path": "package.prod.json",
+          "mode": "100644",
+          "bytes": 399,
+          "sha256": "fac110e9a234fa61cd3eb2ea7f913bd8de5647fdf2257b7bdbf146f63e92b39a",
+          "base_oid": "9ab0c8adaefc4f4911fb4865ace27fb9d18be8ad"
+        },
+        {
+          "path": "resources/public/index.html",
+          "mode": "100644",
+          "bytes": 3702,
+          "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f",
+          "base_oid": "cbff78f2d27200881f26da67002d66b8a01481ed"
+        },
+        {
+          "path": "scripts/check-deployment-boundary.mjs",
+          "mode": "100644",
+          "bytes": 4417,
+          "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e",
+          "base_oid": "4f225e0a1071837397e833ad3da0987c3a90d37e"
+        },
+        {
+          "path": "scripts/check-js-boundary.mjs",
+          "mode": "100644",
+          "bytes": 1856,
+          "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e",
+          "base_oid": "a94fa3e250b78437a7f294da57e8b6bf89a2de72"
+        },
+        {
+          "path": "shadow-cljs.edn",
+          "mode": "100644",
+          "bytes": 1546,
+          "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4",
+          "base_oid": "64231c066923da04992f27882d0b49f414250d4d"
+        },
+        {
+          "path": "src/cljs/axxium/auth/session.cljs",
+          "mode": "100644",
+          "bytes": 3721,
+          "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820",
+          "base_oid": "1a276ddbc8950476d41a36e3e494ad60891a418e"
+        },
+        {
+          "path": "src/cljs/axxium/auth/token.cljs",
+          "mode": "100644",
+          "bytes": 1777,
+          "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315",
+          "base_oid": "ee148a738071d4999f9b4b3b2574e2c6d367d6eb"
+        },
+        {
+          "path": "src/cljs/axxium/config.cljs",
+          "mode": "100644",
+          "bytes": 1865,
+          "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446",
+          "base_oid": "bdb7fc3a0dd324f97534a1db566dcdbf19cb34f5"
+        },
+        {
+          "path": "src/cljs/axxium/db.cljs",
+          "mode": "100644",
+          "bytes": 2398,
+          "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f",
+          "base_oid": "cf19fc4f804ee7e000d5837dc3bbd39e5be79016"
+        },
+        {
+          "path": "src/cljs/axxium/extern/bcrypt.cljs",
+          "mode": "100644",
+          "bytes": 450,
+          "sha256": "10b0307b80b803a1f93962d73927b45fb6bdee99748b280f6a790808bea4fbfc",
+          "base_oid": "7beea7c48fa8862d72019faa71c6dea7efccc323"
+        },
+        {
+          "path": "src/cljs/axxium/extern/jose.cljs",
+          "mode": "100644",
+          "bytes": 188,
+          "sha256": "cb781f7ff48fc9dcc0b34634154e5d46f0b97a2d57c470f0cfa816027f141573",
+          "base_oid": "206b22a0367b183d6e1f05a60b2ccfd8dedbe3bb"
+        },
+        {
+          "path": "src/cljs/axxium/extern/pg.cljs",
+          "mode": "100644",
+          "bytes": 1241,
+          "sha256": "29d56670b873b4af97cc701ac50552ed7d8e17534c5c6f8c348cef61d278eace",
+          "base_oid": "d703fa0b2e7c35170bb77aaae988384b4077e79f"
+        },
+        {
+          "path": "src/cljs/axxium/routes/actor.cljs",
+          "mode": "100644",
+          "bytes": 4016,
+          "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa",
+          "base_oid": "e9f8394cf8e08e394dd77b37bd7b7c358fcd9762"
+        },
+        {
+          "path": "src/cljs/axxium/routes/auth.cljs",
+          "mode": "100644",
+          "bytes": 7299,
+          "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f",
+          "base_oid": "c56c6ba50cf053c0f54d1122dbc177985c9196e7"
+        },
+        {
+          "path": "src/cljs/axxium/routes/health.cljs",
+          "mode": "100644",
+          "bytes": 860,
+          "sha256": "ba2bfd66f2d5df3d6ad6320ab32e6c19a0e83645543f1b9a588342972fc1ebe1",
+          "base_oid": "b58c49d65cd7a1dcf0de3f2ea1a25cdf1d15d0f6"
+        },
+        {
+          "path": "src/cljs/axxium/schema.cljs",
+          "mode": "100644",
+          "bytes": 4472,
+          "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f",
+          "base_oid": "fc4a7500144245f1133d2d2b45089ca7530c2e07"
+        },
+        {
+          "path": "src/cljs/axxium/server.cljs",
+          "mode": "100644",
+          "bytes": 2460,
+          "sha256": "aed7bae437ec6a580a4f3352e4dcd2a71ea58c32b074e828a81a518b64aeec7a",
+          "base_oid": "8e87dc55dcdf5c6f26d536da4402fe344aaad4f9"
+        },
+        {
+          "path": "src/cljs/axxium/shape/db.cljs",
+          "mode": "100644",
+          "bytes": 5478,
+          "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317",
+          "base_oid": "559d514a10e997cea36254b69067b77364e7da44"
+        }
+      ],
+      "returned_uuid": "axxium-github-workflow",
+      "frontmatter": {
+        "category": "infrastructure",
+        "labels": [
+          "axxium",
+          "github",
+          "ci",
+          "workflow",
+          "deployment"
+        ],
+        "points": "5",
+        "source": "axxium/kanban/axxium-github-workflow.md",
+        "title": "Set up GitHub workflow for Axxium (feat -> PR -> staging -> main)",
+        "priority": "P1",
+        "status": "todo",
+        "uuid": "axxium-github-workflow",
+        "created_at": "2026-06-02T00:00:00Z"
+      },
+      "native_read_exit": 0,
+      "visibility_not_validation_ready_admission": true,
+      "no_zero_write_attempt_claim": true
+    },
+    {
+      "label": "refined",
+      "input_entries_exact_after": 45,
+      "inputs": [
+        {
+          "path": ".clj-kondo/config.edn",
+          "mode": "100644",
+          "bytes": 928,
+          "sha256": "758703bfb9714a8ffa7224e8c69d8d7783454f23fd22c8d0e283de57dbec2c34",
+          "base_oid": "0f18642d69ef75dca15fe48763d02539c34a625d"
+        },
+        {
+          "path": ".clj-kondo/imports/funcool/promesa/config.edn",
+          "mode": "100644",
+          "bytes": 492,
+          "sha256": "8a4630da65dd79f5ee0a9622506280b8fad96f822bcf4c6320e4219f9e4df6ed",
+          "base_oid": "1844f77c5a6369be0fb2c8f6519acd70c3e516b9"
+        },
+        {
+          "path": ".clj-kondo/imports/metosin/malli/config.edn",
+          "mode": "100644",
+          "bytes": 114,
+          "sha256": "4adba0583d80d7ffcb98b28583dd4d68069205db26089ddfed49c016d1803bda",
+          "base_oid": "0f8b25ccfd9c80aefea40f69399f90ce801f133f"
+        },
+        {
+          "path": ".env.example",
+          "mode": "100644",
+          "bytes": 583,
+          "sha256": "f23293bb2d1377c2011483791a96d09cf42b5142990ed6babb6286aa7040c101",
+          "base_oid": "8dbe44507135656720ffb9d8f78c34db59f064d8"
+        },
+        {
+          "path": ".github/workflows/auto-merge.yml",
+          "mode": "100644",
+          "bytes": 488,
+          "sha256": "bd75ec9b24506df006ef615221a1d585dca7cabe20c5d73fab8c2f71c6a4adf2",
+          "base_oid": "cc604230142e6fd979e48ed31af5e5dbb63506e1"
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "mode": "100644",
+          "bytes": 1029,
+          "sha256": "46c9a4309cb6be01422d8f6aa5694ae808cead8cf2b72edc3da4f954bcd53dae",
+          "base_oid": "e0fa4fe1776c529eef443b9bea978f1d9c402e04"
+        },
+        {
+          "path": ".github/workflows/kanban-sync.yml",
+          "mode": "100644",
+          "bytes": 615,
+          "sha256": "d05da60fc891e15772fae7105ebf1b2689c8470b7009ccbbd9718e8e2fc8358e",
+          "base_oid": "75b8b75a30442379797fb96528003911ad95891c"
+        },
+        {
+          "path": ".github/workflows/review-resolution-gate.yml",
+          "mode": "100644",
+          "bytes": 479,
+          "sha256": "0ed56d84f9625ab4cbdd6a864f8ad8ae332a448c2c4c873d6f2bcaf22c547b53",
+          "base_oid": "f0a4400f148cd7c4bfabab2c5f14d2768343b1c5"
+        },
+        {
+          "path": ".gitignore",
+          "mode": "100644",
+          "bytes": 134,
+          "sha256": "c6ff2bba03c391e7ab2991965c8c1b1128210ca04d19d5fd21e0b7da5a08dd74",
+          "base_oid": "51a450640b469665d56d209c25d1e673204ad6cf"
+        },
+        {
+          "path": "AGENTS.md",
+          "mode": "100644",
+          "bytes": 5573,
+          "sha256": "6e215ac8b08e82871e88e5a760a08ff31d132658a8e6e00cf6b37ee5d4aa7819",
+          "base_oid": "146c8c00117e45fb93036d59f663ae63700e16ae"
+        },
+        {
+          "path": "Dockerfile",
+          "mode": "100644",
+          "bytes": 358,
+          "sha256": "08a67d66f385f25ea3d1f73173c3eb8ea839c490fd90e60ee3b094d90db87f88",
+          "base_oid": "335df2a3e1f6af440868d328280f983a899ee9b4"
+        },
+        {
+          "path": "README.md",
+          "mode": "100644",
+          "bytes": 3357,
+          "sha256": "e67ddabc4834906d85850d1ae59e89ff5a0ac8e479e3496a8531c348b921d16a",
+          "base_oid": "1164abd6dff7c3bd36985545aff92165a1354471"
+        },
+        {
+          "path": "deps.edn",
+          "mode": "100644",
+          "bytes": 341,
+          "sha256": "f2a95786fc94d912a1ff78a5c7f1928c12669f5ada3ed0b4ffe3e1f21d132a53",
+          "base_oid": "f765302c788224596948c8694c31308e40f10502"
+        },
+        {
+          "path": "docker-compose.yml",
+          "mode": "100644",
+          "bytes": 1240,
+          "sha256": "45b1403a9d0d0542b1c35851333c1f595d95dde8170c0ae904fa9a0db2d32a7c",
+          "base_oid": "54f3f2ee725cf768b785cbdf09c50b4e6dd9739c"
+        },
+        {
+          "path": "docs/axxium-kernel-spec-v2.md",
+          "mode": "100644",
+          "bytes": 12547,
+          "sha256": "81645a2b53e3f2e77d971cb4a1b618ad1b77a8e2e814ebe665cebf04e070a36d",
+          "base_oid": "8cf373b05f21550b7797d6bafe9373bb65241ed6"
+        },
+        {
+          "path": "docs/axxium-kernel-spec.md",
+          "mode": "100644",
+          "bytes": 7745,
+          "sha256": "ef671e6f63fb9d14a9e113c7d5444876264fbb2a1526c043ea5e51b3cdaae6b7",
+          "base_oid": "3a96bb8dac76dd1dac2a2d43fe23591afc8dbd44"
+        },
+        {
+          "path": "docs/axxium-synthesis.md",
+          "mode": "100644",
+          "bytes": 7320,
+          "sha256": "7bbe19018cf9a5df7605a3a0dbde70b48e6d9a36f38735c18917cf94c1bd7750",
+          "base_oid": "b44a2d08a0b1d941ae7f5b444124f907ee8775bb"
+        },
+        {
+          "path": "docs/open-hax-octave-commons-axxium.md",
+          "mode": "100644",
+          "bytes": 966,
+          "sha256": "fcb18925bfc044f845b571b13355ac2d2d666a64763d44f6bb388aaf87a913a6",
+          "base_oid": "c5c06ed666fd1892aad93f47b4f42cd9df5e1850"
+        },
+        {
+          "path": "kanban/axxium-discord-oauth.md",
+          "mode": "100644",
+          "bytes": 1199,
+          "sha256": "6241f6bfdc5c097c9e60a95da0461e3d74faa5466e113c49d4430c5c8751e94e",
+          "base_oid": "ed917c0580a068d71f466a861f0567ce7dddafa7"
+        },
+        {
+          "path": "kanban/axxium-github-workflow.md",
+          "mode": "100644",
+          "bytes": 6637,
+          "sha256": "c823b180f8289771cb79770ab194815a59018a6472d19898ed7d236ae5cde40a",
+          "base_oid": "082baab9edf8d11954d2cd2638e0e3361b5de81b"
+        },
+        {
+          "path": "kanban/axxium-knoxx-identity-migration.md",
+          "mode": "100644",
+          "bytes": 1601,
+          "sha256": "302b4db8522fccc5b434e6239ff9d35455878fa2f02d3d42e3b57389d91acaf8",
+          "base_oid": "2c0f35edbfa11ecd7da5f32c2287872ed21fe4dd"
+        },
+        {
+          "path": "kanban/axxium-openplanner-identity-migration.md",
+          "mode": "100644",
+          "bytes": 1482,
+          "sha256": "68badd30efafa68e83c3eae60964f551e1bc1a68e7d8afba5a53d794b23e2eb4",
+          "base_oid": "1abd081deaed3e40116040b277ef0dc0e1a2b741"
+        },
+        {
+          "path": "kanban/axxium-proxx-identity-migration.md",
+          "mode": "100644",
+          "bytes": 1704,
+          "sha256": "b84e7e0254b1c041305dec1e2e7118db23f3c4ca9b21cf7495a962dce44f16f7",
+          "base_oid": "1010d9a31599866e7f1dd315429a36074e496fd6"
+        },
+        {
+          "path": "kanban/axxium-service-deployment.md",
+          "mode": "100644",
+          "bytes": 1398,
+          "sha256": "666fae983ec682a015f22ba34026bc4ffee6bcf5d0d8ca40e4ab0f9f53dc68c6",
+          "base_oid": "e8a632cd2383a3012a8b71e3eb9a87ba9b80abac"
+        },
+        {
+          "path": "kanban/openhax.kanban.json",
+          "mode": "100644",
+          "bytes": 59,
+          "sha256": "d956658c86803c725ea66c0ef148aa72ea9bc2f07d075f21288f4f264af6abb9",
+          "base_oid": "d7953748e4e87e74e8abd57b02ef12d2a6dd502c"
+        },
+        {
+          "path": "package-lock.json",
+          "mode": "100644",
+          "bytes": 51592,
+          "sha256": "6d38a247e31ff17637f1162c6724470fef77323e4093d153467f5917b9049681",
+          "base_oid": "40f35a71a7484b55fb183b7959f4e74f2b2bc9ba"
+        },
+        {
+          "path": "package.json",
+          "mode": "100644",
+          "bytes": 691,
+          "sha256": "0e5ed5de7f667aa368b33f666e7c6cf551dcd33d539ec700a6af76af7c699a67",
+          "base_oid": "93cc8d33bdb0b08eaa8971ddb2f6937a499e7169"
+        },
+        {
+          "path": "package.prod.json",
+          "mode": "100644",
+          "bytes": 399,
+          "sha256": "fac110e9a234fa61cd3eb2ea7f913bd8de5647fdf2257b7bdbf146f63e92b39a",
+          "base_oid": "9ab0c8adaefc4f4911fb4865ace27fb9d18be8ad"
+        },
+        {
+          "path": "resources/public/index.html",
+          "mode": "100644",
+          "bytes": 3702,
+          "sha256": "92ac3260c2567ee89cf36a7e13278a30077c788885a529a18472c1ad2f49111f",
+          "base_oid": "cbff78f2d27200881f26da67002d66b8a01481ed"
+        },
+        {
+          "path": "scripts/check-deployment-boundary.mjs",
+          "mode": "100644",
+          "bytes": 4417,
+          "sha256": "5dc30e43d4313fc68105941a490ebe42c5a45eea8d2f2caa581b4be54a6eb11e",
+          "base_oid": "4f225e0a1071837397e833ad3da0987c3a90d37e"
+        },
+        {
+          "path": "scripts/check-js-boundary.mjs",
+          "mode": "100644",
+          "bytes": 1856,
+          "sha256": "303a9132e9a0c1ce2b66e5d0e38ab1098edf5c030f0d838ffb1892d95b91873e",
+          "base_oid": "a94fa3e250b78437a7f294da57e8b6bf89a2de72"
+        },
+        {
+          "path": "shadow-cljs.edn",
+          "mode": "100644",
+          "bytes": 1546,
+          "sha256": "2a145eec2b63fa18245ba2a342d563b38f9e84b39ec764c1e26dedd84a102fb4",
+          "base_oid": "64231c066923da04992f27882d0b49f414250d4d"
+        },
+        {
+          "path": "src/cljs/axxium/auth/session.cljs",
+          "mode": "100644",
+          "bytes": 3721,
+          "sha256": "90eeabb012e9506a896432cef3450d1fd5c2af6dae3452c58d270623a4840820",
+          "base_oid": "1a276ddbc8950476d41a36e3e494ad60891a418e"
+        },
+        {
+          "path": "src/cljs/axxium/auth/token.cljs",
+          "mode": "100644",
+          "bytes": 1777,
+          "sha256": "1a18ea97ecd69779ed1be39af6c849933898c3d0b6ab39818bf61783b1a1b315",
+          "base_oid": "ee148a738071d4999f9b4b3b2574e2c6d367d6eb"
+        },
+        {
+          "path": "src/cljs/axxium/config.cljs",
+          "mode": "100644",
+          "bytes": 1865,
+          "sha256": "01d49c6eda071d6ff72026d4d5c38fdbf9b69731eb1f7a65028bc62f7b6b2446",
+          "base_oid": "bdb7fc3a0dd324f97534a1db566dcdbf19cb34f5"
+        },
+        {
+          "path": "src/cljs/axxium/db.cljs",
+          "mode": "100644",
+          "bytes": 2398,
+          "sha256": "fb3a0d44054823c2c0b51fe36f7bb13cb9ae258ad2c105dad1275b0cab2e5a7f",
+          "base_oid": "cf19fc4f804ee7e000d5837dc3bbd39e5be79016"
+        },
+        {
+          "path": "src/cljs/axxium/extern/bcrypt.cljs",
+          "mode": "100644",
+          "bytes": 450,
+          "sha256": "10b0307b80b803a1f93962d73927b45fb6bdee99748b280f6a790808bea4fbfc",
+          "base_oid": "7beea7c48fa8862d72019faa71c6dea7efccc323"
+        },
+        {
+          "path": "src/cljs/axxium/extern/jose.cljs",
+          "mode": "100644",
+          "bytes": 188,
+          "sha256": "cb781f7ff48fc9dcc0b34634154e5d46f0b97a2d57c470f0cfa816027f141573",
+          "base_oid": "206b22a0367b183d6e1f05a60b2ccfd8dedbe3bb"
+        },
+        {
+          "path": "src/cljs/axxium/extern/pg.cljs",
+          "mode": "100644",
+          "bytes": 1241,
+          "sha256": "29d56670b873b4af97cc701ac50552ed7d8e17534c5c6f8c348cef61d278eace",
+          "base_oid": "d703fa0b2e7c35170bb77aaae988384b4077e79f"
+        },
+        {
+          "path": "src/cljs/axxium/routes/actor.cljs",
+          "mode": "100644",
+          "bytes": 4016,
+          "sha256": "afbaea8d463ce86c748e1de4d8f3522656d4b9ab872d34da9f860bb7c20e97aa",
+          "base_oid": "e9f8394cf8e08e394dd77b37bd7b7c358fcd9762"
+        },
+        {
+          "path": "src/cljs/axxium/routes/auth.cljs",
+          "mode": "100644",
+          "bytes": 7299,
+          "sha256": "74fb20a26bc58a566ddd36bc25ee5dba6c92d3fd0bbf1f855249ad0b66c0581f",
+          "base_oid": "c56c6ba50cf053c0f54d1122dbc177985c9196e7"
+        },
+        {
+          "path": "src/cljs/axxium/routes/health.cljs",
+          "mode": "100644",
+          "bytes": 860,
+          "sha256": "ba2bfd66f2d5df3d6ad6320ab32e6c19a0e83645543f1b9a588342972fc1ebe1",
+          "base_oid": "b58c49d65cd7a1dcf0de3f2ea1a25cdf1d15d0f6"
+        },
+        {
+          "path": "src/cljs/axxium/schema.cljs",
+          "mode": "100644",
+          "bytes": 4472,
+          "sha256": "ee5bb98a55e7c2b2acb90cbdad617e2250496ad78682ef8cd4ef611f2770455f",
+          "base_oid": "fc4a7500144245f1133d2d2b45089ca7530c2e07"
+        },
+        {
+          "path": "src/cljs/axxium/server.cljs",
+          "mode": "100644",
+          "bytes": 2460,
+          "sha256": "aed7bae437ec6a580a4f3352e4dcd2a71ea58c32b074e828a81a518b64aeec7a",
+          "base_oid": "8e87dc55dcdf5c6f26d536da4402fe344aaad4f9"
+        },
+        {
+          "path": "src/cljs/axxium/shape/db.cljs",
+          "mode": "100644",
+          "bytes": 5478,
+          "sha256": "ef820317428b25ecb02cb0e8bdd0d456ea5b80a5ca303d5f14ffc558ea6b5317",
+          "base_oid": "559d514a10e997cea36254b69067b77364e7da44"
+        }
+      ],
+      "returned_uuid": "axxium-github-workflow",
+      "frontmatter": {
+        "category": "infrastructure",
+        "labels": [
+          "axxium",
+          "github",
+          "ci",
+          "workflow",
+          "deployment"
+        ],
+        "points": "5",
+        "source": "axxium/kanban/axxium-github-workflow.md",
+        "title": "Set up GitHub workflow for Axxium (feat -> PR -> staging -> main)",
+        "priority": "P1",
+        "status": "todo",
+        "uuid": "axxium-github-workflow",
+        "created_at": "2026-06-02T00:00:00Z"
+      },
+      "native_read_exit": 0,
+      "visibility_not_validation_ready_admission": true,
+      "no_zero_write_attempt_claim": true
+    }
+  ]
+}
