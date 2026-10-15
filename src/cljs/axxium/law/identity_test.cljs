@@ -32,3 +32,55 @@
   (is (false? (actor/valid-credential-id? 42)))
   (is (false? (actor/valid-credential-id?
                "e619cb36-f788-457d-ec3f-76d5fd47d1cc\n"))))
+
+(deftest concurrent-binding-admission-classifies-winners
+  (is (= :missing (atproto/concurrent-binding-admission "actor-a" nil)))
+  (is (= :same-actor (atproto/concurrent-binding-admission "actor-a" {:id "actor-a"})))
+  (is (= :other-actor (atproto/concurrent-binding-admission "actor-a" {:id "actor-b"}))))
+
+(deftest auth-state-capacity-admission-decides-new-keys
+  (is (= :admit (atproto/auth-state-capacity-admission 3 3 true)))
+  (is (= :admit (atproto/auth-state-capacity-admission 2 3 false)))
+  (is (= :refuse (atproto/auth-state-capacity-admission 3 3 false))))
+
+(deftest oauth-saved-state-contract
+  (is (true? (atproto/valid-oauth-state-store-key? "state-abc")))
+  (is (false? (atproto/valid-oauth-state-store-key? "")))
+  (is (false? (atproto/valid-oauth-state-store-key? nil)))
+  (is (true? (atproto/valid-oauth-saved-state?
+              {:iss "https://bsky.social"
+               :verifier "abc"
+               :auth-method {:method "none"}
+               :dpop-jwk {:kty "EC" :crv "P-256" :x "xcoord" :y "ycoord" :d "dpriv"}})))
+  (is (true? (atproto/valid-oauth-saved-state?
+              {:iss "https://bsky.social"
+               :verifier "abc"
+               :auth-method {:method "private_key_jwt" :kid "k1"}
+               :dpop-jwk {:kty "EC" :crv "P-256" :x "xcoord" :y "ycoord" :d "dpriv"}
+               :app-state "link|actor|tok"})))
+  (is (true? (atproto/valid-oauth-saved-state?
+              {:iss "https://bsky.social"
+               :verifier "abc"
+               :auth-method {:method "none"}
+               :dpop-jwk {:kty "OKP" :crv "Ed25519" :x "xcoord" :d "dpriv"}})))
+  (is (true? (atproto/valid-oauth-saved-state?
+              {:iss "https://bsky.social"
+               :verifier "abc"
+               :auth-method {:method "none"}
+               :dpop-jwk {:kty "RSA" :n "modulus" :e "AQAB" :d "dpriv"}})))
+  ;; kty alone is insufficient — private members required for SDK import
+  (is (false? (atproto/valid-oauth-saved-state?
+               {:iss "https://bsky.social"
+                :verifier "abc"
+                :auth-method {:method "none"}
+                :dpop-jwk {:kty "EC"}})))
+  (is (false? (atproto/valid-oauth-saved-state?
+               {:iss "https://bsky.social"
+                :verifier "abc"
+                :auth-method {:method "none"}
+                :dpop-jwk {:kty "EC" :crv "P-256" :x "x" :y "y"}})))
+  (is (false? (atproto/valid-oauth-saved-state? {})))
+  (is (false? (atproto/valid-oauth-saved-state?
+               {:iss "https://bsky.social" :verifier "abc"
+                :auth-method {:method "none"}}))))
+

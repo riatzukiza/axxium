@@ -2,6 +2,7 @@
   "AT Protocol OAuth client boundary. The official SDK verifies issuer, account
    DID, PKCE, PAR, and DPoP. OAuth tokens are revoked after identity binding."
   (:require [axxium.config :as cfg]
+            [axxium.law.atproto :as atproto-law]
             ["@atproto-labs/simple-store-memory" :refer [SimpleStoreMemory]]
             ["@atproto/oauth-client-node" :refer [NodeOAuthClient]]))
 
@@ -26,10 +27,117 @@
         (when (identical? (.get locks key) drained)
           (.delete locks key))))))
 
+(def ^:private oauth-ttl-ms 1800000)
+;; Browser state cookie maxAge is 300s (extern.http/set-state-cookie!). The
+;; SDK writes authorization state during authorize! before the route can set
+;; that cookie, so the store TTL includes a margin for PAR/authorize latency
+;; and still stays far below the 30-minute session TTL. sessionStore keeps
+;; oauth-ttl-ms because sessions are revoked after binding.
+(def ^:private state-cookie-max-age-ms 300000)
+(def ^:private auth-state-authorize-margin-ms 60000)
+(def auth-state-ttl-ms (+ state-cookie-max-age-ms auth-state-authorize-margin-ms))
+(def ^:private oauth-max-entries 1024)
+
 (defn new-oauth-store
-  "Bound abandoned OAuth state and short-lived SDK sessions in memory."
+  "Bound short-lived SDK sessions in memory (LRU; sessions are revoked right
+   after identity binding, so eviction only drops already-finished work)."
   []
-  (SimpleStoreMemory. #js {:ttl 1800000 :max 1024}))
+  (SimpleStoreMemory. #js {:ttl oauth-ttl-ms :max oauth-max-entries}))
+
+(defn state-store-full-error []
+  (ex-info "AT Protocol authorization state store is full"
+           {:status 503 :axxium/reason :atproto/state-store-full}))
+
+(defn state-store-full? [error]
+  (= :atproto/state-store-full (:axxium/reason (ex-data error))))
+
+
+(defn- project-dpop-jwk
+  "Keep the private JWK members the law contract requires for each kty."
+  [jwk]
+  (let [kty (or (:kty jwk) (get jwk "kty"))
+        get* (fn [k] (or (get jwk k) (get jwk (name k))))]
+    (case kty
+      "EC" {:kty "EC" :crv (get* :crv) :x (get* :x) :y (get* :y) :d (get* :d)}
+      "OKP" {:kty "OKP" :crv (get* :crv) :x (get* :x) :d (get* :d)}
+      "RSA" {:kty "RSA" :n (get* :n) :e (get* :e) :d (get* :d)}
+      ;; Unknown/missing kty: leave a minimal map so the contract refuses it.
+      {:kty kty})))
+
+(defn- oauth-saved-state-claims
+  "Project a NodeSavedState JS handle (or CLJ test fixture) into the law contract."
+  [value]
+  (let [auth (if (map? value)
+               (:auth-method value)
+               (js->clj (aget value "authMethod") :keywordize-keys true))
+        jwk (if (map? value)
+              (:dpop-jwk value)
+              (js->clj (aget value "dpopJwk") :keywordize-keys true))]
+    {:iss (if (map? value) (:iss value) (aget value "iss"))
+     :verifier (if (map? value) (:verifier value) (aget value "verifier"))
+     :auth-method {:method (or (:method auth) (get auth "method"))
+                   :kid (or (:kid auth) (get auth "kid"))}
+     :dpop-jwk (project-dpop-jwk jwk)
+     :app-state (if (map? value) (:app-state value) (aget value "appState"))}))
+
+(defn- admit-oauth-saved-state!
+  "Refuse a state-store value that is outside `axxium.law.atproto/OAuthSavedState`."
+  [value]
+  (let [claims (oauth-saved-state-claims value)
+        ;; Drop nil optional kid for method none; drop nil app-state.
+        claims (cond-> claims
+                 (nil? (:kid (:auth-method claims)))
+                 (update :auth-method dissoc :kid)
+                 (nil? (:app-state claims))
+                 (dissoc :app-state))]
+    (when-not (atproto-law/valid-oauth-saved-state? claims)
+      (throw (ex-info "OAuth state-store value is outside its contract"
+                      {:contract :axxium.law.atproto/OAuthSavedState})))
+    value))
+
+(defn new-oauth-state-store
+  "Bounded in-memory authorization state that never evicts a live entry.
+   Expired entries are purged first; a new key at capacity is refused with
+   `state-store-full-error`, so a burst of public sign-in starts can't push
+   out an earlier user's state before its callback arrives. Keys and values
+   are admitted only when they satisfy `axxium.law.atproto` store contracts."
+  ([] (new-oauth-state-store {}))
+  ([{:keys [ttl-ms max now] :or {ttl-ms auth-state-ttl-ms max oauth-max-entries now #(js/Date.now)}}]
+   (let [entries (js/Map.)
+         live (fn [k]
+                (when-let [entry (.get entries k)]
+                  (if (< (now) (:expires entry))
+                    entry
+                    (do (.delete entries k) nil))))
+         purge! (fn []
+                  (let [t (now)]
+                    (.forEach entries (fn [entry k _]
+                                        (when-not (< t (:expires entry))
+                                          (.delete entries k))))))]
+     #js {:get (fn [k]
+                 (when-let [entry (live k)]
+                   (let [value (:value entry)]
+                     (when-not (atproto-law/valid-oauth-state-store-key? k)
+                       (.delete entries k)
+                       (throw (ex-info "OAuth state-store key failed its contract on read"
+                                       {:contract :axxium.law.atproto/OAuthStateStoreKey})))
+                     (admit-oauth-saved-state! value))))
+          :set (fn [k value]
+                 (when-not (atproto-law/valid-oauth-state-store-key? k)
+                   (throw (ex-info "OAuth state-store key is outside its contract"
+                                   {:contract :axxium.law.atproto/OAuthStateStoreKey})))
+                 (admit-oauth-saved-state! value)
+                 (let [already (some? (live k))]
+                   (when-not already
+                     (when (<= max (.-size entries)) (purge!)))
+                   (case (atproto-law/auth-state-capacity-admission
+                          (.-size entries) max already)
+                     :admit nil
+                     :refuse (throw (state-store-full-error))))
+                 (.set entries k {:value value :expires (+ (now) ttl-ms)})
+                 nil)
+          :del (fn [k] (.delete entries k) nil)
+          :clear (fn [] (.clear entries) nil)})))
 
 (defn- metadata []
   (let [base (cfg/get-in-config [:axxium/public-base-url])
@@ -55,7 +163,7 @@
   (delay
     (NodeOAuthClient.
      #js {:clientMetadata (metadata)
-          :stateStore (new-oauth-store)
+          :stateStore (new-oauth-state-store)
           :sessionStore (new-oauth-store)
           :requestLock with-local-oauth-lock})))
 

@@ -2,12 +2,67 @@
   (:require [axxium.extern.atproto-oauth :as oauth]
             [cljs.test :refer [async deftest is]]))
 
+(defn- fixture-saved-state
+  "Minimal NodeSavedState-shaped value for store tests."
+  [label]
+  #js {:iss "https://bsky.social"
+       :verifier (str "verifier-" label)
+       :authMethod #js {:method "none"}
+       :dpopJwk #js {:kty "EC" :crv "P-256" :x "x" :y "y" :d "d"}})
+
+
 (deftest abandoned-authorizations-are-bounded
   (let [store (oauth/new-oauth-store)]
     (doseq [n (range 1025)]
       (.set store (str "state-" n) n))
     (is (nil? (.get store "state-0")))
     (is (= 1024 (.get store "state-1024")))))
+
+(deftest live-authorization-state-is-never-evicted
+  (let [now (atom 0)
+        store (oauth/new-oauth-state-store {:ttl-ms 1000 :max 3 :now (fn [] @now)})
+        entry fixture-saved-state
+        refusal (fn [k] (try (.set store k (entry "new")) nil (catch :default e e)))]
+    (doseq [n (range 3)] (.set store (str "state-" n) (entry n)))
+    (let [error (refusal "state-3")]
+      (is (= 503 (:status (ex-data error))) "a start at capacity is refused, not admitted by eviction")
+      (is (oauth/state-store-full? error)))
+    (is (some? (.get store "state-0")) "an earlier user's live state survives later starts")
+    (.set store "state-1" (entry "replaced"))
+    (is (some? (.get store "state-1")) "rewriting a live key needs no new capacity")
+    (.del store "state-2")
+    (.set store "state-3" (entry 3))
+    (is (some? (.get store "state-3")) "a consumed state frees capacity")
+    (reset! now 1000)
+    (is (nil? (.get store "state-0")) "state expires at its TTL")
+    (.set store "state-4" (entry 4))
+    (.set store "state-5" (entry 5))
+    (is (some? (.get store "state-5")) "expired entries free capacity")
+    (is (nil? (refusal "state-6")) "freed capacity admits a new start")))
+
+(deftest authorization-state-ttl-matches-browser-cookie
+  ;; Cookie maxAge is 300s; store TTL adds a 60s authorize/PAR margin so state
+  ;; cannot expire while the cookie is still valid after a slow authorize!.
+  (is (= 360000 oauth/auth-state-ttl-ms))
+  (let [now (atom 0)
+        store (oauth/new-oauth-state-store {:max 2 :now (fn [] @now)})
+        value (fixture-saved-state "early")]
+    (.set store "early" value)
+    (reset! now 359999)
+    (is (identical? value (.get store "early")) "state remains live through cookie lifetime plus margin")
+    (reset! now 360000)
+    (is (nil? (.get store "early")) "state expires after the authorize margin")))
+
+(deftest oauth-state-store-rejects-contract-violations
+  (let [store (oauth/new-oauth-state-store {:max 2})
+        refuse (fn [k v] (try (.set store k v) :admitted (catch :default e e)))
+        ok (fixture-saved-state "ok")]
+    (is (ex-data (refuse "" ok)) "empty key is refused")
+    (is (ex-data (refuse "k" "primitive")) "primitive string value is refused")
+    (is (ex-data (refuse "k" #js {})) "empty object missing NodeSavedState fields is refused")
+    (is (ex-data (refuse "k" #js {:iss "https://bsky.social"})) "partial saved-state is refused")
+    (.set store "k" ok)
+    (is (identical? ok (.get store "k")))))
 
 (deftest configured-client-metadata-is-accepted-by-the-sdk
   (let [metadata (oauth/client-metadata)]
