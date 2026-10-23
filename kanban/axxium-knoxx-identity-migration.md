@@ -1,13 +1,14 @@
 ---
-uuid: axxium-knoxx-identity-migration
-title: "Migrate Knoxx identity management to Axxium"
-status: todo
-priority: P0
+category: "migration"
 labels: ["axxium", "knoxx", "identity", "migration", "auth"]
-created_at: "2026-06-02T00:00:00Z"
+write-id: "1792727144592-0.tv47pj7e9aloxa1ri6"
+points: "8"
 source: "axxium/kanban/axxium-knoxx-identity-migration.md"
-points: 8
-category: migration
+title: "Migrate Knoxx identity management to Axxium"
+priority: "P0"
+status: "todo"
+uuid: "axxium-knoxx-identity-migration"
+created_at: "2026-06-02T00:00:00Z"
 ---
 
 # Migrate Knoxx Identity Management to Axxium
@@ -113,3 +114,8 @@ through a federated model. Original requirements, acceptance criteria, estimate
 and lifecycle fields are retained; expanded sizing/decomposition and lawful
 Rheos admission remain part of current-head planning review. No implementation,
 review approval, native transition or live deployment is claimed here.
+
+---
+2026-10-23: Rheos 0.2.0 installed and read-task/read-board/drift verified using this board explicitly. Shared-login plan is published; readiness remains pending current-head planning review and receipt-owner correction qualification. No deployment claimed.
+
+---
