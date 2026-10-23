@@ -74,7 +74,14 @@ connection admission and revalidate established transports at least every ten
 seconds, closing earlier on token expiry or an observed refusal/outage. New
 protected requests require current authoritative evidence, not a stale-cache
 allow. Clock skew is bounded to five seconds and never extends revocation
-freshness. Use an injectable clock in adapter and law tests.
+freshness. Use an injectable clock in adapter and law tests. Authority adapters enforce a two-second connect deadline,
+a three-second response-read deadline and a five-second total deadline including
+DNS, TLS, redirects, body reads and status decoding. The earliest deadline wins;
+caller cancellation aborts the underlying operation and discards any late result.
+No timeout restarts a freshness window. A stalled authority returns retryable 503
+before HTTP effects or transport upgrade; established streams stop delivery and
+use the preceding typed failure/close rules. Tests must cover connect success
+followed by stalled headers/body and cancellation, not only immediate failures.
 
 | Transport | Before response/upgrade | After connection admission |
 | --- | --- | --- |
@@ -128,7 +135,13 @@ nonce with an atomic replay record retained through its 120-second request
 validity plus a five-second clock bound. A duplicate is refused before dispatch;
 retries require a fresh authorization and request identifier and must not
 silently repeat a completed side effect. A reconnect revalidates current grants
-and cannot resurrect a revoked node.
+and cannot resurrect a revoked node. The canonical operation is the normalized HTTP method and
+exact allowlisted inference/catalog route, plus the model and any request-affecting
+query fields; bind it to the body digest, actor, tenant, node and grant scope before
+dispatch. Unknown routes, route aliases outside that allowlist, administrative or
+credential operations, and reusing an admitted grant for a different operation
+are refused before effects. A connection lease does not itself authorize each
+RPC operation.
 
 Remove retired Big Ussy endpoints from active desired configuration without
 rewriting historical provenance. Preserve local operation and data; loss of a
@@ -196,7 +209,11 @@ stories; preserve their original requirements and existing provenance.
    model/relay logs bind the same request ID, issuer/actor, tenant, audience,
    grant and expected served-by node. Use a second unrelated actor and an
    expired/wrong-audience token as negative controls: neither may retrieve the
-   record or dispatch inference. The production acceptance then repeats with
+   record or dispatch inference. Also retain a valid product-audience identity token
+   for the same actor while independently removing/revoking its relay grant,
+   changing the grant tenant or source node, and changing the canonical operation.
+   Each case must refuse dispatch before effects; shared identity alone never
+   authorizes a node, tenant, model or operation. The production acceptance then repeats with
    the operator-authorized real creative record. Synthetic model output,
    sources attached without an answer, unrelated plausible text, an HTTP 200
    containing an upstream error, and a connected socket are explicit failures.
