@@ -1,7 +1,7 @@
 ---
 category: "migration"
 labels: ["axxium", "knoxx", "identity", "migration", "auth"]
-write-id: "1792727144592-0.tv47pj7e9aloxa1ri6"
+write-id: "1792738408686-0.3nlo2irl74yz6cq8t51"
 points: "8"
 source: "axxium/kanban/axxium-knoxx-identity-migration.md"
 title: "Migrate Knoxx identity management to Axxium"
@@ -117,5 +117,9 @@ review approval, native transition or live deployment is claimed here.
 
 ---
 2026-10-23: Rheos 0.2.0 installed and read-task/read-board/drift verified using this board explicitly. Shared-login plan is published; readiness remains pending current-head planning review and receipt-owner correction qualification. No deployment claimed.
+
+Shared-login contract now specifies connect2s/read3s/total5s authority deadlines and cancellation, stalled-authority503/transport refusal tests, operation+model grant binding, and valid-identity negative controls for absent/revoked/wrong-tenant/wrong-node/operation grants. EDN config uses installed canonical Rheos. Source consumer392 and authority12 are implementation preparation; current-head review, owner completion adoption and deployment/browser qualification remain owed. Lifecycle unchanged.
+
+Observed 2026-10-23: user selected actor_ed43270c-5c06-43e6-9667-4c585fa63430; live Axxium confirms active actor, stored system-admin role, Google binding and current root session. Current release consumer/renewal/device candidate is open-hax/knoxx#394 on accepted main3409977b, replacing old stacked393. Native backend1872/9276 and frontend457/2049, production compile all pass zero compiler warnings. Root role does not select a local Knoxx membership. Product linkage, qualified deployment and real fleet browser/actor acceptance remain pending. No status transition or completion claim.
 
 ---
