@@ -1,7 +1,7 @@
 ---
 category: "migration"
 labels: ["axxium", "proxx", "identity", "migration", "auth"]
-write-id: "1792727357559-0.n9fe9js2prgjo2059cy"
+write-id: "1792738409314-0.eathyqjibfoq3f6x5cs"
 points: "8"
 source: "axxium/kanban/axxium-proxx-identity-migration.md"
 title: "Migrate Proxx identity management to Axxium"
@@ -102,5 +102,9 @@ review approval, native transition or live deployment is claimed here.
 
 ---
 2026-10-23: canonical Rheos 0.2.0 reads this board and writes comments successfully. Explicit missing-metadata completions appended using candidate Receipt River owner policy f77b872; raw history preserved. Current-head review and owner policy adoption remain required before release.
+
+Use canonical installed Rheos through EDN config; shared contract includes authority connect2s/read3s/total5s deadlines/cancellation and same-identity invalid node/tenant/operation grant controls. Proxx consumer456 is integrated onto current deployed main and staging; session renewal/device UX and relay-only node capability continue independently. Reviews and owner policy adoption remain prerequisites; no lifecycle or live deployment claim.
+
+Observed 2026-10-23: selected real Axxium actor_ed43270c-5c06-43e6-9667-4c585fa63430 verified active with current Google-backed root session. Each Proxx runtime had no users/memberships; existing product SqlCredentialStore explicitly provisioned default tenant owner for that qualified subject on droplet, Stealth and Yoga, with committed membership readback. Current source PR457 includes renewable/device browser login and literal/encoded bridge enrollment refusal. Extended scoped relay fixture passed22 groups on real owned PostgreSQL, including55second streamed response with renewal, replay and SQL key revocation. No OIDC activation, service restart or fleet deployment yet; review, final composed runtime and cross-host acceptance remain pending. No board status change.
 
 ---
