@@ -39,3 +39,27 @@ These are additional future acceptance controls for step 7/R1–R6 and AC1–AC4
 | Public refusal versus unavailable authority | Independently exercise proposed 401 invalid/missing/expired/revoked authentication, 403 verified-but-denied capability/membership/resource, and 503 timeout/unavailable/malformed/unknown-version/unverifiable-current-status authority. Reviewed suspended/retired-actor classification is consistent. No 200-to-allow coercion, anonymous/local credential fallback, stale-cache permission grant, protected effect or identity/key disclosure; streaming revocation is separately exercised. |
 
 All earlier full backend/CLJS/schema/boundary/frontend/human gates remain required. Mock status responses or synthetic recovery fixtures do not qualify production identity trust, real login continuity, operational rollback or Services staging. Owner decisions for migration epoch/provenance, recovery mode, response/error version and cache/revalidation bounds remain explicit before implementation.
+
+
+## Operator extension: shared login and three-host federation (2026-10-22)
+
+The operator authorized extending this existing plan and implementing shared
+Axxium login and Proxx federation across the replacement DigitalOcean droplet,
+Stealth and Yoga. The complete proposed extension is
+[Shared login and federation](shared-login-and-federation.md).
+
+It adds same-browser redirect SSO, separately approved new-device login, and
+identity-authorized relay-only inference with credentials retained at their
+source node. The same verified actor must reach both products on all three
+hosts. Existing local identities and provider/resource attribution must survive;
+authority outage must never revive stale local passwords or grants.
+
+The merged actor foundation is organization Axxium #30 (99e6c725); password
+delegation and recipient-bound identity transfer remain limited, distinct
+features. Neither is evidence that SSO already works. Seven owner-scoped
+implementation slices and nine positive/hostile acceptance groups are specified
+in the shared extension, including real browser flows and a Knoxx actor answer
+through a federated model. Original requirements, acceptance criteria, estimate
+and lifecycle fields are retained; expanded sizing/decomposition and lawful
+Rheos admission remain part of current-head planning review. No implementation,
+review approval, native transition or live deployment is claimed here.

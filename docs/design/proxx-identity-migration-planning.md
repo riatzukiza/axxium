@@ -76,3 +76,27 @@ Keep Factory/OpenAI/local/API-key provider accounts, pending OAuth/device operat
 Axxium must own and qualify a versioned token/session verification or introspection contract before Proxx relies on it. Its typed response must bind issuer, audience/resource, stable subject/actor/entity, session/token identity, current actor status, permissioned capabilities and their freshness/revocation evidence to the actual request. Raw DB-row normalization and authorized capability mutation remain explicit kernel prerequisites. Do not infer this API exists from JWT verification or from a stored actor/unexpired-session lookup. Proxx validates the response shape and provenance before applying its own restrictive tenant/provider policy; signature-only acceptance and an unavailable-status allow fallback are forbidden.
 
 Propose distinct public failure semantics for owner review: missing, malformed, invalid, expired or revoked credentials are authentication refusal (401); a verified active principal lacking current capabilities, tenant membership or resource permission is authorization refusal (403); a required authority that times out, is unavailable, returns malformed/unknown-version data or cannot establish current status/freshness is unavailable verification (503), with no protected effect. Suspended/retired actor classification must be fixed by the same provider-owned contract and applied consistently, never silently admitted or guessed from HTTP success. Preserve public error privacy without leaking account existence, key material or provider tokens. The exact versioned response/error contract, cache lifetime and streaming revalidation behavior need approval and positive/hostile evidence; these proposed codes are not claims about current Axxium routes.
+
+
+## Operator extension: shared login and three-host federation (2026-10-22)
+
+The operator authorized extending this existing plan and implementing shared
+Axxium login and Proxx federation across the replacement DigitalOcean droplet,
+Stealth and Yoga. The complete proposed extension is
+[Shared login and federation](shared-login-and-federation.md).
+
+It adds same-browser redirect SSO, separately approved new-device login, and
+identity-authorized relay-only inference with credentials retained at their
+source node. The same verified actor must reach both products on all three
+hosts. Existing local identities and provider/resource attribution must survive;
+authority outage must never revive stale local passwords or grants.
+
+The merged actor foundation is organization Axxium #30 (99e6c725); password
+delegation and recipient-bound identity transfer remain limited, distinct
+features. Neither is evidence that SSO already works. Seven owner-scoped
+implementation slices and nine positive/hostile acceptance groups are specified
+in the shared extension, including real browser flows and a Knoxx actor answer
+through a federated model. Original requirements, acceptance criteria, estimate
+and lifecycle fields are retained; expanded sizing/decomposition and lawful
+Rheos admission remain part of current-head planning review. No implementation,
+review approval, native transition or live deployment is claimed here.

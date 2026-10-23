@@ -74,3 +74,27 @@ Eight points remains the existing estimate. Proposed review batches are identity
 The whole outcome also requires owner-reviewed recovery authority and authenticated migration change provenance: keep Axxium identity/session/status/capability authority during rollback or fail closed until forward repair; never revive a pre-cutover local login/session/role/key snapshot. Preserve post-cutover created, invited and Axxium-only users and all product attribution without forced re-registration or repeat administrator bootstrap. Reconcile linking/account/credential/session/status/capability/membership/tenant API-key changes through versioned epochs and qualified owning watermarks, refusing stale/conflicting/unknown provenance. Factory/OpenAI/local/provider secrets and product state remain Proxx-owned.
 
 The design and matrix append proposed positive/concurrent/hostile recovery controls plus an Axxium-owned versioned verification/introspection contract. They distinguish proposed authentication refusal (401), verified-but-denied authorization (403), and unavailable/unverifiable mandatory authority (503), with explicit suspended/retired status decisions and no allow fallback. These are future owner decisions and acceptance proofs, not an implemented API or a claim of operational readiness. All original six requirements/four AC, Todo/P0/8, future full gates and ownership/receiving holds remain unchanged.
+
+
+## Operator extension: shared login and three-host federation (2026-10-22)
+
+The operator authorized extending this existing plan and implementing shared
+Axxium login and Proxx federation across the replacement DigitalOcean droplet,
+Stealth and Yoga. The complete proposed extension is
+[Shared login and federation](../docs/design/shared-login-and-federation.md).
+
+It adds same-browser redirect SSO, separately approved new-device login, and
+identity-authorized relay-only inference with credentials retained at their
+source node. The same verified actor must reach both products on all three
+hosts. Existing local identities and provider/resource attribution must survive;
+authority outage must never revive stale local passwords or grants.
+
+The merged actor foundation is organization Axxium #30 (99e6c725); password
+delegation and recipient-bound identity transfer remain limited, distinct
+features. Neither is evidence that SSO already works. Seven owner-scoped
+implementation slices and nine positive/hostile acceptance groups are specified
+in the shared extension, including real browser flows and a Knoxx actor answer
+through a federated model. Original requirements, acceptance criteria, estimate
+and lifecycle fields are retained; expanded sizing/decomposition and lawful
+Rheos admission remain part of current-head planning review. No implementation,
+review approval, native transition or live deployment is claimed here.
