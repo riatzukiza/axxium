@@ -69,6 +69,26 @@ operations; revocation closes active HTTP/WS/SSE/bridge grants according to the
 qualified freshness bound. Distinguish 401 authentication refusal, 403 denied
 capability, and 503 unavailable mandatory verification.
 
+The proposed maximum revocation freshness bound is 30 seconds; validate at
+connection admission and revalidate established transports at least every ten
+seconds, closing earlier on token expiry or an observed refusal/outage. New
+protected requests require current authoritative evidence, not a stale-cache
+allow. Clock skew is bounded to five seconds and never extends revocation
+freshness. Use an injectable clock in adapter and law tests.
+
+| Transport | Before response/upgrade | After connection admission |
+| --- | --- | --- |
+| HTTP | 401 invalid/missing/revoked identity; 403 denied current grant; 503 unavailable status authority, before effects | Streaming bodies use the stream behavior below; never attempt to replace already-sent headers. |
+| WebSocket | Refuse upgrade with the same 401/403/503 distinction | Close 1008 for invalid/revoked identity or denied grant; close 1013 for unavailable mandatory status. Stop message dispatch before closing. Close reasons contain no credentials or account details. |
+| SSE | Return 401/403/503 before sending event-stream headers | Emit one typed auth error event (unauthorized, forbidden or authority_unavailable) if the stream remains writable, then end it; always stop protected events even if the error write fails. |
+| Relay bridge | Refuse its HTTP/WS handshake by the preceding rules | Apply WS close semantics, invalidate node capability advertisement, refuse queued/new dispatch and cancel in-flight work where supported. Already committed effects remain audited and are not replayed. |
+
+Tests assert that every post-handshake path closes or stops protected delivery
+within the 30-second bound without trying to send an HTTP status after a WS
+upgrade. A request retried on another node needs a fresh admitted grant and
+request identity; transport failure is not permission to repeat a committed
+operation.
+
 ### New device approval
 
 Implement an expiring device authorization request with unpredictable device
@@ -82,8 +102,10 @@ requests refuse. A new laptop does not inherit another browser's session.
 Approval must not automatically grant system administration, copy provider
 credentials, bypass migration/account-link conflicts or authorize unknown
 applications. Codes/verification links must not carry access tokens, and
-polling/approval must enforce rate and origin/CSRF controls. Never trust an
-actor subject provided by the pending device.
+browser approval must enforce origin/CSRF controls. Token-endpoint polling
+must enforce rate, backoff, device-code/client binding and authorization checks
+without requiring a browser Origin header or CSRF cookie. Never trust an actor
+subject provided by the pending device.
 
 ## Federated inference contract
 
@@ -99,7 +121,14 @@ relay-only grants. Keep credentials on their source machines; no warm import
 or provider credential projection by default. Reject spoofed owner headers,
 arbitrary DID strings, cross-tenant grants, wrong-node audiences and routing
 loops. Audit each request's actor, tenant, source node and served-by provenance.
-A reconnect revalidates current grants and cannot resurrect a revoked node.
+Authenticate relay provenance at every hop. Bind the request identifier and
+body digest to the current actor, tenant, source node, intended audience and
+valid relay grant. Use an authenticated channel and a fresh source-node-bound
+nonce with an atomic replay record retained through its 120-second request
+validity plus a five-second clock bound. A duplicate is refused before dispatch;
+retries require a fresh authorization and request identifier and must not
+silently repeat a completed side effect. A reconnect revalidates current grants
+and cannot resurrect a revoked node.
 
 Remove retired Big Ussy endpoints from active desired configuration without
 rewriting historical provenance. Preserve local operation and data; loss of a
@@ -153,9 +182,24 @@ stories; preserve their original requirements and existing provenance.
 7. Disconnect/reconnect each laptop independently; verify healthy fallback or
    explicit unavailability, loop rejection, grant revalidation and node
    revocation. Big Ussy is absent from active route/relay configuration.
-8. Complete a real Knoxx actor answer using the indexed creative corpus and the
-   federated model path. Memory-source attachment, a healthy process, a model
-   listing or a connected socket alone do not satisfy this outcome.
+8. Define an isolated actor fixture, creative-memory-reader, bound to the
+   operator-configured Axxium issuer and its immutable fixture actor/entity
+   IDs, with only the product's explicit semantic-query/read and inference
+   grants in one tenant. Obtain a product-audience token through the tested
+   login flow; bind the relay node grant to the same verified actor and tenant.
+   Seed a known creative work in the fixture tenant (Glass Cathedral, with
+   known corpus record ID, title, file path and style metadata). In direct mode
+   require the actor to call semantic_query, then request a real completion
+   routed droplet-to-Stealth and separately droplet-to-Yoga. Pass only when
+   captured tool receipts return that seeded record, the answer states its
+   title and canonical file path with a metadata-supported style detail, and
+   model/relay logs bind the same request ID, issuer/actor, tenant, audience,
+   grant and expected served-by node. Use a second unrelated actor and an
+   expired/wrong-audience token as negative controls: neither may retrieve the
+   record or dispatch inference. The production acceptance then repeats with
+   the operator-authorized real creative record. Synthetic model output,
+   sources attached without an answer, unrelated plausible text, an HTTP 200
+   containing an upstream error, and a connected socket are explicit failures.
 9. Retain exact source/image/config identities, red/green law evidence,
    nonempty zero-warning builds/tests, current-head review and mandatory
    Services rollout qualification. Browser account approval is performed by
