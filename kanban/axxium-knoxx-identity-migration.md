@@ -89,3 +89,27 @@ Native CodeRabbit review `5448463764` at `431d3481c6d923b44503c4fa80899a423d2e11
 The design now proposes an Axxium-owned versioned `POST /api/auth/introspect` deliverable, closed portable boundary shapes, authenticated current actor/session/capability/freshness facts before Knoxx effects, and distinct 401 authentication rejection, 403 verified insufficient grant and retryable fail-closed 503 unknown/unimplemented/unavailable evidence. Method/path/version, service trust, freshness bounds and revision protocols require review before code; current actor-only `/api/auth/me`, raw row normalization or decoded claims do not implement the contract. Keep issuer signing keys and all credentials outside consuming authority, logs and browser projections.
 
 The whole migration also requires cutover epoch and authenticated per-account credential/account revision watermarks. The proposed recovery restores a qualified consumer route while retaining Axxium authority, invalidates changed legacy credentials, preserves post-cutover/new and existing users without re-registration, and never back-imports hashes or restores revoked access. Legacy-authority rollback needs separately reviewed complete writer-freeze/change/watermark proof; unknown or stale evidence holds the switch. Added future fixtures cover post-cutover password/reset, disable/revocation/rotation, new signup/invitation, user kinds, concurrent changes and replay before effects. All original full-scope law, adapter, human/browser, nonempty suite, zero-warning and owner integration/removal gates remain mandatory; no narrow pure fixture replaces them.
+
+
+## Operator extension: shared login and three-host federation (2026-10-22)
+
+The operator authorized extending this existing plan and implementing shared
+Axxium login and Proxx federation across the replacement DigitalOcean droplet,
+Stealth and Yoga. The complete proposed extension is
+[Shared login and federation](../docs/design/shared-login-and-federation.md).
+
+It adds same-browser redirect SSO, separately approved new-device login, and
+identity-authorized relay-only inference with credentials retained at their
+source node. The same verified actor must reach both products on all three
+hosts. Existing local identities and provider/resource attribution must survive;
+authority outage must never revive stale local passwords or grants.
+
+The merged actor foundation is organization Axxium #30 (99e6c725); password
+delegation and recipient-bound identity transfer remain limited, distinct
+features. Neither is evidence that SSO already works. Seven owner-scoped
+implementation slices and nine positive/hostile acceptance groups are specified
+in the shared extension, including real browser flows and a Knoxx actor answer
+through a federated model. Original requirements, acceptance criteria, estimate
+and lifecycle fields are retained; expanded sizing/decomposition and lawful
+Rheos admission remain part of current-head planning review. No implementation,
+review approval, native transition or live deployment is claimed here.

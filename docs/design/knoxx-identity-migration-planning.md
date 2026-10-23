@@ -85,3 +85,27 @@ After full migration and integration evidence, switch final admission/UI to Axxi
 Personal Axxium PR 1 federated actor/agent work and PR 2 Discord OAuth planning, and origin PRs 13/26, are overlap evidence requiring fresh source/merge guards. They are not inherited implementation or approval and do not cover this whole Knoxx migration. Issues 7/8 concern other consumers and remain separate. Issues 9/10 own deployment/workflow holds; no live environment, approval/cohort, default synchronization, token setting, operator account change or auto-merge activation is claimed. Root's publication guard is separate from this local planning contract.
 
 See the [whole verification matrix](../verification/knoxx-identity-migration-planning.md).
+
+
+## Operator extension: shared login and three-host federation (2026-10-22)
+
+The operator authorized extending this existing plan and implementing shared
+Axxium login and Proxx federation across the replacement DigitalOcean droplet,
+Stealth and Yoga. The complete proposed extension is
+[Shared login and federation](shared-login-and-federation.md).
+
+It adds same-browser redirect SSO, separately approved new-device login, and
+identity-authorized relay-only inference with credentials retained at their
+source node. The same verified actor must reach both products on all three
+hosts. Existing local identities and provider/resource attribution must survive;
+authority outage must never revive stale local passwords or grants.
+
+The merged actor foundation is organization Axxium #30 (99e6c725); password
+delegation and recipient-bound identity transfer remain limited, distinct
+features. Neither is evidence that SSO already works. Seven owner-scoped
+implementation slices and nine positive/hostile acceptance groups are specified
+in the shared extension, including real browser flows and a Knoxx actor answer
+through a federated model. Original requirements, acceptance criteria, estimate
+and lifecycle fields are retained; expanded sizing/decomposition and lawful
+Rheos admission remain part of current-head planning review. No implementation,
+review approval, native transition or live deployment is claimed here.
