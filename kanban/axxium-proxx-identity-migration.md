@@ -1,13 +1,14 @@
 ---
-uuid: axxium-proxx-identity-migration
-title: "Migrate Proxx identity management to Axxium"
-status: todo
-priority: P0
+category: "migration"
 labels: ["axxium", "proxx", "identity", "migration", "auth"]
-created_at: "2026-06-02T00:00:00Z"
+write-id: "1792727357559-0.n9fe9js2prgjo2059cy"
+points: "8"
 source: "axxium/kanban/axxium-proxx-identity-migration.md"
-points: 8
-category: migration
+title: "Migrate Proxx identity management to Axxium"
+priority: "P0"
+status: "todo"
+uuid: "axxium-proxx-identity-migration"
+created_at: "2026-06-02T00:00:00Z"
 ---
 
 # Migrate Proxx Identity Management to Axxium
@@ -98,3 +99,8 @@ through a federated model. Original requirements, acceptance criteria, estimate
 and lifecycle fields are retained; expanded sizing/decomposition and lawful
 Rheos admission remain part of current-head planning review. No implementation,
 review approval, native transition or live deployment is claimed here.
+
+---
+2026-10-23: canonical Rheos 0.2.0 reads this board and writes comments successfully. Explicit missing-metadata completions appended using candidate Receipt River owner policy f77b872; raw history preserved. Current-head review and owner policy adoption remain required before release.
+
+---
