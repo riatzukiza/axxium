@@ -108,7 +108,7 @@ All configuration is via environment variables:
 | `AXXIUM_ISS` | `JWT_ISSUER`, else `axxium` | Instance identifier sealed as the JWT `iss` |
 | `AXXIUM_SERVICE` | `promethean` | Service component of the audience |
 | `AXXIUM_ENV` | `NODE_ENV`, else `development` | Environment component of the audience and the `env` claim |
-| `JWT_AUDIENCE` | derived | Optional check only: must equal `AXXIUM_SERVICE+AXXIUM_ENV` (for example `promethean+development`). The audience is not configured independently |
+| `JWT_AUDIENCE` | unset | Optional check only: must equal `AXXIUM_SERVICE+AXXIUM_ENV` (for example `promethean+development`). Leave it unset. `docker-compose.yml` and `.env.example` do not set it; a bare `promethean` is rejected at startup |
 | `AXXIUM_PUBLIC_BASE_URL` | http://127.0.0.1:8787 | Exact public origin for callbacks and CORS; AT OAuth requires a loopback IP for local redirects |
 | `AXXIUM_TRUST_PROXY` | unset | Fastify `trustProxy` behind a reverse proxy, so the per-client AT Protocol sign-in start limit (10/min; IPv6 clients keyed by /64) keys by the real client address. Set the trusted proxy addresses/CIDRs that match the proxy chain (`false` disables). Bare `true` is refused because it trusts every hop, so a client that reaches the port directly could spoof `X-Forwarded-For` and bypass the limit. Hop counts are refused because Fastify 5 trusts no proxy for them |
 | `GOOGLE_OAUTH_CLIENT_FILE` | | Private Google web OAuth client JSON path |
