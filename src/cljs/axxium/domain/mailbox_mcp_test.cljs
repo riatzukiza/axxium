@@ -155,6 +155,7 @@
   (let [{:keys [lg b]} (world)
         [lg s] (open lg alice)
         _ (is (= :poll (:delivery/mode s)) "alice's client declared no push capability")
+        [lg _] (ok (mm/call lg (ctx alice (:session/id s)) :grant_send {:to fx/bob}))
         [lg _] (ok (mm/call lg (ctx bob b) :send_message {:to fx/alice :idempotency-key "k" :body {:x 1}}))
         d (mm/dispatch lg fx/t0)]
     (is (empty? (:notifications d)) "no push claimed for a polling client")
