@@ -202,9 +202,25 @@
                                             :body {:outbox/message-id mid :outbox/recipient to}})]
               {:ledger lg2 :result {:message/id mid :message/receipt receipt}})))))))
 
-(defn- ack-cursor [lg did]
-  (reduce max 0 (map #(get-in % [:event/body :ack/seq])
-                     (of-type lg (mailbox/stream did) :axxium.mailbox/acknowledged))))
+(defn- acked-ids
+  "Message ids acknowledged on `did`'s mailbox. Acks are per message: an
+   ack names one message and implies nothing about any other."
+  [lg did]
+  (into #{} (map #(get-in % [:event/body :ack/message-id]))
+        (of-type lg (mailbox/stream did) :axxium.mailbox/acknowledged)))
+
+(defn- ack-cursor
+  "Highest seq s such that every message at or below s is acknowledged
+   (the contiguous acknowledged prefix). Acking a later message never moves
+   the cursor past an earlier unacknowledged one."
+  [lg did]
+  (let [acked (acked-ids lg did)]
+    (reduce (fn [cursor e]
+              (if (acked (get-in e [:event/body :message/id]))
+                (:event/seq e)
+                (reduced cursor)))
+            0
+            (of-type lg (mailbox/stream did) :axxium.mailbox/accepted))))
 
 (defn- read-inbox [lg {:keys [principal now]} {:keys [mailbox after]}]
   (let [me (:auth/did principal)
@@ -215,8 +231,12 @@
                                               nil {:decision-id (nid lg) :at now})]
     (if-not (get-in d [:event/body :decision/allow?])
       (refuse lg' :forbidden)
-      (let [cursor (if (int? after) after (ack-cursor lg owner))
-            es (filter #(> (:event/seq %) cursor) (of-type lg box :axxium.mailbox/accepted))]
+      (let [explicit? (int? after)
+            cursor (if explicit? after (ack-cursor lg owner))
+            acked (if explicit? #{} (acked-ids lg owner))
+            es (->> (of-type lg box :axxium.mailbox/accepted)
+                    (filter #(> (:event/seq %) cursor))
+                    (remove #(acked (get-in % [:event/body :message/id]))))]
         {:ledger lg'
          :result {:cursor cursor
                   :next-cursor (if (seq es) (:event/seq (last es)) cursor)
@@ -237,10 +257,16 @@
           {:ledger lg' :result {:ack/message-id message-id :cursor (:event/seq e)}}
           (refuse lg' :forbidden))))))
 
-(defn- notification-of [lg message-id]
-  (some #(when (= message-id (get-in % [:event/body :outbox/message-id]))
-           (get-in % [:event/body :outbox/channel]))
-        (of-type lg outbox :axxium.outbox/dispatched)))
+(defn- outbox-body [lg type message-id]
+  (some #(when (= message-id (get-in % [:event/body :outbox/message-id])) (:event/body %))
+        (of-type lg outbox type)))
+
+(defn- notification-of
+  "Reported notification state. Planning (:axxium.outbox/dispatched) only
+   chooses a channel; the state becomes :delivered only once an external
+   transport acknowledgment (:axxium.outbox/delivered) is recorded."
+  [lg message-id]
+  (if (outbox-body lg :axxium.outbox/delivered message-id) :delivered :pending))
 
 (defn- get-delivery [lg {:keys [principal]} {:keys [message-id]}]
   (let [me (:auth/did principal)
@@ -251,7 +277,9 @@
        :result {:message/id message-id
                 :delivery/accepted (get-in m [:message/receipt :receipt/status])
                 :delivery/receipt (:message/receipt m)
-                :delivery/notification (or (notification-of lg message-id) :pending)
+                :delivery/notification (notification-of lg message-id)
+                :delivery/notification-plan
+                (:outbox/channel (outbox-body lg :axxium.outbox/dispatched message-id))
                 :delivery/acknowledged?
                 (boolean (some #(= message-id (get-in % [:event/body :ack/message-id]))
                                (of-type lg (mailbox/stream (:message/to m)) :axxium.mailbox/acknowledged)))
@@ -307,6 +335,24 @@
             {:ledger lg :notifications []}
             pending)))
 
+;; Record an external transport's acknowledgment for a planned push. This
+;; is the only event that moves :delivery/notification off :pending.
+(defn confirm-delivery
+  "Append :axxium.outbox/delivered for a planned notification. Idempotent;
+   refuses when nothing was planned."
+  [lg message-id {:keys [at transport-receipt]}]
+  (cond
+    (outbox-body lg :axxium.outbox/delivered message-id) {:ledger lg :replayed? true}
+    (not (outbox-body lg :axxium.outbox/dispatched message-id)) (refuse lg :not-planned)
+    :else
+    (let [planned (some #(when (= message-id (get-in % [:event/body :outbox/message-id])) %)
+                        (of-type lg outbox :axxium.outbox/dispatched))
+          [lg' _] (ledger/emit lg {:id (nid lg) :stream outbox :type :axxium.outbox/delivered
+                                   :actor (:event/actor planned) :at at :causes [(:event/id planned)]
+                                   :body (cond-> {:outbox/message-id message-id}
+                                           transport-receipt (assoc :outbox/transport-receipt transport-receipt))})]
+      {:ledger lg' :result {:outbox/message-id message-id :delivery/notification :delivered}})))
+
 ;; ---------------------------------------------------------------- MCP JSON-RPC
 
 (def ^:private str-schema {"type" "string"})
@@ -341,9 +387,27 @@
         n (str/replace n "-" "_")]
     (if (= "message" (namespace k)) (str "message_" n) n)))
 
+(def ^:private opaque-keys
+  "Envelope keys whose values are user payload: carried verbatim, never
+   renamed. A JSON body arrives string-keyed and is stored exactly as
+   received, so the ledger's canonical EDN holds the lossless value."
+  #{:message/body :body})
+
+(defn- payload->json
+  "Payload to JSON without collapsing keys: keyword keys keep their full
+   qualified name (:a/id -> \"a/id\"), string keys pass through."
+  [x]
+  (cond
+    (map? x) (into {} (map (fn [[k v]] [(if (keyword? k) (subs (str k) 1) (str k)) (payload->json v)])) x)
+    (coll? x) (mapv payload->json x)
+    (keyword? x) (subs (str x) 1)
+    (inst? x) (.toISOString x)
+    :else x))
+
 (defn ->json [x]
   (cond
-    (map? x) (into {} (map (fn [[k v]] [(if (keyword? k) (json-key k) (str k)) (->json v)])) x)
+    (map? x) (into {} (map (fn [[k v]] [(if (keyword? k) (json-key k) (str k))
+                                        (if (opaque-keys k) (payload->json v) (->json v))])) x)
     (coll? x) (mapv ->json x)
     (keyword? x) (name x)
     (inst? x) (.toISOString x)
@@ -370,7 +434,7 @@
 
     (= method "tools/call")
     (let [tool-name (get params "name")
-          args (into {} (map (fn [[k v]] [(arg-key k) (if (= k "body") (js->clj (clj->js v) :keywordize-keys true) v)]))
+          args (into {} (map (fn [[k v]] [(arg-key k) (if (= k "body") (js->clj v) v)]))
                      (get params "arguments"))
           {:keys [ledger result error]} (call lg ctx (keyword tool-name) args)]
       {:ledger ledger

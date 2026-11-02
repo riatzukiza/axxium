@@ -105,9 +105,14 @@
         lg (:ledger (mm/dispatch lg fx/t0))
         [_ d] (ok (mm/call lg (ctx alice a) :get_delivery {:message-id (:message/id r)}))]
     (is (= :accepted (:delivery/accepted d)))
-    (is (= :push (:delivery/notification d)))
+    (is (= :pending (:delivery/notification d)) "planning is not delivery")
+    (is (= :push (:delivery/notification-plan d)))
     (is (false? (:delivery/acknowledged? d)))
-    (is (= :unknown (:delivery/execution d)))))
+    (is (= :unknown (:delivery/execution d)))
+    (let [c (mm/confirm-delivery lg (:message/id r) {:at fx/t0})
+          [_ d2] (ok (mm/call (:ledger c) (ctx alice a) :get_delivery {:message-id (:message/id r)}))]
+      (is (= :delivered (:delivery/notification d2)) "only an external ack delivers")
+      (is (= :unknown (:delivery/execution d2))))))
 
 ;; 6
 (deftest fail-closed
