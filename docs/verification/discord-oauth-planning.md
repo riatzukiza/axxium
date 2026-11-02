@@ -110,3 +110,16 @@ Rheos original and proposed-body readbacks, typed owning Receipt River validatio
 and portable Session Mycology writer/reader, lossless capture hashes and full-tip
 immutability/hygiene. Local planning preparation provides no provider approval,
 review round, ready transition, production build or live auth qualification.
+
+## Local recheck on 2026-11-02
+
+At PR head `114ecd1ff1d933347341a82a664860598fd2c56a`,
+`git diff --check` against the stated base passed. The deployment boundary
+classifier self-test and scan both passed. `npm run boundary:check` failed with
+53 existing violations in `auth/session.cljs`, `auth/token.cljs`, `config.cljs`,
+`routes/actor.cljs`, `routes/auth.cljs`, `routes/health.cljs`, and `shape/db.cljs`;
+npm also reported an `always-auth` configuration warning. These files are not
+changed by this planning PR, and the failures remain an implementation gate.
+GitHub review and check state could not be refreshed because the API connection
+failed. No provider, backend test suite, build, or typecheck was run in this
+recheck.
