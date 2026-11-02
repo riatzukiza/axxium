@@ -143,6 +143,20 @@ credential operations, and reusing an admitted grant for a different operation
 are refused before effects. A connection lease does not itself authorize each
 RPC operation.
 
+Separate the transport request identifier from a durable logical operation key.
+Bind that key to the verified actor, tenant, canonical operation and body digest;
+reject its reuse with different bindings. Before provider dispatch, atomically
+reserve the key in durable shared storage and record the provider idempotency key
+when supported. Persist dispatch state and the provider's terminal outcome so a
+freshly authorized retry with a new request identifier returns the recorded
+outcome rather than dispatching again. Concurrent retries permit at most one
+dispatch. If a crash or timeout leaves the provider outcome unknown, reconcile
+using the provider's durable idempotency or status mechanism before retrying;
+otherwise refuse redispatch and expose a recoverable unknown outcome for operator
+resolution. Retention must cover the reviewed retry and recovery window, including
+restart and node failover; expiration cannot turn an unresolved outcome into
+permission to repeat it. This is a proposed contract, not implemented behavior.
+
 Remove retired Big Ussy endpoints from active desired configuration without
 rewriting historical provenance. Preserve local operation and data; loss of a
 laptop means capability becomes unavailable rather than cascading retries to
@@ -194,7 +208,11 @@ stories; preserve their original requirements and existing provenance.
    credentials never leave their host and no credential-import event occurred.
 7. Disconnect/reconnect each laptop independently; verify healthy fallback or
    explicit unavailability, loop rejection, grant revalidation and node
-   revocation. Big Ussy is absent from active route/relay configuration.
+   revocation. Big Ussy is absent from active route/relay configuration. Exercise
+   concurrent retries with distinct request IDs, restart/failover after dispatch,
+   durable completed outcomes, conflicting operation-key bindings, and unknown
+   provider outcomes with and without reconciliation; assert at most one provider
+   effect or an explicit refusal before redispatch.
 8. Define an isolated actor fixture, creative-memory-reader, bound to the
    operator-configured Axxium issuer and its immutable fixture actor/entity
    IDs, with only the product's explicit semantic-query/read and inference
