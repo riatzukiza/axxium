@@ -6,6 +6,9 @@
             [axxium.shape.ledger-edn :as edn-lines]
             [clojure.string :as str]))
 
+(defn read-text "A UTF-8 resource file (e.g. an identity seed)." [path]
+  (fs/readFileSync path "utf8"))
+
 (defn load-ledger [path]
   (if (fs/existsSync path)
     (let [text (fs/readFileSync path "utf8")
@@ -18,6 +21,19 @@
       admitted)
     []))
 
+(defn write-all!
+  "Write every byte or throw if the writer makes no valid progress."
+  [buffer write!]
+  (let [size (.-length buffer)]
+    (loop [offset 0]
+      (when (< offset size)
+        (let [remaining (- size offset)
+              written (write! buffer offset remaining)]
+          (when-not (and (number? written) (js/Number.isInteger written)
+                         (pos? written) (<= written remaining))
+            (throw (js/Error. "ledger write made invalid progress")))
+          (recur (+ offset written)))))))
+
 (defn append-batch!
   "Persist events of `after` that `before` lacks. Returns `after`."
   [path before after]
@@ -25,7 +41,10 @@
     (when (seq batch)
       (let [fd (fs/openSync path "a")]
         (try
-          (fs/writeSync fd (edn-lines/export-lines batch))
+          (write-all! (js/Buffer.from (edn-lines/export-lines batch) "utf8")
+                      (fn [buffer offset length]
+                        (fs/writeSync fd buffer offset length nil)))
           (fs/fsyncSync fd)
           (finally (fs/closeSync fd)))))
     after))
+
