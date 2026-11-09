@@ -34,6 +34,81 @@
       (is (zero? (.-size (fs/statSync p))) "no complete line means no admitted bytes")
       (finally (fs/rmSync dir #js {:recursive true})))))
 
+(deftest mailbox-batches-recover-as-complete-operations
+  (let [dir (fs/mkdtempSync (path/join (os/tmpdir) "axxium-mailbox-batch-"))
+        p (path/join dir "ledger.edn")
+        {:keys [ledger result]} (mm/call [] {:principal mailbox-fixture/alice
+                                           :audience mailbox-fixture/aud :now fx/t0}
+                                         :open_session {:audience mailbox-fixture/aud :ttl-ms 3600000})
+        ctx (mailbox-fixture/ctx mailbox-fixture/alice (:session/id result))
+        registered (:ledger (mm/call ledger ctx :register_mailbox {}))]
+    (try
+      (fs/writeFileSync p "" #js {:mode 8r600})
+      (lf/append-batch! p [] ledger)
+      (let [legacy (fs/readFileSync p)
+            {:keys [load! append!]} (lf/private-ledger-storage p [])]
+        (is (= ledger (load! p)) "existing event lines still load")
+        (append! p ledger registered)
+        (is (= registered (load! p)))
+        (let [frame (.subarray (fs/readFileSync p) (.-length legacy))
+              failed-cut
+              (first
+               (remove (fn [cut]
+                         (fs/writeFileSync p (js/Buffer.concat #js [legacy (.subarray frame 0 cut)]))
+                         (and (= ledger (load! p))
+                              (.equals legacy (fs/readFileSync p))))
+                       (range 1 (.-length frame))))]
+          (is (nil? failed-cut) (str "a partial frame leaked events or bytes at cutoff " failed-cut))
+          (fs/writeFileSync p legacy)
+          (append! p ledger registered)
+          (is (= registered (load! p)) "retry after truncation commits the complete operation"))
+        (doseq [invalid ["[:axxium.mailbox/batch-v1]\n"
+                         "[:axxium.mailbox/batch-v1 {:event/id :invalid}]\n"
+                         "[:axxium.mailbox/batch-v2]\n"
+                         "[:axxium.mailbox/batch-v1\n"]]
+          (fs/writeFileSync p legacy)
+          (fs/appendFileSync p (str invalid "{:uncommitted"))
+          (let [before (fs/readFileSync p)]
+            (is (thrown? js/Error (load! p)))
+            (is (.equals before (fs/readFileSync p)) "a malformed complete frame leaves the file intact"))))
+      (finally (fs/rmSync dir #js {:recursive true})))))
+
+(deftest private-mailbox-refuses-capacity-overrun
+  (let [dir (fs/mkdtempSync (path/join (os/tmpdir) "axxium-mailbox-capacity-"))
+        p (path/join dir "ledger.edn")
+        limit (* 2 1024 1024)
+        {:keys [ledger]} (mm/call [] {:principal mailbox-fixture/alice
+                                    :audience "héllo" :now fx/t0}
+                                  :open_session {:audience "héllo" :ttl-ms 3600000})]
+    (try
+      (fs/writeFileSync p "" #js {:mode 8r600})
+      (let [{:keys [load! append!]} (lf/private-ledger-storage p [])]
+        (append! p [] ledger)
+        (let [frame (fs/readFileSync p)
+              padding (js/Buffer.alloc (inc (- limit (.-length frame))) 0x20)
+              final-index (dec (.-length padding))]
+          ;; The audience's é needs two bytes, so counting code units would
+          ;; incorrectly admit an append one byte above the cap.
+          (.writeUInt8 padding 0x0a final-index)
+          (fs/writeFileSync p padding)
+          (is (thrown-with-msg? js/Error #"Mailbox ledger capacity exceeded"
+                                (append! p [] ledger)))
+          (is (.equals padding (fs/readFileSync p)))
+          (.writeUInt8 padding 0x0a (dec final-index))
+          (fs/writeFileSync p (.subarray padding 0 final-index))
+          (append! p [] ledger)
+          (is (= limit (.-size (fs/statSync p))))
+          (is (= ledger (load! p)))
+          (let [before (fs/readFileSync p)]
+            (is (thrown-with-msg? js/Error #"Mailbox ledger capacity exceeded"
+                                  (append! p [] ledger)))
+            (is (.equals before (fs/readFileSync p))))
+          (fs/appendFileSync p "x")
+          (is (thrown-with-msg? js/Error #"Mailbox ledger capacity exceeded" (load! p)))
+          (is (= (inc limit) (.-size (fs/statSync p)))
+              "an oversized existing file is preserved for operator recovery")))
+      (finally (fs/rmSync dir #js {:recursive true})))))
+
 (defn- send-mailbox
   [lg ctx to key body]
   (mm/call lg ctx :send_message {:to to :idempotency-key key :body body}))

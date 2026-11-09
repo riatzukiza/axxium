@@ -19,6 +19,7 @@
             [axxium.law.did :as did]
             [axxium.law.event :as law]
             [axxium.law.principal :as principal]
+            [clio.shape.canonical :as canonical]
             [clojure.string :as str]))
 
 (def empty-ledger ledger/empty-ledger)
@@ -40,8 +41,12 @@
    (let [digits (str (+ offset (count lg) 1))]
      (str "a0000000-0000-4000-8000-" (apply str (repeat (- 12 (count digits)) "0")) digits))))
 
-(defn- ms [t] (.getTime t))
-(defn- plus-ms [t n] (js/Date. (+ (ms t) n)))
+(defn- plus-ms
+  "Add milliseconds using each host's EDN instant representation."
+  [instant millis]
+  (let [epoch-ms (+ (inst-ms instant) millis)]
+    #?(:clj (java.util.Date. epoch-ms)
+       :cljs (js/Date. epoch-ms))))
 
 (defn- refuse
   ([error] {:error error})
@@ -71,16 +76,17 @@
 
 ;; ---------------------------------------------------------------- guards
 
-(defn- authenticate
+(defn session-error
   "Fail closed: principal, session binding, audience and expiry."
-  [lg {:keys [principal audience now] sid :session/id}]
+  [lg {:keys [principal audience now] sid :session/id :as ctx}]
   (let [s (when sid (session lg sid))]
     (cond
       (not (principal/authenticated? principal)) :unauthenticated
       (nil? s) :no-session
       (not= (:auth/did principal) (:session/did s)) :session-mismatch
       (not= audience (:session/aud s)) :wrong-audience
-      (>= (ms now) (ms (:session/expires s))) :session-expired
+      (not= (:session/binding s) (:session/binding ctx)) :session-mismatch
+      (>= (inst-ms now) (inst-ms (:session/expires s))) :session-expired
       :else nil)))
 
 (def ^:private secret-key
@@ -107,20 +113,31 @@
               :session/aud (:session/aud s) :session/expires (:session/expires s)
               :delivery/mode (if (:session/push? s) :push :poll)}}))
 
-(defn- open-session [lg {:keys [principal audience now]} {aud :audience :keys [ttl-ms push]}]
+(defn- session-result [lg body]
+  {:ledger lg
+   :result (assoc (dissoc body :session/binding)
+                  :delivery/mode (if (:session/push? body) :push :poll))})
+
+(defn- open-session [lg {:keys [principal audience now] :as ctx} {aud :audience :keys [ttl-ms push]}]
   (cond
     (not (principal/authenticated? principal)) (refuse :unauthenticated)
     (not= aud audience) (refuse :wrong-audience)
     (not (pos-int? ttl-ms)) (refuse :bad-ttl)
+    (:session/current-only? ctx)
+    (if-let [error (session-error lg ctx)]
+      (refuse lg error)
+      (session-result lg (session lg (:session/id ctx))))
     :else
-    (let [sid (nid lg)
-          body {:session/id sid :session/did (:auth/did principal)
-                :session/method (:auth/method principal) :session/aud aud
-                :session/expires (plus-ms now (min ttl-ms 86400000))
-                :session/push? (true? push)}
+    (let [sid (or (:session/new-id ctx) (nid lg))
+          body (cond-> {:session/id sid :session/did (:auth/did principal)
+                        :session/method (:auth/method principal) :session/aud aud
+                        :session/expires (plus-ms now (min ttl-ms 86400000))
+                        :session/push? (and (not= false (:session/push-supported? ctx))
+                                            (true? push))}
+                 (:session/binding ctx) (assoc :session/binding (:session/binding ctx)))
           [lg' _] (ledger/emit lg {:id sid :stream sessions :type :axxium.session/opened
                                    :actor (:auth/did principal) :at now :body body})]
-      {:ledger lg' :result (assoc body :delivery/mode (if (:session/push? body) :push :poll))})))
+      (session-result lg' body))))
 
 (defn- resolve-address [lg _ {:keys [address]}]
   (let [d (if (and (string? address) (str/starts-with? address mailbox/prefix))
@@ -131,21 +148,51 @@
                 :address/registered? (contains? (:resources (state/fold lg)) (mailbox/stream d))}}
       (refuse lg :bad-address))))
 
+(def ^:private owner-actions [:send :read :ack])
+
+(defn- owner-grant-issued? [lg owner box]
+  ;; Look at grant history so a retry never recreates a revoked grant.
+  (some (fn [{:event/keys [actor body]}]
+          (and (= owner actor (:grant/actor body))
+               (= box (:grant/resource body))
+               (str/starts-with? (or (:grant/id body) "") "mbox-grant:")))
+        (of-type lg "grants" :axxium.grant/granted)))
+
+(defn- unrevoked-owner-actions [lg owner box]
+  (let [revoked (into #{}
+                      (mapcat (fn [{:event/keys [body]}]
+                                (when (and (= owner (:revoke/actor body))
+                                           (= box (:revoke/resource body)))
+                                  (or (:revoke/actions body) owner-actions))))
+                      (of-type lg "grants" :axxium.grant/revoked))]
+    (filterv (complement revoked) owner-actions)))
+
 (defn- register-mailbox [lg {:keys [principal now]} _]
   (let [me (:auth/did principal)
-        box (mailbox/stream me)]
-    (if (contains? (:resources (state/fold lg)) box)
+        box (mailbox/stream me)
+        st (state/fold lg)
+        registered? (contains? (:resources st) box)
+        actions (if registered?
+                  (when-not (owner-grant-issued? lg me box)
+                    (unrevoked-owner-actions lg me box))
+                  owner-actions)]
+    (if-not (seq actions)
       {:ledger lg :result {:mailbox box}}
-      (let [r {:resource/id box :resource/kind :resource/mailbox :resource/owner me
-               :resource/store :clio :resource/location {:stream box}}
-            {lg1 :ledger e1 :effect} (resource/register lg (state/fold lg) me r
-                                                        {:decision-id (nid lg) :effect-id (nid lg 1) :at now})
-            g {:grant/id (str "mbox-grant:" (nid lg1 1)) :grant/actor me :grant/resource box
-               :grant/actions [:send :read :ack]}
-            {lg2 :ledger e2 :effect} (when e1
-                                       (resource/issue-grant lg1 (state/fold lg1) me g
-                                                             {:decision-id (nid lg1) :effect-id (nid lg1 1) :at now}))]
-        (if e2 {:ledger lg2 :result {:mailbox box :grant/id (:grant/id g)}} (refuse lg :forbidden))))))
+      (let [{lg1 :ledger registration :effect}
+            (when-not registered?
+              (resource/register lg st me {:resource/id box :resource/kind :resource/mailbox
+                                           :resource/owner me :resource/store :clio
+                                           :resource/location {:stream box}}
+                                 {:decision-id (nid lg) :effect-id (nid lg 1) :at now}))]
+        (if (or registered? registration)
+          (let [lg1 (or lg1 lg)
+                g {:grant/id (str "mbox-grant:" (nid lg1 1)) :grant/actor me :grant/resource box
+                   :grant/actions actions}
+                {lg2 :ledger grant :effect}
+                (resource/issue-grant lg1 (if registered? st (state/fold lg1)) me g
+                                      {:decision-id (nid lg1) :effect-id (nid lg1 1) :at now})]
+            (if grant {:ledger lg2 :result {:mailbox box :grant/id (:grant/id g)}} (refuse lg :forbidden)))
+          (refuse lg :forbidden))))))
 
 (defn- grant-send [lg {:keys [principal now]} {:keys [to]}]
   (if-not (did/did? to)
@@ -170,13 +217,20 @@
            (when (and (= from (:message/from b)) (= key (:message/idempotency-key b))) b))
         (accepted-events lg)))
 
+(defn- portable-edn? [value]
+  (try
+    (canonical/canonical-form value)
+    true
+    (catch #?(:clj Exception :cljs :default) _ false)))
+
 (defn- send-message [lg {:keys [principal now]} {:keys [to from idempotency-key body]}]
   (let [me (:auth/did principal)]
     (cond
       (and (some? from) (not= from me)) (refuse :forged-sender)
       (not (did/did? to)) (refuse :bad-address)
-      (not (and (string? idempotency-key) (<= 1 (count idempotency-key) 256))) (refuse :bad-idempotency-key)
-      (not (map? body)) (refuse :bad-body)
+      (not (and (string? idempotency-key) (<= 1 (count idempotency-key) 256)
+                (portable-edn? idempotency-key))) (refuse :bad-idempotency-key)
+      (not (and (map? body) (portable-edn? body))) (refuse :bad-body)
       (secret? body) (refuse :secret-in-payload)
       :else
       (if-let [prior (prior-send lg me idempotency-key)]
@@ -302,7 +356,7 @@
   (if (= tool :open_session)
     (let [r (open-session lg ctx args)] (update r :ledger #(or % lg)))
     (if-let [f (get tools tool)]
-      (if-let [err (authenticate lg ctx)]
+      (if-let [err (session-error lg ctx)]
         (refuse lg err)
         (update (f lg ctx args) :ledger #(or % lg)))
       (refuse lg :unknown-tool))))
@@ -312,7 +366,7 @@
 (defn- push-subscriber? [lg did now]
   (some #(let [s (:event/body %)]
            (and (= did (:session/did s)) (:session/push? s)
-                (< (ms now) (ms (:session/expires s)))))
+                (< (inst-ms now) (inst-ms (:session/expires s)))))
         (of-type lg sessions :axxium.session/opened)))
 
 (defn dispatch
@@ -360,130 +414,3 @@
                                    :body (cond-> {:outbox/message-id message-id}
                                            transport-receipt (assoc :outbox/transport-receipt transport-receipt))})]
       {:ledger lg' :result {:outbox/message-id message-id :delivery/notification :delivered}})))
-
-;; ---------------------------------------------------------------- MCP JSON-RPC
-
-(def ^:private str-schema {"type" "string"})
-
-(defn- tool [name desc props required annotations]
-  {"name" name "description" desc
-   "inputSchema" {"type" "object" "properties" props "required" required
-                  "additionalProperties" false}
-   "annotations" (merge {"readOnlyHint" false "destructiveHint" false
-                          "idempotentHint" false "openWorldHint" false}
-                         annotations)})
-
-(def ^:private read-hints
-  {"readOnlyHint" true "idempotentHint" true})
-
-(def tool-descriptors
-  [(tool "whoami" "The authenticated actor and session." {} [] read-hints)
-   (tool "open_session" "Bind a session to this actor and audience; push only if the client declares it."
-         {"audience" str-schema "ttl_ms" {"type" "integer"} "push" {"type" "boolean"}} ["audience" "ttl_ms"] {})
-   (tool "resolve_address" "Resolve a DID or mbox/<did> to a mailbox." {"address" str-schema} ["address"] read-hints)
-   (tool "send_message" "Send to a mailbox. Repeating an idempotency key with the same body returns the original receipt."
-         {"to" str-schema "from" str-schema "idempotency_key" str-schema "body" {"type" "object"}}
-         ["to" "idempotency_key" "body"] {"idempotentHint" true "openWorldHint" true})
-   (tool "read_inbox" "Read inbox messages. A supplied cursor cannot skip an unacknowledged message."
-         {"mailbox" str-schema "after" {"type" "integer"}} [] read-hints)
-   (tool "acknowledge_message" "Acknowledge one message; return the contiguous durable cursor."
-         {"message_id" str-schema} ["message_id"] {})
-   (tool "get_delivery" "Acceptance, notification and acknowledgement state. Never claims execution."
-         {"message_id" str-schema} ["message_id"] read-hints)
-   (tool "register_mailbox" "Register your mailbox and its owner grant." {} [] {})
-   (tool "grant_send" "Change authorization: allow an actor to send to your mailbox."
-         {"to" str-schema} ["to"] {"destructiveHint" true})
-   (tool "revoke_send" "Change authorization: revoke an actor's send grant on your mailbox."
-         {"to" str-schema} ["to"] {"destructiveHint" true})])
-
-(defn- arg-key [k] (keyword (str/replace k "_" "-")))
-
-(defn- json-key [k]
-  (let [n (str/replace (name k) #"[?]$" "")
-        n (str/replace n "-" "_")]
-    (if (= "message" (namespace k)) (str "message_" n) n)))
-
-(def ^:private opaque-keys
-  "Envelope keys whose values are user payload: carried verbatim, never
-   renamed. A JSON body arrives string-keyed and is stored exactly as
-   received, so the ledger's canonical EDN holds the lossless value."
-  #{:message/body :body})
-
-(defn- payload->json
-  "Payload to JSON without collapsing keys: keyword keys keep their full
-   qualified name (:a/id -> \"a/id\"), string keys pass through."
-  [x]
-  (cond
-    (map? x) (into {} (map (fn [[k v]] [(if (keyword? k) (subs (str k) 1) (str k)) (payload->json v)])) x)
-    (coll? x) (mapv payload->json x)
-    (keyword? x) (subs (str x) 1)
-    (inst? x) (.toISOString x)
-    :else x))
-
-(defn ->json [x]
-  (cond
-    (map? x) (into {} (map (fn [[k v]] [(if (keyword? k) (json-key k) (str k))
-                                        (if (opaque-keys k) (payload->json v) (->json v))])) x)
-    (coll? x) (mapv ->json x)
-    (keyword? x) (name x)
-    (inst? x) (.toISOString x)
-    :else x))
-
-(defn- rpc-error [id code message]
-  {"jsonrpc" "2.0" "id" id "error" {"code" code "message" message}})
-
-(def ^:private error-actions
-  {:unauthenticated "Sign in before calling this tool."
-   :no-session "Open a session before calling this tool."
-   :session-mismatch "Use the session bound to the authenticated actor."
-   :wrong-audience "Open a session for this application's audience."
-   :session-expired "Open a new session and retry."
-   :unknown-tool "Use tools/list to select an available tool."
-   :forbidden "Request the mailbox owner's permission before retrying."
-   :not-found "Check the resource id and use its authorized owner."
-   :idempotency-conflict "Use a new idempotency key for changed content."
-   :secret-in-payload "Remove credentials from the message body."
-   :forged-sender "Omit from or use the authenticated actor's DID."})
-
-(defn- tool-error-message [error]
-  (str (name error) ": " (get error-actions error "Check the tool arguments and retry with an authorized session.")))
-
-(defn- rpc-request
-  "Evaluate a request; the public adapter suppresses notification responses."
-  [lg ctx {:strs [id method params]}]
-  (cond
-    (not (principal/authenticated? (:principal ctx)))
-    {:ledger lg :response (rpc-error id -32001 "unauthenticated")}
-
-    (= method "initialize")
-    {:ledger lg :response {"jsonrpc" "2.0" "id" id
-                           "result" {"protocolVersion" "2025-06-18"
-                                     "serverInfo" {"name" "axxium-mailbox" "version" "0.1.0"}
-                                     "capabilities" {"tools" {}}}}}
-
-    (= method "tools/list")
-    {:ledger lg :response {"jsonrpc" "2.0" "id" id "result" {"tools" tool-descriptors}}}
-
-    (= method "tools/call")
-    (let [tool-name (get params "name")
-          args (into {} (map (fn [[k v]] [(arg-key k) (if (= k "body") (js->clj v) v)]))
-                     (get params "arguments"))
-          {:keys [ledger result error]} (call lg ctx (keyword tool-name) args)]
-      {:ledger ledger
-       :response {"jsonrpc" "2.0" "id" id
-                  "result" (if error
-                             {"isError" true "content" [{"type" "text" "text" (tool-error-message error)}]}
-                             (let [sc (->json (cond-> result
-                                                (:message/receipt result) (assoc :accepted (get-in result [:message/receipt :receipt/status]))))]
-                               {"structuredContent" sc
-                                "content" [{"type" "text" "text" (js/JSON.stringify (clj->js sc))}]}))}})
-
-    :else {:ledger lg :response (rpc-error id -32601 "method not found")}))
-
-(defn handle-rpc
-  "MCP JSON-RPC over an authenticated transport. Notifications retain their
-   ledger result and have nil :response; the transport sends HTTP 202, no body."
-  [lg ctx request]
-  (cond-> (rpc-request lg ctx request)
-    (not (contains? request "id")) (assoc :response nil)))
-

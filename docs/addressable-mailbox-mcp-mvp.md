@@ -35,3 +35,38 @@ Axxium owns actor authorization, mailbox admission, session bindings, and receip
 
 ## Current evidence
 A GitHub feature branch has been created. No runtime code, deployment, end-to-end test, or production cutover is established by this specification.
+
+## Opt-in HTTP polling candidate
+
+Set `AXXIUM_MAILBOX_LEDGER_FILE` to a dedicated existing regular file owned by
+the Axxium service user with mode `0600`. Run one writer, keep the file and its
+directory separate from Drive and GitHub identity ledgers, and keep the
+setting absent in deployments that do not operate a mailbox. The route
+`/api/mailbox/mcp` uses the configured public origin and that URL as its
+mailbox audience.
+
+The polling ledger writes each operation as a single newline-terminated
+`:axxium.mailbox/batch-v1` EDN frame. Recovery drops an incomplete final
+frame and reads older complete event lines. Retrying registration completes
+an interrupted legacy owner grant while preserving any recorded revocation.
+Once a ledger receives framed writes, use a polling build that reads v1 frames.
+The polling pilot limits the file to 2 MiB. A load above that limit or an
+append that would exceed it fails without deleting stored events. Preserve the
+ledger and pause pilot traffic if the limit is reached.
+
+The polling profile uses MCP Streamable HTTP with the 2025-06-18 version
+and JSON POST responses. Initialize with a live Axxium session issued by
+the verified AT Protocol callback. A bearer works for programmatic callers.
+A browser can use its session cookie on an exact same-origin request. The
+server checks the active database session and current AT Protocol binding
+before queued work. An ordinary account session or agent credential is
+insufficient. Sessions signed before the callback began including its DID
+require a fresh AT Protocol sign-in.
+
+Echo the returned `Mcp-Session-Id` on subsequent requests. Use
+`tools/list` and the mailbox tools to register mailboxes, authorize senders,
+send, poll, and acknowledge. GET and DELETE return 405. The `open_session` tool reports the
+current polling session. Only HTTP initialization opens a transport session. The HTTP profile does not advertise
+MCP OAuth discovery or support SSE, cross-origin browser access, or ChatGPT
+subscriber delivery. An exact Services staging image and actual subscriber
+proof remain separate acceptance requirements.
