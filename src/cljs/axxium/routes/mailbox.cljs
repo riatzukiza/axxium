@@ -7,8 +7,10 @@
             [axxium.extern.http :as http]
             [axxium.extern.ledger-file :as disk]
             [axxium.extern.ledger-queue :as queue]
+            [axxium.extern.mailbox-authority :as authority]
             [axxium.extern.mailbox-mcp :as rpc]
             [axxium.law.actor :as actor-law]
+            [axxium.law.oidc :as oidc-law]
             [axxium.routes.mailbox-events :as events]
             [clojure.string :as str]))
 
@@ -29,31 +31,73 @@
 (defn- require-auth! [reply resource-metadata]
   (http/set-header! reply "WWW-Authenticate"
                     (if resource-metadata (str "Bearer resource_metadata=\"" resource-metadata "\"") "Bearer"))
-  (http/send-secret! reply 401 {:error "A live AT Protocol session is required"}))
+  (http/send-secret! reply 401 {:error "A live AT Protocol session or identity-tree credential is required"}))
 
-(defn- active-proof! [oauth proof]
-  (if (:oauth/grant-id proof)
-    ((:active-grant? oauth) proof)
-    (session/active-atproto-session? proof)))
+(defn- raw-proof
+  "The verified proof as its adapter made it, without the admission result."
+  [proof]
+  (dissoc proof :mailbox/node :mailbox/principal))
+
+(defn- admitted-node
+  "L6 for one proof against the admission rule in force (tree or legacy)."
+  [rule oauth proof]
+  (authority/admit rule proof
+                   (when-let [client-id (:oauth/client-id proof)]
+                     {:oauth? true
+                      :client-node (when-let [node-of (:client-node oauth)] (node-of client-id))})))
+
+(defn- ^:async live-proof!
+  "The proof's own liveness: its grant, or its AT Protocol root session. A
+   bootstrap key's liveness is its current digest, checked by admission."
+  [oauth proof]
+  (cond
+    (:bootstrap/did proof) true
+    (:oauth/grant-id proof) ((:active-grant? oauth) proof)
+    :else (session/active-atproto-session? proof)))
+
+(defn- ^:async active-proof!
+  "Live and still admitted, to the same node, on every request and every
+   queued operation: a suspend or revoke anywhere above it ends access."
+  [oauth proof]
+  (let [raw (raw-proof proof)]
+    (boolean
+     (and (await (live-proof! oauth raw))
+          (when-let [node (admitted-node (authority/current) oauth raw)]
+            (or (nil? (:mailbox/node proof)) (= node (:mailbox/node proof))))))))
+
+(defn- bootstrap-proof
+  "A host agent as itself: x-axxium-actor <node DID> + Bearer <bootstrap key>."
+  [req rule]
+  (when-let [did (http/header req "x-axxium-actor")]
+    (authority/bootstrap-proof rule did
+                               (some->> (http/authorization req)
+                                        (re-matches #"(?i)Bearer ([^\s]+)")
+                                        second))))
 
 (defn- authorized
-  [origin oauth resource-metadata allowed-dids handler]
+  [origin oauth resource-metadata handler]
   (fn ^:async mailbox-handler [req reply]
     (try
       (if-not (admitted-origin? req origin)
         (http/send-secret! reply 403 {:error "Mailbox origin refused"})
-        (let [token (request-token req (:origin origin))
-              proof (or (await (session/atproto-session-proof token))
-                        (when (and oauth token (http/authorization req))
-                          (await ((:access-proof! oauth) token))))]
+        (let [rule (authority/current)
+              token (request-token req (:origin origin))
+              proof (or (bootstrap-proof req rule)
+                        (when-not (http/header req "x-axxium-actor")
+                          (or (await (session/atproto-session-proof token))
+                              (when (and oauth token (http/authorization req))
+                                (await ((:access-proof! oauth) token))))))
+              node (when proof (admitted-node rule oauth proof))]
           (cond
-            (not (and proof (await (active-proof! oauth proof))))
+            (not (and proof (await (live-proof! oauth proof))))
             (require-auth! reply resource-metadata)
 
-            (and allowed-dids (not (contains? allowed-dids (get-in proof [:principal :auth/did]))))
+            (nil? node)
             (http/send-secret! reply 403 {:error "Mailbox access refused"})
 
-            :else (await (handler req reply proof)))))
+            :else
+            (await (handler req reply (assoc proof :mailbox/node node
+                                             :mailbox/principal (authority/principal rule proof node)))))))
       (catch :default _
         (http/send-secret! reply 503 {:error "Mailbox is unavailable"})))))
 
@@ -103,7 +147,7 @@
         (rpc/handle-rpc lg (assoc ctx :session/current-only? true) body)))))
 
 (defn- ^:async post-mailbox!
-  [writer path resource runtime oauth resource-metadata req reply {:keys [principal cred-id] :as proof}]
+  [writer path resource runtime oauth resource-metadata req reply {:keys [cred-id] :mailbox/keys [principal] :as proof}]
   (let [body (http/json-body req)
         version (http/header req "mcp-protocol-version")
         sid (http/header req "mcp-session-id")
@@ -137,13 +181,18 @@
                  :session/push-supported? false
                  :events/enabled? (events/enabled? runtime proof)
                  :events/only? (some? (:oauth/grant-id proof))
+                 ;; An OAuth grant reaches only the tools its resource scopes open.
+                 :tools/allowed (when (:oauth/grant-id proof)
+                                  (oidc-law/mailbox-tools (or (:oauth/scopes proof) #{oidc-law/mailbox-scope})))
                  :audience resource}
             out (if (and (:events/enabled? ctx) (contains? events/event-methods (get body "method")))
                   (await (events/execute! runtime proof ctx body))
                   (await (queue/submit! writer path
                            (fn ^:async apply-mailbox [lg]
                              (if (await (active-proof! oauth proof))
-                               (operation lg (assoc ctx :now (secrets/now)) body)
+                               (operation lg (assoc ctx :now (secrets/now)
+                                                    :send/allowed? (authority/send-predicate (authority/current)))
+                                          body)
                                {:unauthenticated? true})))))]
         (cond
           (:unauthenticated? out) (require-auth! reply resource-metadata)
@@ -167,14 +216,13 @@
     (let [origin (http/origin-settings (cfg/get-in-config [:axxium/public-base-url]) endpoint)
           resource-metadata (when oauth (str (:origin origin) resource-metadata-path))
           owner (cfg/get-in-config [:mailbox/webhook-actor-did])
-          allowed-dids (cfg/get-in-config [:mailbox/pilot-allowed-dids])
           webhook-key-file (cfg/get-in-config [:mailbox/webhook-key-file])
           storage (disk/private-ledger-storage path [(cfg/get-in-config [:drive/ledger-file])
                                                      (cfg/get-in-config [:github-identity/ledger-file])]
                                               (some? owner))
           writer (queue/create storage)
           runtime (events/install! app writer path owner webhook-key-file (partial active-proof! oauth))
-          no-stream (authorized origin oauth resource-metadata allowed-dids
+          no-stream (authorized origin oauth resource-metadata
                                 (fn [_ reply _]
                                   (http/set-header! reply "Allow" "POST")
                                   (http/send-empty! reply 405)))]
@@ -183,10 +231,10 @@
                    (fn [_ reply]
                      (http/send-secret! reply 200 {"resource" (:resource oauth)
                                                     "authorization_servers" [(:issuer oauth)]
-                                                    "scopes_supported" [(:scope oauth)]
+                                                    "scopes_supported" (vec (or (:scopes oauth) [(:scope oauth)]))
                                                     "bearer_methods_supported" ["header"]}))))
       (http/post! app endpoint
-                  (authorized origin oauth resource-metadata allowed-dids
+                  (authorized origin oauth resource-metadata
                               (partial post-mailbox! writer path (:resource origin) runtime oauth resource-metadata)))
       (http/get! app endpoint no-stream)
       (http/delete! app endpoint no-stream)))))

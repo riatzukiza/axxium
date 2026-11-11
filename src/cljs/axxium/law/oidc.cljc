@@ -1,11 +1,43 @@
 (ns axxium.law.oidc
   "Registered browser-client and private signing configuration contracts."
-  (:require [axxium.law.relay :as relay]
+  (:require [axxium.law.did :as did]
+            [axxium.law.relay :as relay]
+            [clojure.string :as str]
             [malli.core :as m]))
 
 (def mailbox-scope
-  "The only resource scope granted to the dedicated mailbox client."
+  "The resource scope every mailbox grant carries: event subscriptions."
   "mailbox:events")
+
+(def mailbox-send-scope
+  "Optional resource scope: send as the client's node (L8 still decides who)."
+  "mailbox:send")
+
+(def mailbox-scopes
+  "Resource scopes a mailbox client may hold, in advertised order."
+  [mailbox-scope mailbox-send-scope])
+
+(def mailbox-scope-tools
+  "Mailbox MCP tools each resource scope opens, as data."
+  {mailbox-scope #{"whoami"}
+   mailbox-send-scope #{"whoami" "resolve_address" "send_message" "get_delivery"}})
+
+(defn scope-set
+  "A space-delimited scope string as a set, or nil when malformed."
+  [scope]
+  (when (and (string? scope) (re-matches #"[A-Za-z0-9:_-]+( [A-Za-z0-9:_-]+)*" scope))
+    (set (str/split scope #" "))))
+
+(defn mailbox-scopes?
+  "A mailbox resource scope set: always events, optionally send, nothing else."
+  [scopes]
+  (boolean (and (set? scopes) (contains? scopes mailbox-scope)
+                (every? (set mailbox-scopes) scopes))))
+
+(defn mailbox-tools
+  "Tools a mailbox OAuth grant may call, from its resource scopes."
+  [scopes]
+  (into #{} (mapcat mailbox-scope-tools) scopes))
 
 (def registry
   "Named input contracts; private keys and client secrets stay in server config."
@@ -17,7 +49,9 @@
              [:secret [:ref ::secret]]
              [:redirect-uris [:vector {:min 1 :max 16} [:ref ::uri]]]
              [:refresh-enabled? {:optional true} :boolean]
-             [:device-enabled? {:optional true} :boolean]]
+             [:device-enabled? {:optional true} :boolean]
+             ;; The identity-tree node this mailbox client authenticates as.
+             [:mailbox-node {:optional true} did/Did]]
    ::config [:map {:closed true}
              [:issuer [:ref ::uri]]
              [:clients [:vector {:min 1 :max 64} [:ref ::client]]]
@@ -29,20 +63,33 @@
              [:mailbox-resource {:optional true} [:ref ::uri]]
              [:node-grants {:optional true} [:vector {:max 64} relay/grant-schema]]]})
 
+(defn mailbox-node
+  "The tree node a registered mailbox client authenticates as, or nil."
+  [{:keys [clients mailbox-resource]} client-id]
+  (when (some? mailbox-resource)
+    (some #(when (= client-id (:id %)) (:mailbox-node %)) clients)))
+
 (defn mailbox-client?
-  "Check the exact opt-in registered client identity."
-  [{:keys [mailbox-client-id mailbox-resource]} client-id]
-  (and (some? mailbox-client-id) (some? mailbox-resource)
-       (= mailbox-client-id client-id)))
+  "Check the exact opt-in registered client identity: the legacy single
+   `:mailbox-client-id`, or any client registered with a `:mailbox-node`."
+  [{:keys [mailbox-client-id mailbox-resource] :as config} client-id]
+  (boolean
+   (and (some? mailbox-resource) (some? client-id)
+        (or (= mailbox-client-id client-id)
+            (some? (mailbox-node config client-id))))))
 
 (defn- mailbox-client-configured?
+  "Every mailbox client has exactly one redirect and no device flow; a mailbox
+   resource has at least one mailbox client, and node clients need a resource."
   [{:keys [clients mailbox-client-id mailbox-resource] :as config}]
-  (or (and (nil? mailbox-client-id) (nil? mailbox-resource))
-      (some (fn [{:keys [id redirect-uris device-enabled?]}]
-              (and (mailbox-client? config id)
-                   (= 1 (count redirect-uris))
-                   (not (true? device-enabled?))))
-            clients)))
+  (let [mailbox (filter #(mailbox-client? config (:id %)) clients)]
+    (if (nil? mailbox-resource)
+      (and (nil? mailbox-client-id) (not-any? :mailbox-node clients))
+      (and (seq mailbox)
+           (or (nil? mailbox-client-id) (some #(= mailbox-client-id (:id %)) mailbox))
+           (every? (fn [{:keys [redirect-uris device-enabled?]}]
+                     (and (= 1 (count redirect-uris)) (not (true? device-enabled?))))
+                   mailbox)))))
 
 (defn require-config!
   "Validate closed config and unique client IDs before any provider is created.
@@ -65,7 +112,7 @@
   (and (mailbox-client? config client-id)
        (= issuer token-issuer)
        (= mailbox-resource audience)
-       (= mailbox-scope scope)
+       (mailbox-scopes? (scope-set scope))
        (every? #(and (string? %) (<= 1 (count %) 2048)) [account-id grant-id])))
 
 (defn- consent-scopes?
@@ -74,7 +121,7 @@
        (some #{"openid"} scopes)
        (if mailbox-client?
          (and (some #{mailbox-scope} scopes)
-              (every? #{"openid" "profile" "mailbox:events"} scopes))
+              (every? (into #{"openid" "profile"} mailbox-scopes) scopes))
          (every? #{"openid" "profile"} scopes))))
 
 (defn interaction-admission

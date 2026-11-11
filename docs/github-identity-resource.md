@@ -152,6 +152,12 @@ alice (:human)
   through the normal provision op as its parent (G1 applies). Existing actors
   are left untouched, so restarts are no-ops; nothing is ever deleted or
   changed by a seed. Credentials are never in seeds; add them in the portal.
+- A node may carry `:proofs {:atproto "did:plc:…"}`. The seed operator (a
+  managing ancestor, L4) binds that AT Protocol account to the node once, as a
+  `:resource/proof-binding` keyed by the account. An AT Protocol sign-in as
+  that account then authenticates as the node (`authn`), never as a separate
+  identity. A subject already bound elsewhere is refused, never moved; only a
+  managing ancestor of the bound node can unbind it. Bindings carry no secret.
 
 Host agents (`:host` → `:agent`) let each coding tool on a machine hold its
 own keys. Suspending a host suspends its agents (G3).

@@ -93,6 +93,14 @@
 (defn- tool-error-message [error]
   (str (name error) ": " (get error-actions error "Check the tool arguments and retry with an authorized session.")))
 
+(defn- tool-allowed?
+  "`:tools/allowed` (an OAuth grant's scopes) bounds the tools; the older
+   `:events/only?` flag alone means whoami only; otherwise every tool."
+  [ctx tool]
+  (if-let [allowed (:tools/allowed ctx)]
+    (contains? allowed tool)
+    (or (not (:events/only? ctx)) (= "whoami" tool))))
+
 (defn- rpc-request
   "Evaluate a request; the public adapter suppresses notification responses."
   [lg ctx {:strs [id method params]}]
@@ -109,12 +117,10 @@
 
     (= method "tools/list")
     {:ledger lg :response {"jsonrpc" "2.0" "id" id
-                           "result" {"tools" (if (:events/only? ctx)
-                                               (filterv #(= "whoami" (get % "name")) tool-descriptors)
-                                               tool-descriptors)}}}
+                           "result" {"tools" (filterv #(tool-allowed? ctx (get % "name")) tool-descriptors)}}}
 
-    (and (= method "tools/call") (:events/only? ctx) (not= "whoami" (get params "name")))
-    {:ledger lg :response (rpc-error id -32001 "Mailbox event scope does not grant this tool")}
+    (and (= method "tools/call") (not (tool-allowed? ctx (get params "name"))))
+    {:ledger lg :response (rpc-error id -32001 "Mailbox OAuth scope does not grant this tool")}
 
     (= method "tools/call")
     (let [tool-name (get params "name")

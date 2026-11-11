@@ -4,7 +4,11 @@
             [axxium.auth.token :as token]
             [axxium.config :as cfg]
             [axxium.db :as db]
+            [axxium.domain.github-identity :as gi]
             [axxium.domain.kernel-fixture :as fixture]
+            [axxium.domain.state :as state]
+            [axxium.extern.github-identity-mcp :as identity-mcp]
+            [axxium.shape.ledger-edn :as edn-lines]
             [axxium.extern.agent-credentials :as secrets]
             [axxium.extern.fastify :as fastify]
             [axxium.extern.http :as http]
@@ -374,5 +378,145 @@
 (deftest opted-in-mailbox-webhook-survives-restart-and-rechecks-access
   (async done
     (-> (verify-webhook*)
+        (.catch (fn [error] (is false (str error))))
+        (.finally done))))
+
+;; ------------------------------------------------- identity-tree admission
+
+(def ^:private tree-host "axxium.example")
+(defn- node [p] (str "did:web:" tree-host ":actors:" p))
+(def ^:private no-github
+  {:policy/repos #{} :policy/permissions {} :policy/actions #{} :policy/forbid #{:force-push}})
+
+(defn- tree-ledger
+  "Err's tree: the two AT Protocol pilot accounts bound to Work nodes, and a
+   Grok Bot node holding a bootstrap key. Carol's account is bound to nothing."
+  [bootstrap-key]
+  (let [n (atom 900)
+        ids (fn [] {:decision-id (fixture/event-uuid (swap! n inc))
+                    :effect-id (fixture/event-uuid (swap! n inc)) :at fixture/t1})
+        seed {:root {:id "err" :name "Err" :policy (assoc no-github :policy/repos #{"*"})}
+              :nodes [{:id "err:work" :parent "err" :kind :group :name "Work" :policy no-github}
+                      {:id "err:work:sender" :parent "err:work" :kind :agent :name "Sender"
+                       :policy no-github :proofs {:atproto fixture/alice}}
+                      {:id "err:work:inbox" :parent "err:work" :kind :agent :name "Inbox"
+                       :policy no-github :proofs {:atproto fixture/bob}}
+                      {:id "err:grokbots:grok-bot" :parent "err" :kind :bot :name "Grok Bot"
+                       :policy no-github}]}
+        lg (:ledger (gi/seed-ledger (gi/resolve-seed seed tree-host) ids))
+        lg (:ledger (gi/issue-bootstrap lg (state/fold lg) (node "err") (node "err:grokbots:grok-bot")
+                                        (identity-mcp/digest bootstrap-key) (ids)))]
+    {:lg lg :ids ids}))
+
+(defn- ^:async verify-tree-admission* []
+  (let [keys (await (signing/generate-ephemeral!))
+        dir (fs/mkdtempSync (path/join (os/tmpdir) "axxium-mailbox-tree-"))
+        ledger (path/join dir "ledger.edn")
+        tree-file (path/join dir "identity.edn")
+        live (atom {})
+        app (atom nil)
+        config cfg/get-in-config
+        grok-key "fixture-grok-bot-bootstrap-key"
+        {tree :lg ids :ids} (tree-ledger grok-key)
+        write-tree! (fn [lg] (fs/writeFileSync tree-file (edn-lines/export-lines lg)))
+        grok {"x-axxium-actor" (node "err:grokbots:grok-bot")}
+        grants (atom {})
+        strip #(dissoc % :oauth/scopes)
+        oauth {:issuer (str origin "/oidc") :resource audience :scope "mailbox:events"
+               :scopes ["mailbox:events" "mailbox:send"]
+               :client-node (fn [client] (when (= "chatgpt" client) (node "err:work:inbox")))
+               :access-proof! (fn [token] (get @grants token))
+               :active-grant? (fn [proof] (boolean (some #(= (strip proof) (strip %)) (vals @grants))))}]
+    (try
+      (fs/writeFileSync ledger "" #js {:mode 384})
+      (write-tree! tree)
+      (with-redefs [signing/current! (constantly keys)
+                    db/query-one-sql (fn [q] (js/Promise.resolve (get @live q)))
+                    cfg/get-in-config (fn [ks]
+                                        (case (first ks)
+                                          :mailbox/ledger-file ledger
+                                          :mailbox/authority {:root-did (node "err") :ledger-file tree-file}
+                                          :mailbox/pilot-allowed-dids nil
+                                          :mailbox/webhook-actor-did nil
+                                          :identity/root-operator-binding nil
+                                          :axxium/public-base-url origin
+                                          (config ks)))]
+        (reset! app (await (start-app! oauth)))
+        (let [alice (:bearer (await (mint-fixture! live "actor_11111111-1111-4111-8111-111111111111"
+                                                  (secrets/secure-id) fixture/alice)))
+              inbox (await (session/atproto-session-proof
+                            (:bearer (await (mint-fixture! live "actor_22222222-2222-4222-8222-222222222222"
+                                                           (secrets/secure-id) fixture/bob)))))
+              carol (:bearer (await (mint-fixture! live "actor_33333333-3333-4333-8333-333333333333"
+                                                  (secrets/secure-id) fixture/carol)))
+              init (rpc "initialize")
+              a-session (:sid (await (request! @app "POST" alice nil init {})))
+              g-session (:sid (await (request! @app "POST" grok-key nil init grok)))
+              whoami (fn [token sid headers]
+                       (request! @app "POST" token sid (tool "whoami" {}) headers))
+              send (fn [to key]
+                     (request! @app "POST" grok-key g-session
+                               (tool "send_message" {"to" to "idempotency_key" key "body" {"n" 1}}) grok))]
+          (is (some? a-session) "a bound did:plc is admitted")
+          (is (= (node "err:work:sender") (get (result (await (whoami alice a-session {}))) "did"))
+              "π ∘ authn: it acts as its tree node, not as its did:plc")
+          (is (= 403 (:status (await (request! @app "POST" carol nil init {}))))
+              "an unbound AT Protocol account is refused")
+          (is (some? g-session) "a bootstrap key admits its node")
+          (is (= (node "err:grokbots:grok-bot") (get (result (await (whoami grok-key g-session grok))) "did")))
+          (is (= 401 (:status (await (request! @app "POST" "wrong-key" nil init grok)))))
+          (is (= 401 (:status (await (request! @app "POST" grok-key nil init
+                                              {"x-axxium-actor" (node "err:work:inbox")})))))
+          (is (= "accepted" (get (result (await (send (node "err:work:inbox") "in-tree"))) "accepted"))
+              "same-tree send needs no grant_send")
+          (is (true? (get-in (await (send fixture/carol "outside")) [:data "result" "isError"]))
+              "a send outside the tree still needs an explicit grant")
+          (let [grant (assoc inbox :oauth/grant-id "chatgpt-grant" :oauth/client-id "chatgpt"
+                             :oauth/resource audience)
+                _ (reset! grants {"events-token" (assoc grant :oauth/scopes #{"mailbox:events"})
+                                  "send-token" (assoc grant :oauth/scopes #{"mailbox:events" "mailbox:send"})})
+                metadata-path "/.well-known/oauth-protected-resource/api/mailbox/mcp"
+                metadata (await (request! (update @app :url #(str/replace % (re-pattern (str endpoint "$")) metadata-path))
+                                          "GET" nil nil nil {}))
+                e-session (:sid (await (request! @app "POST" "events-token" nil init {})))
+                s-session (:sid (await (request! @app "POST" "send-token" nil init {})))
+                tools (fn ^:async tools [token sid] (set (map #(get % "name")
+                                                (get-in (await (request! @app "POST" token sid (rpc "tools/list") {}))
+                                                        [:data "result" "tools"]))))
+                reply (fn [token sid key]
+                        (request! @app "POST" token sid
+                                  (tool "send_message" {"to" (node "err:grokbots:grok-bot") "idempotency_key" key
+                                                        "body" {"reply" "from ChatGPT"}}) {}))]
+            (is (= ["mailbox:events" "mailbox:send"] (get-in metadata [:data "scopes_supported"])))
+            (is (= #{"whoami"} (await (tools "events-token" e-session))) "mailbox:events alone stays events-only")
+            (is (= -32001 (get-in (await (reply "events-token" e-session "no-scope")) [:data "error" "code"])))
+            (is (= #{"whoami" "resolve_address" "send_message" "get_delivery"} (await (tools "send-token" s-session))))
+            (is (= (node "err:work:inbox") (get (result (await (whoami "send-token" s-session {}))) "did"))
+                "the grant acts as the client's node")
+            (is (= "accepted" (get (result (await (reply "send-token" s-session "chatgpt-reply"))) "accepted"))
+                "mailbox:send lets ChatGPT reply to Grok Bot in-tree with no grant")
+            (is (= -32001 (get-in (await (request! @app "POST" "send-token" s-session (tool "read_inbox" {}) {}))
+                                  [:data "error" "code"])) "send scope does not open reading")
+            (write-tree! (:ledger (gi/suspend tree (state/fold tree) (node "err") (node "err:work:inbox") (ids))))
+            (is (= 403 (:status (await (reply "send-token" s-session "suspended"))))
+                "the send scope holds only while the consenting node is effective")
+            (write-tree! tree))
+          (do
+            (write-tree! (:ledger (gi/suspend tree (state/fold tree) (node "err") (node "err:work") (ids))))
+            (is (= 403 (:status (await (whoami alice a-session {})))) "a suspended ancestor ends access at once")
+            (is (true? (get-in (await (send (node "err:work:inbox") "after-suspend")) [:data "result" "isError"]))
+                "a suspended recipient is refused")
+            (is (some? (result (await (whoami grok-key g-session grok)))) "a sibling subtree is unaffected"))
+          (write-tree! (:ledger (gi/revoke-actor tree (state/fold tree) (node "err")
+                                                 (node "err:grokbots:grok-bot") (ids))))
+          (is (= 401 (:status (await (whoami grok-key g-session grok))))
+              "a revoked node's bootstrap key admits nothing")))
+      (finally
+        (when @app (await (.close (:app @app))))
+        (fs/rmSync dir #js {:recursive true})))))
+
+(deftest identity-tree-admission-over-loopback-http
+  (async done
+    (-> (verify-tree-admission*)
         (.catch (fn [error] (is false (str error))))
         (.finally done))))

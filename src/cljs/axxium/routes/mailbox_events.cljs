@@ -25,7 +25,8 @@
                     "required" ["message_id"] "additionalProperties" false}})
 
 (defn enabled? [runtime proof]
-  (and runtime (= (:owner runtime) (get-in proof [:principal :auth/did]))))
+  (and runtime (= (:owner runtime) (get-in proof [:mailbox/principal :auth/did]
+                                             (get-in proof [:principal :auth/did])))))
 
 (defn- success [id result]
   {:response {"jsonrpc" "2.0" "id" id "result" result}})

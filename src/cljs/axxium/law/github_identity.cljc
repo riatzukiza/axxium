@@ -37,6 +37,25 @@
 (def statuses #{:active :suspended :revoked})
 
 (defn actor-resource-id [did] (str "bot-actor:" did))
+
+(def proof-binding-kind
+  "A resource naming one external proof subject that authenticates as one node."
+  :resource/proof-binding)
+
+(def proof-kinds
+  "External proof kinds a node may be bound to. :atproto subjects are did:plc
+   accounts proven by an AT Protocol OAuth sign-in."
+  #{:atproto})
+
+(defn proof-binding-resource-id
+  "Keyed by the proof subject, so one subject names at most one node."
+  [kind subject]
+  (str "proof-binding:" (name kind) ":" subject))
+
+(defn valid-proof-subject?
+  [kind subject]
+  (boolean (and (contains? proof-kinds kind) (string? subject)
+                (case kind :atproto (re-matches #"did:plc:[a-z2-7]{24}" subject)))))
 (defn credential-resource-id [did label] (str "credential:" did ":" label))
 
 (def levels {"none" 0 "read" 1 "write" 2 "admin" 3})

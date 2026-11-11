@@ -2,6 +2,7 @@
   "Fastify interaction transport around the durable OIDC engine."
   (:require [axxium.auth.session :as session]
             [axxium.extern.agent-credentials :as secrets]
+            [axxium.extern.mailbox-authority :as authority]
             [axxium.extern.oidc-provider :as engine]
             [axxium.extern.oidc-store :as store]
             [axxium.extern.relay :as relay]
@@ -70,12 +71,15 @@
         (when (= "active" (:status actor)) {:actor actor :digest (secrets/token-hash token)})))))
 
 (defn- ^:async interaction-root!
-  [request cookie-name resolve-session! mailbox? owner]
+  "A mailbox interaction needs a live AT Protocol sign-in the mailbox
+   authority admits for this exact client (L6, and for a tree client L4: the
+   signer is the client's node or manages it)."
+  [request cookie-name resolve-session! mailbox? admit client-id]
   (if mailbox?
     (when-let [proof (await (session/atproto-session-proof (cookie-value request cookie-name)))]
-      (when (and (= owner (get-in proof [:principal :auth/did]))
-                 (await (session/active-atproto-session? proof)))
-        {:actor {:id (:actor-id proof) :display_name owner} :proof proof}))
+      (when-let [admitted (admit proof client-id)]
+        (when (await (session/active-atproto-session? proof))
+          {:actor {:id (:actor-id proof) :display_name admitted} :proof proof})))
     (await (current-root request cookie-name resolve-session!))))
 
 (defn- fail!
@@ -131,9 +135,11 @@
 
 (defn- mailbox-redirect-source
   "Allow the browser to finish this mailbox interaction's registered callback redirect."
-  [{:keys [clients mailbox-client-id]} details]
-  (let [redirect (.. details -params -redirect_uri)
-        registered (some #(when (= mailbox-client-id (:id %)) (:redirect-uris %)) clients)]
+  [{:keys [clients] :as config} details]
+  (let [client-id (.. details -params -client_id)
+        redirect (.. details -params -redirect_uri)
+        registered (when (law/mailbox-client? config client-id)
+                     (some #(when (= client-id (:id %)) (:redirect-uris %)) clients))]
     (when (some #{redirect} registered)
       (let [url (js/URL. redirect)]
         ;; Browsers check the origin across redirects. The provider still checks the exact URI.
@@ -173,6 +179,9 @@
    resolve-session! lookup-actor!]
   (when (seq config-file)
     (let [config (private-config config-file)
+          admit (fn [proof client-id]
+                  (authority/admit (authority/with-owner (authority/current) mailbox-actor-did) proof
+                                   {:oauth? true :client-node (law/mailbox-node config client-id)}))
           issuer (:issuer config)
           mailbox-resource (:mailbox-resource config)
           origin (.-origin (js/URL. issuer))
@@ -189,7 +198,7 @@
       (install-store-sweeper! app pool)
       (let [provider (engine/create-provider! pool config lookup-actor!
                        (fn [grant-id actor-id] (store/session-grant-active? pool grant-id actor-id))
-                       mailbox-actor-did)
+                       admit)
             callback (.callback provider)]
         (await (relay/install! app config #(private-config config-file) lookup-actor!))
         ;; Provider receives the raw stream before Fastify can parse a token body.
@@ -249,7 +258,7 @@
                     (if-not (= uid (.-uid details))
                       (fail! reply 400)
                       (if-let [root (await (interaction-root! request session-cookie-name resolve-session!
-                                              mailbox? mailbox-actor-did))]
+                                              mailbox? admit (.. details -params -client_id)))]
                         ;; The root actor may have changed since the provider's
                         ;; browser session. Render current identity; the protected
                         ;; POST restarts login before it can ever grant consent.
@@ -277,7 +286,7 @@
                       (let [details (await (.interactionDetails provider (.-raw request) (.-raw reply)))
                             mailbox? (mailbox-interaction? config details)]
                         (if-let [root (await (interaction-root! request session-cookie-name resolve-session!
-                                               mailbox? mailbox-actor-did))]
+                                               mailbox? admit (.. details -params -client_id)))]
                           (let [actor-id (get-in root [:actor :id])
                               prompt (.. details -prompt -name)
                               scopes (str/split (or (.. details -params -scope) "") #"\s+")
@@ -303,13 +312,17 @@
                             :consent
                             (let [grant (new (.-Grant provider)
                                              #js {:accountId actor-id :clientId (.. details -params -client_id)})]
-                              (.addOIDCScope grant (str/join " " (remove #{law/mailbox-scope} scopes)))
+                              (.addOIDCScope grant (str/join " " (remove (set law/mailbox-scopes) scopes)))
                               (.addOIDCClaims grant (clj->js claims))
-                              (when mailbox? (.addResourceScope grant mailbox-resource law/mailbox-scope))
+                              ;; Consent already admitted the client's node (L6): events
+                              ;; always, send only when the client asked for it.
+                              (when mailbox?
+                                (.addResourceScope grant mailbox-resource
+                                  (str/join " " (filter (set scopes) law/mailbox-scopes))))
                               (let [grant-id (await (.save grant))]
                                 (if mailbox?
                                   (await (store/bind-mailbox-session! pool grant-id (:proof root)
-                                           (:mailbox-client-id config) mailbox-resource))
+                                           (.. details -params -client_id) mailbox-resource))
                                   (await (store/bind-session! pool grant-id actor-id (:digest root))))
                                 (.hijack reply)
                                 (await (.interactionFinished provider (.-raw request) (.-raw reply)
@@ -326,10 +339,11 @@
                           (.end (.-raw reply) "Shared login could not be completed"))
                       (fail! reply (if (<= 400 (or (.-statusCode error) 503) 499) 400 503)))))))))
         (if mailbox-resource
-          {:resource mailbox-resource :issuer issuer :scope law/mailbox-scope
-           :access-proof! (fn [bearer] (engine/mailbox-access-proof! provider pool config mailbox-actor-did bearer))
+          {:resource mailbox-resource :issuer issuer :scope law/mailbox-scope :scopes law/mailbox-scopes
+           :access-proof! (fn [bearer] (engine/mailbox-access-proof! provider pool config admit bearer))
+           :client-node (fn [client-id] (law/mailbox-node config client-id))
            :active-grant?
            (fn ^:async active-grant? [proof]
-             (= proof (await (engine/current-mailbox-grant! pool config mailbox-actor-did
-                               (:oauth/grant-id proof) (:actor-id proof)))))}
+             (= (dissoc proof :oauth/scopes) (await (engine/current-mailbox-grant! pool config admit
+                               (:oauth/grant-id proof) (:actor-id proof) (:oauth/client-id proof)))))}
           true)))))

@@ -52,6 +52,14 @@
     {:events (into [] (mapcat mailbox-frame-events) (edn-lines/import-lines complete))
      :tail-bytes (when (< end (.-length buffer)) end)}))
 
+(defn read-ledger
+  "Complete committed events of a ledger another process owns. Never repairs
+   or writes: an uncommitted tail is ignored, a missing file reads as empty."
+  [path]
+  (if (fs/existsSync path)
+    (:events (decode-ledger (fs/readFileSync path "utf8")))
+    []))
+
 (defn load-ledger [path]
   (if (fs/existsSync path)
     (let [{:keys [events tail-bytes]} (decode-ledger (fs/readFileSync path "utf8"))]

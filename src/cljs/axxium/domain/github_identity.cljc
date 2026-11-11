@@ -206,6 +206,49 @@
                                                               :credential/generation :github/app-slug])
                                                (credentials state d))}))))
 
+;; -------------------------------------------------------- proof bindings
+;;
+;; authn : Proof ⇀ Node. A binding maps one external proof subject (an AT
+;; Protocol did:plc) to exactly one node. The resource ID is keyed by the
+;; subject, so the map stays a function (L5). Only a managing ancestor may
+;; bind (L4): a node can never claim an outside account for itself.
+
+(defn proof-binding [state kind subject]
+  (let [r (get-in state [:resources (law/proof-binding-resource-id kind subject)])]
+    (when (= law/proof-binding-kind (:resource/kind r)) r)))
+
+(defn bound-node
+  "The node an external proof subject authenticates as, or nil."
+  [state kind subject]
+  (let [r (proof-binding state kind subject)]
+    (when (= :active (get-in r [:resource/metadata :binding/status]))
+      (:resource/owner r))))
+
+(defn- binding-resource [did kind subject status]
+  {:resource/id (law/proof-binding-resource-id kind subject)
+   :resource/kind law/proof-binding-kind
+   :resource/owner did
+   :resource/store :axxium
+   :resource/metadata {:binding/kind kind :binding/subject subject :binding/status status}})
+
+(defn bind-proof
+  "A managing ancestor binds an unbound proof subject to an effective node."
+  [lg state operator did kind subject ids]
+  (act lg state operator :bind (binding-resource did kind subject :active)
+       (and (law/valid-proof-subject? kind subject)
+            (nil? (proof-binding state kind subject))
+            (effective? state did) (may-manage? state operator did)) ids))
+
+(defn unbind-proof
+  "Terminal: a managing ancestor of the bound node revokes the binding."
+  [lg state operator kind subject ids]
+  (let [r (proof-binding state kind subject)
+        did (:resource/owner r)]
+    (act lg state operator :revoke
+         (binding-resource (or did operator) kind subject :revoked)
+         (and r (= :active (get-in r [:resource/metadata :binding/status]))
+              (may-manage? state operator did)) ids)))
+
 ;; ------------------------------------------------------------ bootstrap
 
 (defn issue-bootstrap
@@ -284,13 +327,14 @@
          pol #(if (keyword? %) (get policies %) %)
          root-did (did (:id root) nil)
          resolved (reduce
-                   (fn [{:keys [parents] :as out} {:keys [id parent name kind policy]}]
+                   (fn [{:keys [parents] :as out} {:keys [id parent name kind policy proofs]}]
                      (let [parent-did (or (get parents parent) (did parent nil))
                            resolved-id (did id parent-did)]
                        (-> out
                            (update :parents remember-seed-parent prefixes id resolved-id)
-                           (update :nodes conj {:did resolved-id :parent parent-did :name name
-                                                :kind kind :policy (pol policy)}))))
+                           (update :nodes conj (cond-> {:did resolved-id :parent parent-did :name name
+                                                              :kind kind :policy (pol policy)}
+                                                       (seq proofs) (assoc :proofs proofs))))))
                    {:parents (remember-seed-parent {} prefixes (:id root) root-did) :nodes []}
                    nodes)]
      (when (seq legacy)
@@ -299,6 +343,25 @@
                                        (into #{root-did} (map :did) (:nodes resolved))))
      {:root (when root {:did root-did :name (:name root) :policy (pol (:policy root))})
       :nodes (:nodes resolved)})))
+
+(defn- apply-seed-proofs
+  "Bind each seed proof subject once. A subject already bound to this node is
+   left as it is; one bound elsewhere, or revoked, is refused, never moved."
+  [acc operator did proofs ids]
+  (reduce (fn [{lg :ledger :as acc} [kind subject]]
+            (let [st (state/fold lg)
+                  existing (proof-binding st kind subject)]
+              (cond
+                (and existing (= did (:resource/owner existing))
+                     (= :active (get-in existing [:resource/metadata :binding/status])))
+                acc
+                existing (update acc :refused-bindings conj [did kind subject])
+                :else
+                (let [out (bind-proof lg st operator did kind subject (ids))]
+                  (-> (assoc acc :ledger (:ledger out))
+                      (update (if (:effect out) :bound :refused-bindings) conj [did kind subject]))))))
+          acc
+          (sort-by (comp name key) proofs)))
 
 (defn apply-seed
   "Idempotently apply resolved `nodes` as `operator`, through the same
@@ -311,19 +374,20 @@
   (let [lg (if (and root (= operator (:did root)) (nil? (actor-node (state/fold lg) (:did root))))
              (:ledger (register-root lg (state/fold lg) (:did root) (:name root) (:policy root) (ids)))
              lg)]
-    (reduce (fn [{lg :ledger :as acc} {:keys [did parent name kind policy]}]
-              (let [st (state/fold lg)]
-                (cond
-                  (actor-node st did) (update acc :unchanged conj did)
-                  ;; G2: the operator must be the parent or manage it
-                  (not (or (and (= operator parent) (effective? st parent))
-                           (may-manage? st operator parent)))
-                  (update acc :refused conj did)
-                  :else
-                  (let [out (provision-actor lg st operator parent did name policy (or kind :bot) (ids))]
-                    (-> (assoc acc :ledger (:ledger out))
-                        (update (if (:effect out) :created :refused) conj did))))))
-            {:ledger lg :created [] :unchanged [] :refused []}
+    (reduce (fn [{lg :ledger :as acc} {:keys [did parent name kind policy proofs]}]
+              (let [st (state/fold lg)
+                    acc (cond
+                          (actor-node st did) (update acc :unchanged conj did)
+                          ;; G2: the operator must be the parent or manage it
+                          (not (or (and (= operator parent) (effective? st parent))
+                                   (may-manage? st operator parent)))
+                          (update acc :refused conj did)
+                          :else
+                          (let [out (provision-actor lg st operator parent did name policy (or kind :bot) (ids))]
+                            (-> (assoc acc :ledger (:ledger out))
+                                (update (if (:effect out) :created :refused) conj did))))]
+                (apply-seed-proofs acc operator did proofs ids)))
+            {:ledger lg :created [] :unchanged [] :refused [] :bound [] :refused-bindings []}
             nodes)))
 
 (defn seed-ledger

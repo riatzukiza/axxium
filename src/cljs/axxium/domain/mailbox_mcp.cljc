@@ -223,7 +223,7 @@
     true
     (catch #?(:clj Exception :cljs :default) _ false)))
 
-(defn- send-message [lg {:keys [principal now]} {:keys [to from idempotency-key body]}]
+(defn- send-message [lg {:keys [principal now] :as ctx} {:keys [to from idempotency-key body]}]
   (let [me (:auth/did principal)]
     (cond
       (and (some? from) (not= from me)) (refuse :forged-sender)
@@ -246,11 +246,16 @@
               msg {:message/id mid :message/from me :message/to to :message/body body
                    :message/idempotency-key idempotency-key :message/owner to
                    :message/receipt receipt}
+              ;; `:send/allowed?` is the adapter's selected send policy
+              ;; (axxium.domain.mailbox-authority/send-policies); without one,
+              ;; only explicit mailbox grants decide.
+              allowed? (or (:send/allowed? ctx) (constantly false))
               {lg1 :ledger e :effect}
               (policy/act lg (state/fold lg)
                           {:actor me :resource box :action :send :at now}
                           {:stream box :type :axxium.mailbox/accepted :actor me :body msg}
-                          {:decision-id (nid lg) :effect-id mid :at now})]
+                          {:decision-id (nid lg) :effect-id mid :at now}
+                          (fn [_ _] (boolean (allowed? me to))))]
           (if-not e
             (refuse lg1 :forbidden)
             (let [[lg2 _] (ledger/emit lg1 {:id (nid lg1) :stream outbox :type :axxium.outbox/pending

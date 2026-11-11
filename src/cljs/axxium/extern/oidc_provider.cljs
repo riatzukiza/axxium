@@ -24,7 +24,8 @@
   #js {:getResourceServerInfo
        (fn [_ctx resource client]
          (if (and (law/mailbox-client? config (.-clientId client)) (= mailbox-resource resource))
-           #js {:scope law/mailbox-scope :audience mailbox-resource :accessTokenFormat "opaque"}
+           #js {:scope (str/join " " law/mailbox-scopes) :audience mailbox-resource
+                :accessTokenFormat "opaque"}
            (throw (new (.-InvalidTarget errors)))))
        :defaultResource
        (fn [_ctx client requested]
@@ -39,23 +40,27 @@
               (.has (.-resourceIndicators source) mailbox-resource)))})
 
 (defn ^:async current-mailbox-grant!
-  "Require the grant to belong to the currently selected mailbox recipient."
-  [pool {:keys [mailbox-client-id mailbox-resource]} owner grant-id account-id]
-  (when-let [proof (await (store/mailbox-grant-proof! pool grant-id account-id
-                                                    mailbox-client-id mailbox-resource))]
-    (when (= owner (get-in proof [:principal :auth/did])) proof)))
+  "Require the exact client's current grant proof, and that the mailbox
+   authority still admits it. `admit` is (fn [proof client-id]) → admitted
+   principal key or nil: identity-tree L6 admission, or the deprecated
+   single-recipient fence."
+  [pool {:keys [mailbox-resource] :as config} admit grant-id account-id client-id]
+  (when (law/mailbox-client? config client-id)
+    (when-let [proof (await (store/mailbox-grant-proof! pool grant-id account-id
+                                                      client-id mailbox-resource))]
+      (when (admit proof client-id) proof))))
 
 (defn- current-grant!
-  "Apply the mailbox's verified-AT parent law to its dedicated client only."
-  [pool config owner verify-grant! grant-id account-id client-id]
+  "Apply the mailbox's verified-AT parent law to its dedicated clients only."
+  [pool config admit verify-grant! grant-id account-id client-id]
   (if (law/mailbox-client? config client-id)
-    (current-mailbox-grant! pool config owner grant-id account-id)
+    (current-mailbox-grant! pool config admit grant-id account-id client-id)
     (verify-grant! grant-id account-id)))
 
 (defn ^:async mailbox-access-proof!
   "Resolve one opaque resource access token to its current mailbox grant proof."
-  [provider pool {:keys [issuer mailbox-client-id] :as config} owner bearer]
-  (when (and mailbox-client-id provider (= issuer (.-issuer provider))
+  [provider pool {:keys [issuer mailbox-resource] :as config} admit bearer]
+  (when (and mailbox-resource provider (= issuer (.-issuer provider))
              (string? bearer) (re-matches #"[A-Za-z0-9_-]{1,512}" bearer))
     (when-let [token (await (.find (.-AccessToken provider) bearer))]
       (let [account-id (.-accountId token)
@@ -67,7 +72,9 @@
                             :token-issuer (some-> token (aget "extra") (aget "iss"))
                             :audience (.-aud token) :scope (.-scope token)
                             :account-id account-id :grant-id grant-id}))
-          (await (current-mailbox-grant! pool config owner grant-id account-id)))))))
+          (when-let [proof (await (current-mailbox-grant! pool config admit grant-id account-id
+                                                          (.-clientId token)))]
+            (assoc proof :oauth/scopes (law/scope-set (.-scope token)))))))))
 
 (defn- html-escape
   "Encode labels supplied by registered clients and displayed user codes."
@@ -114,8 +121,9 @@
   "Construct a code+PKCE authority with opt-in durable device approval.
    The HTTP mount owns browser root-session/Origin checks; polling requires only
    the registered confidential client's protocol authentication.
-   lookup-actor! returns a shaped current actor or nil; inactive actors refuse."
-  [pool config lookup-actor! verify-grant! mailbox-owner]
+   lookup-actor! returns a shaped current actor or nil; inactive actors refuse.
+   mailbox-admit is the mailbox authority's (fn [proof client-id])."
+  [pool config lookup-actor! verify-grant! mailbox-admit]
   (law/require-config! config)
   (when-not (and (fn? lookup-actor!) (fn? verify-grant!))
     (throw (ex-info "OIDC requires current actor and parent session verification" {})))
@@ -183,7 +191,7 @@
                                                    (boolean
                                                      (and (= (.-clientId token) (.-clientId client))
                                                           (some? (.-grantId token))
-                                                          (await (current-grant! pool config mailbox-owner verify-grant!
+                                                          (await (current-grant! pool config mailbox-admit verify-grant!
                                                                    (.-grantId token) (.-accountId token)
                                                                    (.-clientId client)))
                                                           (when-let [actor (await (lookup-actor! (.-accountId token)))]
@@ -214,7 +222,9 @@
                                            (= mailbox-resource (.-aud token)))
                                     #js {:iss issuer}
                                     js/undefined))
-              :scopes #js ["openid" "profile"]
+              :scopes (clj->js (cond-> ["openid" "profile"]
+                                 ;; Advertise resource scopes only where a mailbox exists.
+                                 mailbox-resource (into law/mailbox-scopes)))
               :claims #js {:openid #js ["sub"] :profile #js ["name"]}
               :renderError (fn [ctx _out _error]
                              (set! (.-type ctx) "text/plain")
@@ -234,7 +244,7 @@
                       client-id (.. oidc -client -clientId)
                       grant-id (or (some-> oidc (aget "result") (aget "consent") (aget "grantId"))
                                    (.grantIdFor session client-id))]
-                  (when (and grant-id (await (current-grant! pool config mailbox-owner verify-grant!
+                  (when (and grant-id (await (current-grant! pool config mailbox-admit verify-grant!
                                                grant-id (.-accountId session) client-id)))
                     (await (.find (.. oidc -provider -Grant) grant-id)))))
               :findAccount
@@ -245,7 +255,7 @@
                       (when (and (= subject (:id actor)) (= "active" (:status actor))
                                  (or (nil? token)
                                      (when-let [grant-id (.-grantId token)]
-                                       (await (current-grant! pool config mailbox-owner verify-grant!
+                                       (await (current-grant! pool config mailbox-admit verify-grant!
                                                 grant-id subject (.-clientId token))))))
                         (when token
                           (aset ctx "axxiumRootExpiry"

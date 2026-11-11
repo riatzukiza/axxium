@@ -205,7 +205,7 @@
                         (fn [lg]
                           (let [seed (gi/resolve-seed source authority (state/fold lg))]
                             (gi/apply-seed lg (get-in seed [:root :did]) seed mcp/event-ids)))))]
-        (println "Identity seed:" (count (:created out)) "created,"
+        (println "Identity seed:" (count (:created out)) "created," (count (:bound out)) "bound,"
                  (count (:unchanged out)) "unchanged," (count (:refused out)) "refused")
         out))))
 

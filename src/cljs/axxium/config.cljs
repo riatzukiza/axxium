@@ -101,7 +101,9 @@
                     {:reason :invalid-identity-root-operator-binding}))))
 
 (defn mailbox-pilot-allowed-dids
-  "Admit exactly two distinct AT Protocol DIDs including the webhook recipient."
+  "Deprecated flat fence, kept only so a running pilot can roll forward safely:
+   admit exactly two distinct AT Protocol DIDs including the webhook recipient.
+   Superseded by `mailbox-authority` (identity-tree admission)."
   [value webhook-actor]
   (when (some? value)
     (let [dids (str/split value #"," -1)
@@ -113,9 +115,34 @@
                         {:reason :invalid-mailbox-pilot-allowed-dids})))
       allowed)))
 
+(defn mailbox-authority
+  "Identity-tree mailbox admission: the root node every admitted principal
+   must sit under, and the shared append-only tree ledger read on every
+   request. Refuses the deprecated flat allowlist alongside it, so exactly one
+   admission rule is ever in force."
+  [root-did ledger-file legacy-allowed webhook-actor]
+  (let [root-did (present root-did)
+        ledger-file (present ledger-file)]
+    (cond
+      (and (nil? root-did) (nil? ledger-file)) nil
+
+      (and root-did ledger-file
+           (did-law/did? root-did) (str/starts-with? root-did "did:web:")
+           (str/starts-with? ledger-file "/")
+           (nil? legacy-allowed)
+           (or (nil? webhook-actor) (str/starts-with? webhook-actor "did:web:")))
+      {:root-did root-did :ledger-file ledger-file}
+
+      :else
+      (throw (ex-info (str "AXXIUM_MAILBOX_AUTHORITY_ROOT_DID (did:web) and an absolute "
+                           "AXXIUM_MAILBOX_AUTHORITY_LEDGER_FILE are required together, without "
+                           "AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS, and with a did:web webhook node")
+                      {:reason :invalid-mailbox-authority})))))
+
 (def config
   (let [instance (load-instance)
-        webhook-actor (present (env "AXXIUM_MAILBOX_WEBHOOK_ACTOR_DID"))]
+        webhook-actor (present (env "AXXIUM_MAILBOX_WEBHOOK_ACTOR_DID"))
+        legacy-allowed (mailbox-pilot-allowed-dids (env "AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS") webhook-actor)]
     {:axxium/env (or (env "NODE_ENV") "development")
      :axxium/port (env-int "AXXIUM_PORT" 8787)
      :axxium/host (env "AXXIUM_HOST" "0.0.0.0")
@@ -162,7 +189,11 @@
      :mailbox/ledger-file (present (env "AXXIUM_MAILBOX_LEDGER_FILE"))
      :mailbox/webhook-key-file (present (env "AXXIUM_MAILBOX_WEBHOOK_KEY_FILE"))
      :mailbox/webhook-actor-did webhook-actor
-     :mailbox/pilot-allowed-dids (mailbox-pilot-allowed-dids (env "AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS") webhook-actor)
+     :mailbox/pilot-allowed-dids legacy-allowed
+     ;; Identity-tree admission (L6). Replaces the flat allowlist above.
+     :mailbox/authority (mailbox-authority (env "AXXIUM_MAILBOX_AUTHORITY_ROOT_DID")
+                                           (env "AXXIUM_MAILBOX_AUTHORITY_LEDGER_FILE")
+                                           legacy-allowed webhook-actor)
      :identity/root-operator-binding
      (root-operator-binding (env "AXXIUM_IDENTITY_ROOT_OPERATOR_ACTOR_ID")
                             (env "AXXIUM_IDENTITY_ROOT_DID"))
