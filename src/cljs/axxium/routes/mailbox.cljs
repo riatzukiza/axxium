@@ -10,6 +10,7 @@
             [axxium.extern.mailbox-authority :as authority]
             [axxium.extern.mailbox-mcp :as rpc]
             [axxium.law.actor :as actor-law]
+            [axxium.law.oidc :as oidc-law]
             [axxium.routes.mailbox-events :as events]
             [clojure.string :as str]))
 
@@ -180,6 +181,9 @@
                  :session/push-supported? false
                  :events/enabled? (events/enabled? runtime proof)
                  :events/only? (some? (:oauth/grant-id proof))
+                 ;; An OAuth grant reaches only the tools its resource scopes open.
+                 :tools/allowed (when (:oauth/grant-id proof)
+                                  (oidc-law/mailbox-tools (or (:oauth/scopes proof) #{oidc-law/mailbox-scope})))
                  :audience resource}
             out (if (and (:events/enabled? ctx) (contains? events/event-methods (get body "method")))
                   (await (events/execute! runtime proof ctx body))
@@ -227,7 +231,7 @@
                    (fn [_ reply]
                      (http/send-secret! reply 200 {"resource" (:resource oauth)
                                                     "authorization_servers" [(:issuer oauth)]
-                                                    "scopes_supported" [(:scope oauth)]
+                                                    "scopes_supported" (vec (or (:scopes oauth) [(:scope oauth)]))
                                                     "bearer_methods_supported" ["header"]}))))
       (http/post! app endpoint
                   (authorized origin oauth resource-metadata

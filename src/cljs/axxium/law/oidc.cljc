@@ -2,11 +2,42 @@
   "Registered browser-client and private signing configuration contracts."
   (:require [axxium.law.did :as did]
             [axxium.law.relay :as relay]
+            [clojure.string :as str]
             [malli.core :as m]))
 
 (def mailbox-scope
-  "The only resource scope granted to the dedicated mailbox client."
+  "The resource scope every mailbox grant carries: event subscriptions."
   "mailbox:events")
+
+(def mailbox-send-scope
+  "Optional resource scope: send as the client's node (L8 still decides who)."
+  "mailbox:send")
+
+(def mailbox-scopes
+  "Resource scopes a mailbox client may hold, in advertised order."
+  [mailbox-scope mailbox-send-scope])
+
+(def mailbox-scope-tools
+  "Mailbox MCP tools each resource scope opens, as data."
+  {mailbox-scope #{"whoami"}
+   mailbox-send-scope #{"whoami" "resolve_address" "send_message" "get_delivery"}})
+
+(defn scope-set
+  "A space-delimited scope string as a set, or nil when malformed."
+  [scope]
+  (when (and (string? scope) (re-matches #"[A-Za-z0-9:_-]+( [A-Za-z0-9:_-]+)*" scope))
+    (set (str/split scope #" "))))
+
+(defn mailbox-scopes?
+  "A mailbox resource scope set: always events, optionally send, nothing else."
+  [scopes]
+  (boolean (and (set? scopes) (contains? scopes mailbox-scope)
+                (every? (set mailbox-scopes) scopes))))
+
+(defn mailbox-tools
+  "Tools a mailbox OAuth grant may call, from its resource scopes."
+  [scopes]
+  (into #{} (mapcat mailbox-scope-tools) scopes))
 
 (def registry
   "Named input contracts; private keys and client secrets stay in server config."
@@ -81,7 +112,7 @@
   (and (mailbox-client? config client-id)
        (= issuer token-issuer)
        (= mailbox-resource audience)
-       (= mailbox-scope scope)
+       (mailbox-scopes? (scope-set scope))
        (every? #(and (string? %) (<= 1 (count %) 2048)) [account-id grant-id])))
 
 (defn- consent-scopes?
@@ -90,7 +121,7 @@
        (some #{"openid"} scopes)
        (if mailbox-client?
          (and (some #{mailbox-scope} scopes)
-              (every? #{"openid" "profile" "mailbox:events"} scopes))
+              (every? (into #{"openid" "profile"} mailbox-scopes) scopes))
          (every? #{"openid" "profile"} scopes))))
 
 (defn interaction-admission

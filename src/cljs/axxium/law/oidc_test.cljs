@@ -212,3 +212,28 @@
                      (update-in candidate [:clients 2 :redirect-uris] conj "https://grok.example.test/other")
                      (assoc candidate :mailbox-client-id "missing")]]
       (is (nil? (admitted-config invalid))))))
+
+(deftest mailbox-send-scope-is-optional-and-bounded
+  (is (= #{"mailbox:events" "mailbox:send"} (law/scope-set "mailbox:events mailbox:send")))
+  (is (nil? (law/scope-set "mailbox:events  mailbox:send")))
+  (is (law/mailbox-scopes? #{"mailbox:events"}))
+  (is (law/mailbox-scopes? #{"mailbox:events" "mailbox:send"}))
+  (doseq [bad [#{} #{"mailbox:send"} #{"mailbox:events" "mailbox:admin"} nil]]
+    (is (not (law/mailbox-scopes? bad)) (pr-str bad)))
+  (is (= #{"whoami"} (law/mailbox-tools #{"mailbox:events"})))
+  (is (contains? (law/mailbox-tools #{"mailbox:events" "mailbox:send"}) "send_message"))
+  (is (not (contains? (law/mailbox-tools #{"mailbox:events" "mailbox:send"}) "read_inbox")))
+  (let [resource "https://identity.example.test/api/mailbox/mcp"
+        candidate (assoc config :mailbox-client-id "knoxx-stealth" :mailbox-resource resource)
+        claims {:client-id "knoxx-stealth" :token-issuer (:issuer config) :audience resource
+                :scope "mailbox:events mailbox:send" :account-id "actor" :grant-id "grant"}]
+    (is (law/mailbox-access-claims? candidate claims))
+    (is (law/mailbox-access-claims? candidate (assoc claims :scope "mailbox:send mailbox:events")))
+    (is (not (law/mailbox-access-claims? candidate (assoc claims :scope "mailbox:send"))))
+    (is (not (law/mailbox-access-claims? candidate (assoc claims :scope "mailbox:events openid")))))
+  (let [context {:expected-uid "uid" :actual-uid "uid" :actor-id "actor" :session-actor-id "actor"
+                 :prompt "consent" :decision "approve" :claims []
+                 :scopes ["openid" "mailbox:events" "mailbox:send"]}]
+    (is (= :consent (:decision (law/interaction-admission (assoc context :mailbox-client? true)))))
+    (is (not= :consent (:decision (law/interaction-admission context)))
+        "an ordinary client cannot request a mailbox scope")))

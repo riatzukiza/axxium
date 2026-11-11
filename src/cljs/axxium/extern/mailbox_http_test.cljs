@@ -419,7 +419,14 @@
         grok-key "fixture-grok-bot-bootstrap-key"
         {tree :lg ids :ids} (tree-ledger grok-key)
         write-tree! (fn [lg] (fs/writeFileSync tree-file (edn-lines/export-lines lg)))
-        grok {"x-axxium-actor" (node "err:grokbots:grok-bot")}]
+        grok {"x-axxium-actor" (node "err:grokbots:grok-bot")}
+        grants (atom {})
+        strip #(dissoc % :oauth/scopes)
+        oauth {:issuer (str origin "/oidc") :resource audience :scope "mailbox:events"
+               :scopes ["mailbox:events" "mailbox:send"]
+               :client-node (fn [client] (when (= "chatgpt" client) (node "err:work:inbox")))
+               :access-proof! (fn [token] (get @grants token))
+               :active-grant? (fn [proof] (boolean (some #(= (strip proof) (strip %)) (vals @grants))))}]
     (try
       (fs/writeFileSync ledger "" #js {:mode 384})
       (write-tree! tree)
@@ -434,9 +441,12 @@
                                           :identity/root-operator-binding nil
                                           :axxium/public-base-url origin
                                           (config ks)))]
-        (reset! app (await (start-app!)))
+        (reset! app (await (start-app! oauth)))
         (let [alice (:bearer (await (mint-fixture! live "actor_11111111-1111-4111-8111-111111111111"
                                                   (secrets/secure-id) fixture/alice)))
+              inbox (await (session/atproto-session-proof
+                            (:bearer (await (mint-fixture! live "actor_22222222-2222-4222-8222-222222222222"
+                                                           (secrets/secure-id) fixture/bob)))))
               carol (:bearer (await (mint-fixture! live "actor_33333333-3333-4333-8333-333333333333"
                                                   (secrets/secure-id) fixture/carol)))
               init (rpc "initialize")
@@ -461,6 +471,36 @@
               "same-tree send needs no grant_send")
           (is (true? (get-in (await (send fixture/carol "outside")) [:data "result" "isError"]))
               "a send outside the tree still needs an explicit grant")
+          (let [grant (assoc inbox :oauth/grant-id "chatgpt-grant" :oauth/client-id "chatgpt"
+                             :oauth/resource audience)
+                _ (reset! grants {"events-token" (assoc grant :oauth/scopes #{"mailbox:events"})
+                                  "send-token" (assoc grant :oauth/scopes #{"mailbox:events" "mailbox:send"})})
+                metadata-path "/.well-known/oauth-protected-resource/api/mailbox/mcp"
+                metadata (await (request! (update @app :url #(str/replace % (re-pattern (str endpoint "$")) metadata-path))
+                                          "GET" nil nil nil {}))
+                e-session (:sid (await (request! @app "POST" "events-token" nil init {})))
+                s-session (:sid (await (request! @app "POST" "send-token" nil init {})))
+                tools (fn ^:async tools [token sid] (set (map #(get % "name")
+                                                (get-in (await (request! @app "POST" token sid (rpc "tools/list") {}))
+                                                        [:data "result" "tools"]))))
+                reply (fn [token sid key]
+                        (request! @app "POST" token sid
+                                  (tool "send_message" {"to" (node "err:grokbots:grok-bot") "idempotency_key" key
+                                                        "body" {"reply" "from ChatGPT"}}) {}))]
+            (is (= ["mailbox:events" "mailbox:send"] (get-in metadata [:data "scopes_supported"])))
+            (is (= #{"whoami"} (await (tools "events-token" e-session))) "mailbox:events alone stays events-only")
+            (is (= -32001 (get-in (await (reply "events-token" e-session "no-scope")) [:data "error" "code"])))
+            (is (= #{"whoami" "resolve_address" "send_message" "get_delivery"} (await (tools "send-token" s-session))))
+            (is (= (node "err:work:inbox") (get (result (await (whoami "send-token" s-session {}))) "did"))
+                "the grant acts as the client's node")
+            (is (= "accepted" (get (result (await (reply "send-token" s-session "chatgpt-reply"))) "accepted"))
+                "mailbox:send lets ChatGPT reply to Grok Bot in-tree with no grant")
+            (is (= -32001 (get-in (await (request! @app "POST" "send-token" s-session (tool "read_inbox" {}) {}))
+                                  [:data "error" "code"])) "send scope does not open reading")
+            (write-tree! (:ledger (gi/suspend tree (state/fold tree) (node "err") (node "err:work:inbox") (ids))))
+            (is (= 403 (:status (await (reply "send-token" s-session "suspended"))))
+                "the send scope holds only while the consenting node is effective")
+            (write-tree! tree))
           (do
             (write-tree! (:ledger (gi/suspend tree (state/fold tree) (node "err") (node "err:work") (ids))))
             (is (= 403 (:status (await (whoami alice a-session {})))) "a suspended ancestor ends access at once")

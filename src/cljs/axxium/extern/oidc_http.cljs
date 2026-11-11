@@ -312,9 +312,13 @@
                             :consent
                             (let [grant (new (.-Grant provider)
                                              #js {:accountId actor-id :clientId (.. details -params -client_id)})]
-                              (.addOIDCScope grant (str/join " " (remove #{law/mailbox-scope} scopes)))
+                              (.addOIDCScope grant (str/join " " (remove (set law/mailbox-scopes) scopes)))
                               (.addOIDCClaims grant (clj->js claims))
-                              (when mailbox? (.addResourceScope grant mailbox-resource law/mailbox-scope))
+                              ;; Consent already admitted the client's node (L6): events
+                              ;; always, send only when the client asked for it.
+                              (when mailbox?
+                                (.addResourceScope grant mailbox-resource
+                                  (str/join " " (filter (set scopes) law/mailbox-scopes))))
                               (let [grant-id (await (.save grant))]
                                 (if mailbox?
                                   (await (store/bind-mailbox-session! pool grant-id (:proof root)
@@ -335,11 +339,11 @@
                           (.end (.-raw reply) "Shared login could not be completed"))
                       (fail! reply (if (<= 400 (or (.-statusCode error) 503) 499) 400 503)))))))))
         (if mailbox-resource
-          {:resource mailbox-resource :issuer issuer :scope law/mailbox-scope
+          {:resource mailbox-resource :issuer issuer :scope law/mailbox-scope :scopes law/mailbox-scopes
            :access-proof! (fn [bearer] (engine/mailbox-access-proof! provider pool config admit bearer))
            :client-node (fn [client-id] (law/mailbox-node config client-id))
            :active-grant?
            (fn ^:async active-grant? [proof]
-             (= proof (await (engine/current-mailbox-grant! pool config admit
+             (= (dissoc proof :oauth/scopes) (await (engine/current-mailbox-grant! pool config admit
                                (:oauth/grant-id proof) (:actor-id proof) (:oauth/client-id proof)))))}
           true)))))

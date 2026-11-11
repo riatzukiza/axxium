@@ -24,7 +24,8 @@
   #js {:getResourceServerInfo
        (fn [_ctx resource client]
          (if (and (law/mailbox-client? config (.-clientId client)) (= mailbox-resource resource))
-           #js {:scope law/mailbox-scope :audience mailbox-resource :accessTokenFormat "opaque"}
+           #js {:scope (str/join " " law/mailbox-scopes) :audience mailbox-resource
+                :accessTokenFormat "opaque"}
            (throw (new (.-InvalidTarget errors)))))
        :defaultResource
        (fn [_ctx client requested]
@@ -71,7 +72,9 @@
                             :token-issuer (some-> token (aget "extra") (aget "iss"))
                             :audience (.-aud token) :scope (.-scope token)
                             :account-id account-id :grant-id grant-id}))
-          (await (current-mailbox-grant! pool config admit grant-id account-id (.-clientId token))))))))
+          (when-let [proof (await (current-mailbox-grant! pool config admit grant-id account-id
+                                                          (.-clientId token)))]
+            (assoc proof :oauth/scopes (law/scope-set (.-scope token)))))))))
 
 (defn- html-escape
   "Encode labels supplied by registered clients and displayed user codes."
@@ -219,7 +222,9 @@
                                            (= mailbox-resource (.-aud token)))
                                     #js {:iss issuer}
                                     js/undefined))
-              :scopes #js ["openid" "profile"]
+              :scopes (clj->js (cond-> ["openid" "profile"]
+                                 ;; Advertise resource scopes only where a mailbox exists.
+                                 mailbox-resource (into law/mailbox-scopes)))
               :claims #js {:openid #js ["sub"] :profile #js ["name"]}
               :renderError (fn [ctx _out _error]
                              (set! (.-type ctx) "text/plain")

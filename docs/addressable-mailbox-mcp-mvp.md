@@ -150,12 +150,17 @@ For a private ChatGPT connection, set `mailbox-client-id` and
 must be a registered confidential authorization-code client with one exact
 redirect URI from the ChatGPT connection settings. The resource is the
 canonical public URL ending in `/api/mailbox/mcp`. Discovery advertises that
-resource and the `mailbox:events` scope. Use authorization code with S256 PKCE
+resource and the `mailbox:events` and `mailbox:send` scopes. Use authorization code with S256 PKCE
 and the resource indicator at authorization and token exchange.
 
 Consent requires the pilot recipient's live verified AT Protocol session.
 The resulting grant binds the exact client, resource, actor, DID and parent
 session. The scoped bearer can discover and manage events and use `whoami`.
+A grant that also requested `mailbox:send` can call `resolve_address`,
+`send_message` and `get_delivery` as the client's node; the send policy (L8)
+still decides each recipient, and every call re-admits the node, so the scope
+is dead while that node is suspended or revoked. No OAuth scope opens reading
+the inbox. Scopes map to tools as data (`axxium.law.oidc/mailbox-scope-tools`).
 Direct AT Protocol credentials continue to authorize the mailbox tools.
 Provider revocation or loss of the parent session or DID binding stops future
 delivery for that OAuth grant.
