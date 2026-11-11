@@ -5,14 +5,19 @@
             [axxium.db :as db]
             [axxium.extern.fastify :as fastify]
             [axxium.extern.http :as http]
+            [axxium.extern.lifecycle :as lifecycle]
             [axxium.extern.signing-key :as signing-key]
+            [axxium.infra.oidc :as oidc]
             [axxium.routes.auth :as auth-routes]
             [axxium.routes.actor :as actor-routes]
             [axxium.routes.agents :as agent-routes]
             [axxium.routes.atproto :as atproto-routes]
             [axxium.routes.atproto-oauth :as atproto-oauth-routes]
+            [axxium.routes.drive :as drive-routes]
+            [axxium.routes.github-identity :as github-identity-routes]
             [axxium.routes.google :as google-routes]
             [axxium.routes.health :as health-routes]
+            [axxium.routes.mailbox :as mailbox-routes]
             [axxium.routes.well-known :as well-known-routes]
             ["@fastify/cors" :default fastifyCors]
             ["@fastify/cookie" :default fastifyCookie]
@@ -33,11 +38,14 @@
 
 (defn- register-routes!
   "Register all API routes on the app."
-  [app]
+  [app oidc]
   (health-routes/register-health-routes! app)
   (well-known-routes/register-well-known-routes! app)
   (auth-routes/register-auth-routes! app)
   (google-routes/register-google-routes! app)
+  (drive-routes/register-drive-routes! app)
+  (github-identity-routes/register-github-identity-routes! app)
+  (mailbox-routes/register-mailbox-routes! app (when (map? oidc) oidc))
   (actor-routes/register-actor-routes! app)
   (agent-routes/register-agent-routes! app)
   (atproto-routes/register-atproto-routes! app)
@@ -56,28 +64,39 @@
    The log line is the kid only."
   []
   (println "Starting Axxium identity kernel...")
-  (-> (signing-key/load!)
-      (.then (fn [loaded]
-               (println (str "Signing key " (:kid loaded)))
-               (db/init-schema!)))
+  (let [statement-timeout-ms (cfg/schema-statement-timeout-ms)
+        schema-pool (db/create-schema-pool! statement-timeout-ms)
+        controller (lifecycle/install! @db/pool schema-pool statement-timeout-ms)]
+    (-> (signing-key/load!)
+        (.then
+         (fn [loaded]
+           (println (str "Signing key " (:kid loaded)))
+           (db/init-schema! schema-pool #(lifecycle/stopping? controller))))
       (.then
-        (fn [_]
-          (println "Database schema initialized")
-          (let [app (create-app)]
-            (http/register-portal-origin!
-             app (cfg/get-in-config [:axxium/public-base-url]))
-            (register-routes! app)
-            (register-static! app)
-            (-> (.listen app #js {:port (cfg/get-in-config [:axxium/port])
-                                  :host (cfg/get-in-config [:axxium/host])})
-                (.then
-                  (fn [address]
-                    (println (str "Axxium listening on " address))
-                    (println (str "Portal: " (cfg/get-in-config [:axxium/public-base-url]) "/portal/index.html"))
-                    app))))))
+        (fn ^:async schema-ready [_]
+          (await (lifecycle/close-startup! controller))
+          (when-not (lifecycle/stopping? controller)
+            (println "Database schema initialized")
+            (let [app (create-app)]
+              (lifecycle/attach! controller app)
+              (let [authority (await (oidc/enable! app))]
+                (when-not (lifecycle/stopping? controller)
+                  (http/register-portal-origin!
+                   app (cfg/get-in-config [:axxium/public-base-url]))
+                  (register-routes! app authority)
+                  (register-static! app)
+                  (-> (.listen app #js {:port (cfg/get-in-config [:axxium/port])
+                                        :host (cfg/get-in-config [:axxium/host])})
+                      (.then
+                        (fn [address]
+                          (when-not (lifecycle/stopping? controller)
+                            (println (str "Axxium listening on " address))
+                            (println (str "Portal: " (cfg/get-in-config [:axxium/public-base-url]) "/portal/index.html"))
+                            app))))))))))
       (.catch
         (fn [err]
-          (let [reason (:reason (ex-data err))]
-            (println (str "Failed to start Axxium: " (.-message err)
-                          (when reason (str " (" (name reason) ")")))))
-          (js/process.exit 1)))))
+          (when-not (lifecycle/stopping? controller)
+            (let [reason (:reason (ex-data err))]
+              (println (str "Failed to start Axxium: " (.-message err)
+                            (when reason (str " (" (name reason) ")")))))
+            (js/process.exit 1)))))))

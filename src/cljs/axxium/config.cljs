@@ -2,7 +2,9 @@
   "Axxium runtime configuration from environment."
   (:require [axxium.domain.token :as token-domain]
             [axxium.extern.env :as environment]
+            [axxium.law.actor :as actor-law]
             [axxium.law.atproto :as atproto-law]
+            [axxium.law.did :as did-law]
             [axxium.law.signing :as signing-law]
             [axxium.law.token :as token-law]
             [clojure.string :as str]))
@@ -20,6 +22,19 @@
 (defn- env-bool [key default]
   (let [v (env key)]
     (if v (= "true" (str/lower-case v)) default)))
+
+(defn parse-schema-statement-timeout-ms
+  "Admit a bounded per-statement schema timeout in milliseconds."
+  [value]
+  (when-not (and (string? value) (re-matches #"[0-9]{1,6}" value))
+    (throw (ex-info "Invalid AXXIUM_SCHEMA_STATEMENT_TIMEOUT_MS" {})))
+  (let [timeout-ms (environment/parse-int value)]
+    (when-not (<= 1000 timeout-ms 300000)
+      (throw (ex-info "AXXIUM_SCHEMA_STATEMENT_TIMEOUT_MS must be 1000..300000" {})))
+    timeout-ms))
+
+(defn schema-statement-timeout-ms []
+  (parse-schema-statement-timeout-ms (env "AXXIUM_SCHEMA_STATEMENT_TIMEOUT_MS" "20000")))
 
 (defn- present
   "Environment values that are missing or blank are absent."
@@ -71,8 +86,36 @@
                               {:axxium/reason (keyword "axxium.config" (name setting))
                                :law/reason setting})))))
 
+(defn root-operator-binding
+  "Admit both host-local settings together, or refuse startup."
+  [actor-id root-did]
+  (cond
+    (and (nil? actor-id) (nil? root-did)) nil
+    (and (string? actor-id)
+         (str/starts-with? actor-id "actor_")
+         (actor-law/valid-credential-id? (subs actor-id 6))
+         (did-law/did? root-did))
+    {:actor-id actor-id :root-did root-did}
+    :else
+    (throw (ex-info "AXXIUM_IDENTITY_ROOT_OPERATOR_ACTOR_ID and AXXIUM_IDENTITY_ROOT_DID must specify a canonical actor ID and a DID"
+                    {:reason :invalid-identity-root-operator-binding}))))
+
+(defn mailbox-pilot-allowed-dids
+  "Admit exactly two distinct AT Protocol DIDs including the webhook recipient."
+  [value webhook-actor]
+  (when (some? value)
+    (let [dids (str/split value #"," -1)
+          allowed (set dids)]
+      (when-not (and (= 2 (count dids) (count allowed))
+                     (every? #(and (atproto-law/did? %) (did-law/did? %)) dids)
+                     (contains? allowed webhook-actor))
+        (throw (ex-info "AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS must contain two distinct AT Protocol DIDs including AXXIUM_MAILBOX_WEBHOOK_ACTOR_DID"
+                        {:reason :invalid-mailbox-pilot-allowed-dids})))
+      allowed)))
+
 (def config
-  (let [instance (load-instance)]
+  (let [instance (load-instance)
+        webhook-actor (present (env "AXXIUM_MAILBOX_WEBHOOK_ACTOR_DID"))]
     {:axxium/env (or (env "NODE_ENV") "development")
      :axxium/port (env-int "AXXIUM_PORT" 8787)
      :axxium/host (env "AXXIUM_HOST" "0.0.0.0")
@@ -102,6 +145,27 @@
      :oauth/github-client-secret (env "GITHUB_OAUTH_CLIENT_SECRET" "")
      :oauth/github-enabled (env-bool "GITHUB_OAUTH_ENABLED" false)
      :oauth/google-client-file (env "GOOGLE_OAUTH_CLIENT_FILE" "")
+     ;; Google Drive resource: same Cloud OAuth client, drive.file scope.
+     ;; The refresh-token encryption key is a 32-byte base64 file, never committed.
+     :drive/token-key-file (env "AXXIUM_DRIVE_TOKEN_KEY_FILE" "")
+     ;; Optional explicit client; empty falls back to GOOGLE_OAUTH_CLIENT_FILE.
+     :drive/client-id (env "GOOGLE_DRIVE_CLIENT_ID" "")
+     :drive/client-secret (env "GOOGLE_DRIVE_CLIENT_SECRET" "")
+     ;; Append-only EDN ledger holding Drive credential and file resources.
+     :drive/ledger-file (env "AXXIUM_DRIVE_LEDGER_FILE" "")
+     ;; Bot identity tree + per-actor GitHub Apps. Key: 32-byte base64 file.
+     :github-identity/token-key-file (env "AXXIUM_GITHUB_IDENTITY_KEY_FILE" "")
+     :github-identity/ledger-file (env "AXXIUM_GITHUB_IDENTITY_LEDGER_FILE" "")
+     ;; Directory imported App PEMs may be read from in place (never copied).
+     :github-identity/key-dir (env "AXXIUM_GITHUB_IDENTITY_KEY_DIR" "")
+     :identity/seed-file (env "AXXIUM_IDENTITY_SEED_FILE" "")
+     :mailbox/ledger-file (present (env "AXXIUM_MAILBOX_LEDGER_FILE"))
+     :mailbox/webhook-key-file (present (env "AXXIUM_MAILBOX_WEBHOOK_KEY_FILE"))
+     :mailbox/webhook-actor-did webhook-actor
+     :mailbox/pilot-allowed-dids (mailbox-pilot-allowed-dids (env "AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS") webhook-actor)
+     :identity/root-operator-binding
+     (root-operator-binding (env "AXXIUM_IDENTITY_ROOT_OPERATOR_ACTOR_ID")
+                            (env "AXXIUM_IDENTITY_ROOT_DID"))
      :oauth/bootstrap-admin-email (env "AXXIUM_BOOTSTRAP_ADMIN_EMAIL" "")
 
      ;; Session

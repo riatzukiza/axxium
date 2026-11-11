@@ -1,5 +1,6 @@
 // A self-contained account control usable wherever Axxium is served at the same origin.
 import { fetchAllActors } from './actor-pages.js';
+import { safeInteractionReturn } from './oidc-return.js';
 
 class AxxiumAccountManager extends HTMLElement {
   constructor() {
@@ -16,6 +17,10 @@ class AxxiumAccountManager extends HTMLElement {
   }
 
   async connectedCallback() {
+    try {
+      const target = safeInteractionReturn(new URL(location.href).searchParams.get('oidc_return'));
+      if (target) sessionStorage.setItem('axxium.oidcReturn', target);
+    } catch { /* A restricted browser store must not prevent ordinary login. */ }
     await this.refresh();
   }
 
@@ -39,6 +44,11 @@ class AxxiumAccountManager extends HTMLElement {
     return result;
   }
 
+  async changeSession(path, body) {
+    await this.request(path, 'POST', body);
+    window.dispatchEvent(new Event('axxium-session-changed'));
+  }
+
   async refresh() {
     try {
       const config = await this.request('/api/auth/config');
@@ -58,6 +68,13 @@ class AxxiumAccountManager extends HTMLElement {
     } catch (_) {
       this.actor = null;
       this.actors = [];
+    }
+    if (this.actor) {
+      try {
+        const target = safeInteractionReturn(sessionStorage.getItem('axxium.oidcReturn'));
+        sessionStorage.removeItem('axxium.oidcReturn');
+        if (target) { location.assign(target); return; }
+      } catch { /* Continue to the account manager when browser storage is unavailable. */ }
     }
     this.render();
   }
@@ -129,7 +146,7 @@ class AxxiumAccountManager extends HTMLElement {
         event.preventDefault();
         const form = event.currentTarget;
         this.run(async () => {
-          await this.request('/api/auth/login', 'POST', {
+          await this.changeSession('/api/auth/login', {
             email: form.elements.email.value,
             password: form.elements.password.value,
           });
@@ -165,7 +182,7 @@ class AxxiumAccountManager extends HTMLElement {
     logout.className = 'secondary';
     logout.textContent = 'Sign out';
     logout.addEventListener('click', () => this.run(async () => {
-      await this.request('/api/auth/logout', 'POST', {});
+      await this.changeSession('/api/auth/logout', {});
       this.issuedToken = '';
     }));
     identity.append(title, detail, logout);

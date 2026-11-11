@@ -5,6 +5,11 @@
 (defn body [req]
   (js->clj (or (aget req "body") #js {}) :keywordize-keys true))
 
+(defn json-body
+  "Decode a JSON protocol body while preserving its string keys."
+  [req]
+  (js->clj (aget req "body")))
+
 (defn param [req key]
   (aget (aget req "params") key))
 
@@ -27,11 +32,41 @@
   (.header reply "Pragma" "no-cache")
   (send! reply status data))
 
+(defn send-empty! [reply status]
+  (.send (.code reply status)))
+
+(defn on-interval!
+  "Run one background operation at a time and drain it when the app closes."
+  [app interval-ms operation]
+  (let [running (atom nil)
+        timer (js/setInterval
+               (fn []
+                 (when-not @running
+                   (reset! running (-> (js/Promise.resolve nil)
+                                       (.then (fn [_] (operation)))
+                                       (.catch (fn [_] (.warn (.-log app) "Background operation failed")))
+                                       (.finally (fn [] (reset! running nil)))))))
+               interval-ms)]
+    (.unref timer)
+    (.addHook app "onClose"
+              (fn ^:async stop-interval [_app]
+                (js/clearInterval timer)
+                (await @running)))))
+
+(defn origin-settings
+  "Resolve the configured public host, origin and endpoint."
+  [base-url path]
+  (let [url (js/URL. path base-url)]
+    {:host (.-host url) :origin (.-origin url) :resource (.-href url)}))
+
 (defn redirect! [reply url]
   (.redirect reply url))
 
 (defn cookie [req name]
   (some-> req (aget "cookies") (aget name)))
+
+(defn header [req name]
+  (some-> req (aget "headers") (aget name)))
 
 (defn authorization [req]
   (some-> req (aget "headers") (aget "authorization")))

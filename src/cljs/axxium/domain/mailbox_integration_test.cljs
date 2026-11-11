@@ -2,6 +2,7 @@
   "Cross-repository acceptance probes; see docs/mailbox-integration-regressions.md."
   (:require [axxium.domain.kernel-fixture :as fixture]
             [axxium.domain.mailbox-mcp :as mailbox]
+            [axxium.extern.mailbox-mcp :as rpc]
             [cljs.test :refer [deftest is]]))
 
 (def ^:private audience "promethean+testing")
@@ -49,9 +50,9 @@
 (defn- rpc-tool
   "Exercise the public wire adapter with JSON-compatible string-keyed data."
   [ledger ctx id tool arguments]
-  (mailbox/handle-rpc ledger ctx
-                      {"jsonrpc" "2.0" "id" id "method" "tools/call"
-                       "params" {"name" tool "arguments" arguments}}))
+  (rpc/handle-rpc ledger ctx
+                  {"jsonrpc" "2.0" "id" id "method" "tools/call"
+                   "params" {"name" tool "arguments" arguments}}))
 
 (deftest acknowledgment-of-second-message-preserves-first
   (let [{initial :ledger ctx-a :alice ctx-b :bob} (world)
@@ -62,8 +63,18 @@
                              {:message-id (get-in second-send [:result :message/id])}))
         inbox (successful (mailbox/call (:ledger acked) ctx-b :read_inbox {}))
         ids (set (map :message/id (get-in inbox [:result :messages])))]
+    (is (= 0 (get-in acked [:result :cursor])) "an out-of-order ack does not advance the durable cursor")
+    (is (= (get-in inbox [:result :cursor]) (get-in acked [:result :cursor])))
     (is (contains? ids (get-in first-send [:result :message/id]))
-        "Acknowledging B must not silently acknowledge unread A.")))
+        "Acknowledging B must not silently acknowledge unread A.")
+    (let [explicit (successful (mailbox/call (:ledger acked) ctx-b :read_inbox
+                                            {:after (get-in acked [:result :cursor])}))
+          first-acked (successful (mailbox/call (:ledger acked) ctx-b :acknowledge_message
+                                               {:message-id (get-in first-send [:result :message/id])}))]
+      (is (some #{(get-in first-send [:result :message/id])}
+                (map :message/id (get-in explicit [:result :messages]))))
+      (is (= (get-in second-send [:result :message/receipt :receipt/seq])
+             (get-in first-acked [:result :cursor])) "closing the gap advances across both acknowledgments"))))
 
 (deftest json-message-body-retains-exact-user-keys
   (let [{initial :ledger ctx-a :alice ctx-b :bob} (world)

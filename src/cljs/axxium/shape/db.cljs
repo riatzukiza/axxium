@@ -164,6 +164,20 @@
                 [:= :a.status "active"]
                 [:> :s.expires_at [:now]]])))
 
+(defn select-active-human-session
+  "The same live session bound to an active actor with a human entity."
+  [actor-id token-hash cred-id]
+  (-> (select-actor-by-session actor-id token-hash cred-id)
+      (h/join [:entities :e] [:= :e.id :a.entity_id])
+      (h/where [:= :e.kind "human"])))
+
+(defn select-actor-by-atproto-session
+  "The exact live actor session with a current binding to the signed DID."
+  [actor-id token-hash cred-id did]
+  (-> (select-actor-by-session actor-id token-hash cred-id)
+      (h/join [:provider_bindings :b] [:= :b.actor_id :a.id])
+      (h/where [:= :b.provider "atproto"] [:= :b.subject did])))
+
 (defn delete-session-by-hash
   [token-hash]
   (-> (h/delete-from :sessions)
