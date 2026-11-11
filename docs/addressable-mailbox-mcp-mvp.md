@@ -91,13 +91,41 @@ also be configured. Only the selected actor's live AT Protocol session
 advertises the event capability. Register that actor's mailbox before
 requesting the event catalog or subscribing.
 
-For a private two-actor pilot, set `AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS` to the
-recipient DID and the native sender DID, separated by a comma. The recipient
-must equal `AXXIUM_MAILBOX_WEBHOOK_ACTOR_DID`. Both actors need a live verified
-AT Protocol binding. The recipient still has to grant the sender permission
-to send. An authenticated DID outside the pair receives 403 before the route
-can open a mailbox session or access the ledger. Leave the allowlist unset to
-retain the existing mailbox authentication policy.
+### Identity-tree admission
+
+Set `AXXIUM_MAILBOX_AUTHORITY_ROOT_DID` to a tree root
+(`did:web:<authority>:actors:<path>`) and
+`AXXIUM_MAILBOX_AUTHORITY_LEDGER_FILE` to the identity ledger the authority
+instance appends to (mount it read-only; it is read, never repaired or
+written, on every request). The mailbox then admits a proof only when it
+authenticates as a node at or below that root whose every ancestor is active
+(L6), and acts as that node's DID:
+
+- an AT Protocol sign-in as an account bound to a node (seed `:proofs`);
+- the portal root session bound by `AXXIUM_IDENTITY_ROOT_OPERATOR_ACTOR_ID`
+  when `AXXIUM_IDENTITY_ROOT_DID` equals the mailbox root;
+- a host agent's bootstrap key: `x-axxium-actor: <node DID>` with
+  `Authorization: Bearer <key>`;
+- an OAuth grant for a mailbox client registered with `:mailbox-node`, while
+  its consenting signer is that node or manages it (L4).
+
+Suspending or revoking any ancestor ends access at the next request. Under
+the default `:tree-ownership` send policy, an admitted node may send to any
+admitted node of the same tree without `grant_send` (L8); explicit grants
+still add sends, e.g. to a DID outside the tree. Policies are data in
+`axxium.domain.mailbox-authority/send-policies`.
+
+### Deprecated flat pilot fence
+
+Kept only so a running pilot can roll forward; it cannot be combined with
+tree admission. For a private two-actor pilot, set
+`AXXIUM_MAILBOX_PILOT_ALLOWED_DIDS` to the recipient DID and the native
+sender DID, separated by a comma. The recipient must equal
+`AXXIUM_MAILBOX_WEBHOOK_ACTOR_DID`. Both actors need a live verified AT
+Protocol binding. The recipient still has to grant the sender permission to
+send. An authenticated DID outside the pair receives 403 before the route can
+open a mailbox session or access the ledger. Leave both unset to retain the
+existing mailbox authentication policy.
 
 The authenticated MCP endpoint supports `events/list`, `events/subscribe`
 and `events/unsubscribe` for `message.available`. The recipient is derived

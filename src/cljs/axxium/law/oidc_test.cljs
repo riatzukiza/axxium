@@ -2,7 +2,7 @@
   "Authority config refuses ambiguous client registration and weak secrets."
   (:require [axxium.law.oidc :as law]
             [axxium.extern.oidc-provider :as provider]
-            [cljs.test :refer [deftest is]]))
+            [cljs.test :refer [deftest is testing]]))
 
 (def config
   "Synthetic configuration without real key material."
@@ -185,3 +185,30 @@
     (doseq [candidate [(assoc config :cookie-keys [])
                        (assoc config :cookie-keys (conj keys (apply str (repeat 32 "extra"))))]]
       (is (thrown? cljs.core/ExceptionInfo (law/require-config! candidate))))))
+
+(deftest mailbox-clients-are-one-per-tree-node
+  (let [resource "https://identity.example.test/api/mailbox/mcp"
+        inbox "did:web:axxium.example:actors:err:work:inbox"
+        grok "did:web:axxium.example:actors:err:grokbots:grok-bot"
+        client (fn [id node secret]
+                 {:id id :secret (apply str (repeat 32 secret))
+                  :redirect-uris [(str "https://" id ".example.test/callback")] :mailbox-node node})
+        candidate (assoc config :mailbox-resource resource
+                         :clients [(first (:clients config))
+                                   (client "chatgpt" inbox "c") (client "grok-bot" grok "g")])]
+    (is (= candidate (admitted-config candidate)))
+    (is (= inbox (law/mailbox-node candidate "chatgpt")))
+    (is (= grok (law/mailbox-node candidate "grok-bot")))
+    (is (law/mailbox-client? candidate "grok-bot"))
+    (is (not (law/mailbox-client? candidate "knoxx-stealth")) "an ordinary client stays ordinary")
+    (is (nil? (law/mailbox-node candidate "knoxx-stealth")))
+    (testing "the legacy single client still works beside node clients"
+      (let [mixed (assoc candidate :mailbox-client-id "knoxx-stealth")]
+        (is (= mixed (admitted-config mixed)))
+        (is (law/mailbox-client? mixed "knoxx-stealth"))))
+    (doseq [invalid [(dissoc candidate :mailbox-resource)
+                     (assoc-in candidate [:clients 2 :mailbox-node] "not-a-did")
+                     (assoc-in candidate [:clients 2 :device-enabled?] true)
+                     (update-in candidate [:clients 2 :redirect-uris] conj "https://grok.example.test/other")
+                     (assoc candidate :mailbox-client-id "missing")]]
+      (is (nil? (admitted-config invalid))))))

@@ -232,3 +232,15 @@
       (is (false? (get-in descriptors [name "annotations" "readOnlyHint"])))
       (is (true? (get-in descriptors [name "annotations" "destructiveHint"]))))
     (is (re-find #"tools/list" (get-in out [:response "result" "content" 0 "text"])))))
+
+(deftest send-policy-seam-adds-sends-without-grants
+  (let [{:keys [lg b]} (world)
+        msg {:to fx/alice :idempotency-key "policy" :body {:text "in-tree"}}
+        allowed (assoc (ctx bob b) :send/allowed? (fn [from to] (and (= fx/bob from) (= fx/alice to))))
+        refused (assoc (ctx bob b) :send/allowed? (constantly false))]
+    (is (= :forbidden (:error (mm/call lg (ctx bob b) :send_message msg))) "no grant, no policy")
+    (is (= :forbidden (:error (mm/call lg refused :send_message msg))) "the policy refuses")
+    (let [{:keys [ledger result error]} (mm/call lg allowed :send_message msg)]
+      (is (nil? error))
+      (is (= :accepted (get-in result [:message/receipt :receipt/status])))
+      (is (policy/decision-before-effect? ledger) "the policy send is still a recorded decision"))))

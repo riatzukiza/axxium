@@ -28,6 +28,20 @@
                            [(str "alice.example," bob) bob] [pair nil] [pair carol]]]
       (is (thrown? js/Error (config/mailbox-pilot-allowed-dids input owner))))))
 
+(deftest mailbox-authority-replaces-the-flat-allowlist
+  (let [root "did:web:axxium.example:actors:err"
+        inbox "did:web:axxium.example:actors:err:work:inbox"
+        ledger "/var/lib/axxium/identity/ledger.edn"]
+    (is (nil? (config/mailbox-authority nil nil nil nil)) "off unless configured")
+    (is (= {:root-did root :ledger-file ledger} (config/mailbox-authority root ledger nil inbox)))
+    (is (= {:root-did root :ledger-file ledger} (config/mailbox-authority root ledger nil nil)))
+    (doseq [[r l allowed owner] [[root nil nil nil] [nil ledger nil nil]
+                                 [fixture/alice ledger nil nil] [root "relative.edn" nil nil]
+                                 [root ledger #{fixture/alice fixture/bob} nil]
+                                 [root ledger nil fixture/bob]]]
+      (is (thrown? js/Error (config/mailbox-authority r l allowed owner))
+          "exactly one admission rule, a did:web root and an absolute ledger"))))
+
 (deftest schema-pool-has-only-its-own-statement-timeout
   (let [seen (atom nil)]
     (with-redefs [pg/create-pool! (fn [options] (reset! seen options) :schema-pool)]
