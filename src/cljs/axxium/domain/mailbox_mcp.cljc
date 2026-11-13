@@ -231,7 +231,8 @@
     (if-not (get-in d [:event/body :decision/allow?])
       (refuse lg' :forbidden)
       (let [explicit? (int? after)
-            cursor (if explicit? after (ack-cursor lg owner))
+            durable-cursor (ack-cursor lg owner)
+            cursor (if explicit? (min after durable-cursor) durable-cursor)
             acked (if explicit? #{} (acked-ids lg owner))
             es (->> (of-type lg box :axxium.mailbox/accepted)
                     (filter #(> (:event/seq %) cursor))
@@ -377,7 +378,7 @@
    (tool "send_message" "Send to a mailbox. Repeating an idempotency key with the same body returns the original receipt."
          {"to" str-schema "from" str-schema "idempotency_key" str-schema "body" {"type" "object"}}
          ["to" "idempotency_key" "body"] {"idempotentHint" true "openWorldHint" true})
-   (tool "read_inbox" "Read messages after a cursor (default: contiguous acknowledged prefix)."
+   (tool "read_inbox" "Read inbox messages. A supplied cursor cannot skip an unacknowledged message."
          {"mailbox" str-schema "after" {"type" "integer"}} [] read-hints)
    (tool "acknowledge_message" "Acknowledge one message; return the contiguous durable cursor."
          {"message_id" str-schema} ["message_id"] {})
