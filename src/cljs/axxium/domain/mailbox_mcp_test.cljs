@@ -99,6 +99,23 @@
     (is (= [{:n 2}] (mapv :message/body (:messages r2))))
     (is (some? (:cursor r2)))))
 
+(deftest explicit-inbox-cursor-cannot-skip-an-unacknowledged-message
+  (let [{:keys [lg a b]} (world)
+        [lg first-send] (ok (send lg (ctx alice a) "cursor-first" {:n 1}))
+        [lg second-send] (ok (send lg (ctx alice a) "cursor-second" {:n 2}))
+        [lg read] (ok (mm/call lg (ctx bob b) :read_inbox {}))
+        second-seq (:next-cursor read)
+        [lg ack] (ok (mm/call lg (ctx bob b) :acknowledge_message
+                             {:message-id (:message/id second-send)}))
+        restored (edn-lines/import-lines (edn-lines/export-lines lg))
+        [restored session] (open restored bob)
+        [_ resumed] (ok (mm/call restored (ctx bob (:session/id session))
+                                 :read_inbox {:after second-seq}))]
+    (is (= 0 (:cursor ack)))
+    (is (= (:cursor ack) (:cursor resumed)))
+    (is (= [(:message/id first-send) (:message/id second-send)]
+           (mapv :message/id (:messages resumed))))))
+
 ;; 5
 (deftest notification-is-not-completion
   (let [{:keys [lg a]} (world)
