@@ -2,7 +2,9 @@
   "Axxium runtime configuration from environment."
   (:require [axxium.domain.token :as token-domain]
             [axxium.extern.env :as environment]
+            [axxium.law.actor :as actor-law]
             [axxium.law.atproto :as atproto-law]
+            [axxium.law.did :as did-law]
             [axxium.law.signing :as signing-law]
             [axxium.law.token :as token-law]
             [clojure.string :as str]))
@@ -71,6 +73,20 @@
                               {:axxium/reason (keyword "axxium.config" (name setting))
                                :law/reason setting})))))
 
+(defn root-operator-binding
+  "Admit both host-local settings together, or refuse startup."
+  [actor-id root-did]
+  (cond
+    (and (nil? actor-id) (nil? root-did)) nil
+    (and (string? actor-id)
+         (str/starts-with? actor-id "actor_")
+         (actor-law/valid-credential-id? (subs actor-id 6))
+         (did-law/did? root-did))
+    {:actor-id actor-id :root-did root-did}
+    :else
+    (throw (ex-info "AXXIUM_IDENTITY_ROOT_OPERATOR_ACTOR_ID and AXXIUM_IDENTITY_ROOT_DID must specify a canonical actor ID and a DID"
+                    {:reason :invalid-identity-root-operator-binding}))))
+
 (def config
   (let [instance (load-instance)]
     {:axxium/env (or (env "NODE_ENV") "development")
@@ -110,6 +126,15 @@
      :drive/client-secret (env "GOOGLE_DRIVE_CLIENT_SECRET" "")
      ;; Append-only EDN ledger holding Drive credential and file resources.
      :drive/ledger-file (env "AXXIUM_DRIVE_LEDGER_FILE" "")
+     ;; Bot identity tree + per-actor GitHub Apps. Key: 32-byte base64 file.
+     :github-identity/token-key-file (env "AXXIUM_GITHUB_IDENTITY_KEY_FILE" "")
+     :github-identity/ledger-file (env "AXXIUM_GITHUB_IDENTITY_LEDGER_FILE" "")
+     ;; Directory imported App PEMs may be read from in place (never copied).
+     :github-identity/key-dir (env "AXXIUM_GITHUB_IDENTITY_KEY_DIR" "")
+     :identity/seed-file (env "AXXIUM_IDENTITY_SEED_FILE" "")
+     :identity/root-operator-binding
+     (root-operator-binding (env "AXXIUM_IDENTITY_ROOT_OPERATOR_ACTOR_ID")
+                            (env "AXXIUM_IDENTITY_ROOT_DID"))
      :oauth/bootstrap-admin-email (env "AXXIUM_BOOTSTRAP_ADMIN_EMAIL" "")
 
      ;; Session
@@ -135,3 +160,4 @@
     (str "postgresql://" user 
          (when (seq password) (str ":" password))
          "@" host ":" port "/" name)))
+
