@@ -5,12 +5,17 @@
 (defn create []
   {:ledger (atom nil) :queue (atom (js/Promise.resolve nil))})
 
+(defn current-ledger
+  "Return the cached ledger, reloading it after an uncertain write."
+  [{:keys [ledger]} path]
+  (or @ledger (reset! ledger (disk/load-ledger path))))
+
 (defn submit!
   "Run f exclusively and persist its resulting ledger before returning it."
   [{:keys [ledger queue]} path f]
   (let [run (.then @queue
                    (fn [_]
-                     (let [before (or @ledger (reset! ledger (disk/load-ledger path)))]
+                     (let [before (current-ledger {:ledger ledger} path)]
                        (.then (js/Promise.resolve (f before))
                               (fn [out]
                                 (when-let [after (:ledger out)]
@@ -21,3 +26,4 @@
                                 out)))))]
     (reset! queue (.catch run (fn [_] nil)))
     run))
+
